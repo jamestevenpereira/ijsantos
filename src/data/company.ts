@@ -1,0 +1,27 @@
+export const company = {
+  name: "IJ Santos",
+  tagline: "Construção e Limpezas Exteriores",
+  phone: "+351 912 345 678",
+  phoneHref: "tel:+351912345678",
+  whatsapp: "https://wa.me/351912345678",
+  email: "geral@ijsantos.pt",
+  emailHref: "mailto:geral@ijsantos.pt",
+  address: "Rua das Obras, 123 — 2700-000 Amadora, Portugal",
+  hours: "Seg–Sáb · 08h00 — 19h00",
+  areas: [
+    "Lisboa",
+    "Amadora",
+    "Sintra",
+    "Cascais",
+    "Oeiras",
+    "Loures",
+    "Mafra",
+    "Vila Franca de Xira",
+  ],
+  stats: [
+    { value: "15+", label: "Anos de experiência" },
+    { value: "500+", label: "Obras concluídas" },
+    { value: "<24h", label: "Resposta a pedidos" },
+    { value: "4.9/5", label: "Avaliação dos clientes" },
+  ],
+};
