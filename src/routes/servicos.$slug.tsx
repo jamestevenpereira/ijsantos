@@ -75,7 +75,7 @@ function ServiceDetail() {
       {/* Overview */}
       <section className="py-20 md:py-28">
         <div className="mx-auto max-w-7xl container-px grid gap-12 lg:grid-cols-2 lg:items-center">
-          <div>
+          <div className="text-center md:text-left">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Visão geral</span>
             <h2 className="mt-3 font-display text-3xl md:text-4xl font-bold tracking-tight text-balance">
               Um serviço pensado ao detalhe.
@@ -83,8 +83,8 @@ function ServiceDetail() {
             <p className="mt-6 text-muted-foreground text-lg leading-relaxed">{service.description}</p>
             <ul className="mt-8 space-y-3">
               {service.useCases.map((u) => (
-                <li key={u} className="flex items-start gap-3 text-foreground">
-                  <Check className="h-5 w-5 text-brand mt-0.5" />
+                <li key={u} className="flex items-start gap-3 text-foreground justify-center md:justify-start text-left">
+                  <Check className="h-5 w-5 text-brand mt-0.5 shrink-0" />
                   <span>{u}</span>
                 </li>
               ))}
