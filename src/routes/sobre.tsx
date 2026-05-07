@@ -95,7 +95,7 @@ export default function SobrePage() {
       {/* Why trust */}
       <section className="py-20 md:py-28 bg-surface">
         <div className="mx-auto max-w-7xl container-px">
-          <div className="max-w-2xl">
+          <div className="max-w-2xl mx-auto md:mx-0 text-center md:text-left">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Os nossos valores</span>
             <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
               Porque é que os clientes confiam em nós.
@@ -103,8 +103,8 @@ export default function SobrePage() {
           </div>
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {values.map((v) => (
-              <div key={v.title} className="rounded-xl bg-card border border-border p-7">
-                <div className="h-11 w-11 rounded-lg bg-brand/10 text-brand grid place-items-center">
+              <div key={v.title} className="rounded-xl bg-card border border-border p-7 text-center md:text-left">
+                <div className="h-11 w-11 rounded-lg bg-brand/10 text-brand grid place-items-center mx-auto md:mx-0">
                   <v.icon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-5 font-display font-semibold text-lg">{v.title}</h3>
