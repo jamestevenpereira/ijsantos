@@ -22,7 +22,7 @@ export function WhyUs() {
           {items.map((it) => (
             <div
               key={it.title}
-              className="group rounded-xl border border-border bg-card p-6 text-center md:text-left hover:border-brand/40 hover:shadow-md transition-all"
+              className="flex-wrap gap-x-5 gap-y-2 justify-center flex items-center md:justify-between"
             >
               <div className="h-11 w-11 rounded-lg bg-brand/10 text-brand grid place-items-center mx-auto md:mx-0 group-hover:bg-brand group-hover:text-brand-foreground transition-colors">
                 <it.icon className="h-5 w-5" />
