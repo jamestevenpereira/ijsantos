@@ -31,7 +31,7 @@ function Index() {
       {/* Intro */}
       <section className="py-20 md:py-28">
         <div className="mx-auto max-w-7xl container-px grid gap-12 lg:grid-cols-2 lg:items-center">
-          <div>
+          <div className="text-center md:text-left">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Sobre a IJ Santos</span>
             <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
               Uma empresa local com obra feita e nome a defender.
