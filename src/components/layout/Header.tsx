@@ -63,6 +63,7 @@ export function Header() {
               <Phone className="h-4 w-4" />
               {company.phone}
             </a>
+            <ThemeToggle />
             <Link
               to="/contacto"
               className="inline-flex items-center justify-center rounded-md bg-brand text-brand-foreground px-4 py-2.5 text-sm font-semibold hover:brightness-95 transition shadow-sm"
@@ -71,6 +72,8 @@ export function Header() {
             </Link>
           </div>
 
+          <div className="md:hidden flex items-center gap-2">
+            <ThemeToggle />
           <button
             className="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-md border border-border"
             aria-label="Menu"
