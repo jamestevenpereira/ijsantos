@@ -105,7 +105,7 @@ function ContactoPage() {
       <section className="pb-20 md:pb-28">
         <div className="mx-auto max-w-7xl container-px">
           <div className="relative overflow-hidden rounded-2xl border border-border aspect-[16/7] bg-surface">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,oklch(0.92_0.02_70/0.5),transparent_60%),radial-gradient(circle_at_70%_60%,oklch(0.88_0.02_250/0.5),transparent_60%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,oklch(0.92_0_0/0.6),transparent_60%),radial-gradient(circle_at_70%_60%,oklch(0.55_0.22_27/0.12),transparent_60%)]" />
             <div className="absolute inset-0 grain opacity-40" />
             <div className="absolute inset-0 grid place-items-center text-primary">
               <div className="text-center">
