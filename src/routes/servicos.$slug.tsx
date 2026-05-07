@@ -120,7 +120,7 @@ function ServiceDetail() {
       {/* Process */}
       <section className="py-20 md:py-28">
         <div className="mx-auto max-w-7xl container-px">
-          <div className="max-w-2xl">
+          <div className="max-w-2xl mx-auto md:mx-0 text-center md:text-left">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">O nosso processo</span>
             <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
               Do primeiro contacto à entrega final.
@@ -128,7 +128,7 @@ function ServiceDetail() {
           </div>
           <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {service.process.map((p, i) => (
-              <div key={p.title} className="rounded-xl border border-border bg-card p-6">
+              <div key={p.title} className="rounded-xl border border-border bg-card p-6 text-center md:text-left">
                 <div className="font-display text-4xl font-bold text-brand/30">0{i + 1}</div>
                 <h3 className="mt-3 font-display font-semibold text-lg">{p.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{p.desc}</p>
