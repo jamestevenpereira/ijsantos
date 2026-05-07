@@ -16,7 +16,7 @@ export const Route = createFileRoute("/")({
       { title: "IJ Santos · Construção e Limpezas Exteriores em Lisboa" },
       { name: "description", content: "Empresa local de construção civil, remodelações, pinturas e limpeza de fachadas, telhados e pavimentos. Orçamento gratuito em 24 horas." },
       { property: "og:title", content: "IJ Santos · Construção e Limpezas Exteriores" },
-      { property: "og:description", content: "Construção, remodelações e limpezas exteriores na região de Lisboa." },
+      { property: "og:description", content: "Construção, remodelações e limpezas exteriores na região de Viseu." },
       { property: "og:image", content: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1200&q=80" },
     ],
   }),
@@ -39,7 +39,7 @@ function Index() {
             <p className="mt-6 text-muted-foreground text-lg leading-relaxed">
               Somos uma equipa portuguesa especializada em construção civil e limpezas
               exteriores. Trabalhamos com clientes particulares, empresas e condomínios em
-              toda a região de Lisboa, com um compromisso simples: entregar trabalho bem
+              toda a região de Viseu, com um compromisso simples: entregar trabalho bem
               feito, no tempo combinado e sem surpresas.
             </p>
             <Link
@@ -93,8 +93,8 @@ function Index() {
             <div className="absolute inset-0 grid place-items-center text-primary">
               <div className="text-center">
                 <MapPin className="h-10 w-10 mx-auto text-brand" />
-                <div className="mt-3 font-display text-xl font-bold">Região de Lisboa</div>
-                <div className="text-sm text-muted-foreground">Atendemos toda a Grande Lisboa</div>
+                <div className="mt-3 font-display text-xl font-bold">Região Centro</div>
+                <div className="text-sm text-muted-foreground">Sede em Nelas — atendemos toda a região centro</div>
               </div>
             </div>
           </div>
@@ -105,7 +105,7 @@ function Index() {
               Local, próximo e disponível.
             </h2>
             <p className="mt-6 text-muted-foreground text-lg leading-relaxed">
-              Servimos clientes em toda a Grande Lisboa. Resposta rápida, deslocações sem
+              Servimos clientes em toda a região centro. Resposta rápida, deslocações sem
               custo adicional dentro da nossa área de atuação.
             </p>
             <ul className="mt-6 flex flex-wrap gap-2">

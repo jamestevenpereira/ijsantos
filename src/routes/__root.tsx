@@ -73,7 +73,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "IJ Santos · Construção e Limpezas Exteriores" },
-      { name: "description", content: "Construção civil, remodelações e limpezas exteriores na região de Lisboa. Orçamento gratuito." },
+      { name: "description", content: "Construção civil, remodelações e limpezas exteriores na região de Viseu. Orçamento gratuito." },
       { name: "author", content: "IJ Santos" },
       { property: "og:title", content: "IJ Santos · Construção e Limpezas Exteriores" },
       { property: "og:description", content: "Construção, remodelações e limpezas exteriores. Orçamento gratuito." },

@@ -113,7 +113,7 @@ function ContactoPage() {
                   <MapPin className="h-6 w-6" />
                 </div>
                 <div className="mt-4 font-display text-2xl font-bold">{company.address}</div>
-                <div className="mt-1 text-sm text-muted-foreground">Servimos toda a Grande Lisboa</div>
+                <div className="mt-1 text-sm text-muted-foreground">Servimos toda a região centro</div>
               </div>
             </div>
           </div>
