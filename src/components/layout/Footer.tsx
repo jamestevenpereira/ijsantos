@@ -7,7 +7,7 @@ export function Footer() {
   return (
     <footer className="bg-primary text-primary-foreground mt-24">
       <div className="mx-auto max-w-7xl container-px py-16">
-        <div className="grid gap-12 md:grid-cols-4">
+        <div className="grid gap-12 md:grid-cols-4 text-center md:text-left">
           <div className="md:col-span-1">
             <img
               src="/logo-light.png"
