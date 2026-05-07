@@ -82,21 +82,39 @@
 
 .dark {
   --background: oklch(0.14 0 0);
-  --foreground: oklch(0.98 0 0);
-  --card: oklch(0.2 0 0);
-  --card-foreground: oklch(0.98 0 0);
-  --popover: oklch(0.2 0 0);
-  --popover-foreground: oklch(0.98 0 0);
-  --primary: oklch(0.95 0 0);
-  --primary-foreground: oklch(0.2 0 0);
-  --secondary: oklch(0.25 0 0);
-  --secondary-foreground: oklch(0.98 0 0);
-  --muted: oklch(0.25 0 0);
+  --foreground: oklch(0.97 0 0);
+
+  --ink: oklch(0.97 0 0);
+  --surface: oklch(0.18 0 0);
+
+  --card: oklch(0.18 0 0);
+  --card-foreground: oklch(0.97 0 0);
+
+  --popover: oklch(0.18 0 0);
+  --popover-foreground: oklch(0.97 0 0);
+
+  /* Keep primary as a dark band even in dark mode (slightly lifted from bg) */
+  --primary: oklch(0.22 0 0);
+  --primary-foreground: oklch(0.98 0 0);
+
+  --brand: oklch(0.62 0.22 27);
+  --brand-foreground: oklch(0.99 0 0);
+
+  --secondary: oklch(0.22 0 0);
+  --secondary-foreground: oklch(0.97 0 0);
+
+  --muted: oklch(0.22 0 0);
   --muted-foreground: oklch(0.7 0 0);
-  --accent: oklch(0.25 0 0);
-  --accent-foreground: oklch(0.98 0 0);
+
+  --accent: oklch(0.24 0 0);
+  --accent-foreground: oklch(0.97 0 0);
+
+  --destructive: oklch(0.62 0.22 27);
+  --destructive-foreground: oklch(0.99 0 0);
+
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.62 0.22 27);
 }
 
 @layer base {
