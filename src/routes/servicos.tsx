@@ -22,12 +22,12 @@ function ServicosPage() {
   return (
     <>
       <section className="bg-primary text-primary-foreground">
-        <div className="mx-auto max-w-7xl container-px py-20 md:py-28">
+        <div className="mx-auto max-w-7xl container-px py-20 md:py-28 text-center md:text-left">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Serviços</span>
-          <h1 className="mt-3 font-display text-4xl md:text-6xl font-bold tracking-tight text-balance max-w-3xl">
+          <h1 className="mt-3 font-display text-4xl md:text-6xl font-bold tracking-tight text-balance max-w-3xl mx-auto md:mx-0">
             Soluções completas para construir, renovar e cuidar.
           </h1>
-          <p className="mt-6 text-lg text-primary-foreground/75 max-w-2xl">
+          <p className="mt-6 text-lg text-primary-foreground/75 max-w-2xl mx-auto md:mx-0">
             Da obra nova à manutenção exterior, oferecemos um leque de serviços executados
             com rigor, materiais de qualidade e profissionais experientes.
           </p>
