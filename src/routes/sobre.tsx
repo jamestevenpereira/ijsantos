@@ -7,7 +7,7 @@ export const Route = createFileRoute("/sobre")({
   head: () => ({
     meta: [
       { title: "Sobre · IJ Santos" },
-      { name: "description", content: "Conheça a IJ Santos: empresa local com mais de 15 anos de experiência em construção civil e limpezas exteriores na região de Lisboa." },
+      { name: "description", content: "Conheça a IJ Santos: empresa local com mais de 15 anos de experiência em construção civil e limpezas exteriores na região de Viseu." },
       { property: "og:title", content: "Sobre a IJ Santos" },
       { property: "og:description", content: "Empresa local, próxima e profissional. Conheça quem somos." },
     ],
@@ -61,7 +61,7 @@ export default function SobrePage() {
             <p className="mt-4 text-muted-foreground text-lg leading-relaxed">
               Hoje, somos uma equipa multidisciplinar que combina construção civil com serviços
               de limpeza exterior, oferecendo uma resposta completa a particulares, empresas e
-              condomínios em toda a Grande Lisboa.
+              condomínios em toda a região centro.
             </p>
           </div>
         </div>

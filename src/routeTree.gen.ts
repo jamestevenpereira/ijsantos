@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as ServicosRouteImport } from './routes/servicos'
+import { Route as ResolucaoLitigiosRouteImport } from './routes/resolucao-litigios'
+import { Route as PrivacidadeRouteImport } from './routes/privacidade'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ServicosSlugRouteImport } from './routes/servicos.$slug'
@@ -23,6 +25,16 @@ const SobreRoute = SobreRouteImport.update({
 const ServicosRoute = ServicosRouteImport.update({
   id: '/servicos',
   path: '/servicos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResolucaoLitigiosRoute = ResolucaoLitigiosRouteImport.update({
+  id: '/resolucao-litigios',
+  path: '/resolucao-litigios',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacidadeRoute = PrivacidadeRouteImport.update({
+  id: '/privacidade',
+  path: '/privacidade',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactoRoute = ContactoRouteImport.update({
@@ -44,6 +56,8 @@ const ServicosSlugRoute = ServicosSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contacto': typeof ContactoRoute
+  '/privacidade': typeof PrivacidadeRoute
+  '/resolucao-litigios': typeof ResolucaoLitigiosRoute
   '/servicos': typeof ServicosRouteWithChildren
   '/sobre': typeof SobreRoute
   '/servicos/$slug': typeof ServicosSlugRoute
@@ -51,6 +65,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contacto': typeof ContactoRoute
+  '/privacidade': typeof PrivacidadeRoute
+  '/resolucao-litigios': typeof ResolucaoLitigiosRoute
   '/servicos': typeof ServicosRouteWithChildren
   '/sobre': typeof SobreRoute
   '/servicos/$slug': typeof ServicosSlugRoute
@@ -59,19 +75,37 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/contacto': typeof ContactoRoute
+  '/privacidade': typeof PrivacidadeRoute
+  '/resolucao-litigios': typeof ResolucaoLitigiosRoute
   '/servicos': typeof ServicosRouteWithChildren
   '/sobre': typeof SobreRoute
   '/servicos/$slug': typeof ServicosSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/contacto' | '/servicos' | '/sobre' | '/servicos/$slug'
+  fullPaths:
+    | '/'
+    | '/contacto'
+    | '/privacidade'
+    | '/resolucao-litigios'
+    | '/servicos'
+    | '/sobre'
+    | '/servicos/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contacto' | '/servicos' | '/sobre' | '/servicos/$slug'
+  to:
+    | '/'
+    | '/contacto'
+    | '/privacidade'
+    | '/resolucao-litigios'
+    | '/servicos'
+    | '/sobre'
+    | '/servicos/$slug'
   id:
     | '__root__'
     | '/'
     | '/contacto'
+    | '/privacidade'
+    | '/resolucao-litigios'
     | '/servicos'
     | '/sobre'
     | '/servicos/$slug'
@@ -80,6 +114,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactoRoute: typeof ContactoRoute
+  PrivacidadeRoute: typeof PrivacidadeRoute
+  ResolucaoLitigiosRoute: typeof ResolucaoLitigiosRoute
   ServicosRoute: typeof ServicosRouteWithChildren
   SobreRoute: typeof SobreRoute
 }
@@ -98,6 +134,20 @@ declare module '@tanstack/react-router' {
       path: '/servicos'
       fullPath: '/servicos'
       preLoaderRoute: typeof ServicosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resolucao-litigios': {
+      id: '/resolucao-litigios'
+      path: '/resolucao-litigios'
+      fullPath: '/resolucao-litigios'
+      preLoaderRoute: typeof ResolucaoLitigiosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacidade': {
+      id: '/privacidade'
+      path: '/privacidade'
+      fullPath: '/privacidade'
+      preLoaderRoute: typeof PrivacidadeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contacto': {
@@ -139,6 +189,8 @@ const ServicosRouteWithChildren = ServicosRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactoRoute: ContactoRoute,
+  PrivacidadeRoute: PrivacidadeRoute,
+  ResolucaoLitigiosRoute: ResolucaoLitigiosRoute,
   ServicosRoute: ServicosRouteWithChildren,
   SobreRoute: SobreRoute,
 }

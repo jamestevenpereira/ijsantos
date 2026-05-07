@@ -8,7 +8,7 @@ export const testimonials = [
   },
   {
     name: "Carlos Mendes",
-    role: "Administrador de Condomínio, Lisboa",
+    role: "Administrador de Condomínio, Viseu",
     quote:
       "Contratámos a limpeza de fachadas do nosso prédio. Equipa profissional, cuidadosa e o edifício ficou irreconhecível. Já contratámos novamente.",
     rating: 5,

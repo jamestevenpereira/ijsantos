@@ -25,24 +25,18 @@ export function Header() {
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-background/85 backdrop-blur-md border-b border-border shadow-sm"
-          : "bg-background/0"
+          ? "bg-background/90 backdrop-blur-md border-b border-border shadow-sm"
+          : "bg-background/60 backdrop-blur"
       }`}
     >
       <div className="mx-auto max-w-7xl container-px">
-        <div className="flex h-16 md:h-20 items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="h-9 w-9 rounded-md bg-primary text-primary-foreground grid place-items-center font-display font-bold">
-              IJ
-            </div>
-            <div className="leading-tight">
-              <div className="font-display font-bold tracking-tight text-foreground">
-                IJ SANTOS
-              </div>
-              <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-                Construção · Limpezas
-              </div>
-            </div>
+        <div className="flex h-20 md:h-24 items-center justify-between">
+          <Link to="/" className="flex items-center gap-3 group" aria-label="IJ Santos — Início">
+            <img
+              src="/logo.png"
+              alt="IJ Santos"
+              className="h-12 md:h-14 w-auto"
+            />
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">

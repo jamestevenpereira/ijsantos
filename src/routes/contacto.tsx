@@ -42,10 +42,60 @@ function ContactoPage() {
           </div>
 
           <aside className="lg:col-span-2 flex flex-col gap-4">
-            <InfoCard icon={Phone} title="Telefone" value={company.phone} href={company.phoneHref} />
+            <div className="rounded-xl border border-border bg-card p-5">
+              <div className="flex items-center gap-3">
+                <div className="h-11 w-11 rounded-lg bg-brand/10 text-brand grid place-items-center">
+                  <Phone className="h-5 w-5" />
+                </div>
+                <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Telefones</div>
+              </div>
+              <ul className="mt-4 space-y-2.5">
+                {company.phones.map((p) => (
+                  <li key={p.href} className="flex items-center justify-between gap-3 text-sm">
+                    <span className="text-muted-foreground">{p.label}</span>
+                    <a href={p.href} className="font-display font-semibold text-foreground hover:text-brand">{p.value}</a>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-3 text-[11px] text-muted-foreground">{company.phoneNote}</p>
+            </div>
+
+            <div className="rounded-xl border border-border bg-card p-5">
+              <div className="flex items-center gap-3">
+                <div className="h-11 w-11 rounded-lg bg-brand/10 text-brand grid place-items-center">
+                  <Mail className="h-5 w-5" />
+                </div>
+                <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Emails</div>
+              </div>
+              <ul className="mt-4 space-y-2.5">
+                {company.emails.map((e) => (
+                  <li key={e.href} className="flex items-center justify-between gap-3 text-sm">
+                    <span className="text-muted-foreground">{e.label}</span>
+                    <a href={e.href} className="font-display font-semibold text-foreground hover:text-brand truncate">{e.value}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
             <InfoCard icon={MessageCircle} title="WhatsApp" value="Mensagem direta" href={company.whatsapp} external />
-            <InfoCard icon={Mail} title="Email" value={company.email} href={company.emailHref} />
-            <InfoCard icon={MapPin} title="Morada" value={company.address} />
+
+            <div className="rounded-xl border border-border bg-card p-5">
+              <div className="flex items-center gap-3">
+                <div className="h-11 w-11 rounded-lg bg-brand/10 text-brand grid place-items-center">
+                  <MapPin className="h-5 w-5" />
+                </div>
+                <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Moradas</div>
+              </div>
+              <ul className="mt-4 space-y-3">
+                {company.addresses.map((a) => (
+                  <li key={a.value} className="text-sm">
+                    <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{a.label}</div>
+                    <div className="font-display font-semibold text-foreground">{a.value}</div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
             <InfoCard icon={Clock} title="Horário" value={company.hours} />
           </aside>
         </div>
@@ -63,7 +113,7 @@ function ContactoPage() {
                   <MapPin className="h-6 w-6" />
                 </div>
                 <div className="mt-4 font-display text-2xl font-bold">{company.address}</div>
-                <div className="mt-1 text-sm text-muted-foreground">Servimos toda a Grande Lisboa</div>
+                <div className="mt-1 text-sm text-muted-foreground">Servimos toda a região centro</div>
               </div>
             </div>
           </div>
