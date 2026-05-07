@@ -29,12 +29,12 @@ export default function SobrePage() {
           <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=2000&q=80" alt="" className="h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary/40" />
         </div>
-        <div className="mx-auto max-w-7xl container-px py-20 md:py-28 text-primary-foreground">
+        <div className="mx-auto max-w-7xl container-px py-20 md:py-28 text-primary-foreground text-center md:text-left">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Sobre nós</span>
-          <h1 className="mt-3 font-display text-4xl md:text-6xl font-bold tracking-tight max-w-3xl text-balance">
+          <h1 className="mt-3 font-display text-4xl md:text-6xl font-bold tracking-tight max-w-3xl mx-auto md:mx-0 text-balance">
             Construir bem é uma questão de princípio.
           </h1>
-          <p className="mt-6 text-lg md:text-xl text-primary-foreground/80 max-w-2xl">
+          <p className="mt-6 text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto md:mx-0">
             Somos uma empresa familiar portuguesa que cresceu obra a obra, cliente a cliente.
             Mais de 15 anos depois, continuamos a fazer o que fazemos melhor: trabalho honesto.
           </p>
