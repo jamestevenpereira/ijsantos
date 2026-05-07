@@ -141,7 +141,7 @@ function ServiceDetail() {
       {/* Gallery */}
       <section className="py-20 md:py-28 bg-surface">
         <div className="mx-auto max-w-7xl container-px">
-          <div className="max-w-2xl">
+          <div className="max-w-2xl mx-auto md:mx-0 text-center md:text-left">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Galeria</span>
             <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
               Trabalhos realizados.
