@@ -97,7 +97,7 @@ function ServiceDetail() {
       {/* Benefits */}
       <section className="py-20 md:py-28 bg-surface">
         <div className="mx-auto max-w-7xl container-px">
-          <div className="max-w-2xl">
+          <div className="max-w-2xl mx-auto md:mx-0 text-center md:text-left">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Benefícios</span>
             <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
               O que ganha ao trabalhar connosco.
@@ -105,8 +105,8 @@ function ServiceDetail() {
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {service.benefits.map((b) => (
-              <div key={b.title} className="rounded-xl bg-card border border-border p-6">
-                <div className="h-9 w-9 rounded-md bg-brand/10 text-brand grid place-items-center">
+              <div key={b.title} className="rounded-xl bg-card border border-border p-6 text-center md:text-left">
+                <div className="h-9 w-9 rounded-md bg-brand/10 text-brand grid place-items-center mx-auto md:mx-0">
                   <Check className="h-5 w-5" />
                 </div>
                 <h3 className="mt-4 font-display font-semibold text-lg">{b.title}</h3>
