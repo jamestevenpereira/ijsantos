@@ -86,7 +86,7 @@ export function Footer() {
         </div>
 
         <div className="mt-14 pt-6 border-t border-primary-foreground/10 flex flex-col gap-4 text-xs text-primary-foreground/60">
-          <ul className="flex flex-wrap items-center gap-x-5 gap-y-2">
+          <ul className="flex flex-wrap items-center gap-x-5 gap-y-2 justify-center md:justify-start">
             <li>
               <Link to="/privacidade" className="hover:text-brand">Política de Privacidade & Cookies</Link>
             </li>
