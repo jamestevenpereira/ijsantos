@@ -59,14 +59,14 @@ function Index() {
       {/* Services */}
       <section id="servicos" className="py-20 md:py-28 bg-surface">
         <div className="mx-auto max-w-7xl container-px">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-            <div className="max-w-2xl">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 text-center md:text-left">
+            <div className="max-w-2xl mx-auto md:mx-0">
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Os nossos serviços</span>
               <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
                 Tudo o que precisa para construir e cuidar do seu imóvel.
               </h2>
             </div>
-            <Link to="/servicos" className="inline-flex items-center gap-2 text-sm font-semibold text-brand">
+            <Link to="/servicos" className="inline-flex items-center gap-2 text-sm font-semibold text-brand justify-center md:justify-start">
               Ver todos os serviços <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
