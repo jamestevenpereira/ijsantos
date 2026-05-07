@@ -12,7 +12,7 @@ export function Footer() {
             <img
               src="/logo-light.png"
               alt="IJ Santos"
-              className="h-14 w-auto mb-5"
+              className="h-14 w-auto mb-5 mx-auto md:mx-0"
             />
             <p className="text-sm text-primary-foreground/70 leading-relaxed">
               {company.legalName} — Construção civil e limpezas exteriores com rigor,
