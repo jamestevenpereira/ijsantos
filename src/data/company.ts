@@ -29,6 +29,8 @@ export const company = {
 
   // Primary address
   address: "Rua da Shell, nº 13, 3520-074 Nelas",
+  mapUrl: "https://www.google.com/maps/search/?api=1&query=Rua+da+Shell,+n%C2%BA+13,+3520-074+Nelas",
+  mapEmbedUrl: "https://www.google.com/maps?q=Rua+da+Shell,+n%C2%BA+13,+3520-074+Nelas&output=embed",
 
   addresses: [
     { label: "Sede", value: "Rua da Shell, nº 13, 3520-074 Nelas" },

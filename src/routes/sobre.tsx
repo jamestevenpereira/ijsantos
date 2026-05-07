@@ -103,8 +103,8 @@ export default function SobrePage() {
           </div>
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {values.map((v) => (
-              <div key={v.title} className="rounded-xl bg-card border border-border p-7 text-center md:text-left">
-                <div className="h-11 w-11 rounded-lg bg-brand/10 text-brand grid place-items-center mx-auto md:mx-0">
+              <div key={v.title} className="rounded-xl bg-card border border-border p-7 h-full flex flex-col items-center justify-center text-center">
+                <div className="h-11 w-11 rounded-lg bg-brand/15 text-brand border border-brand/25 grid place-items-center">
                   <v.icon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-5 font-display font-semibold text-lg">{v.title}</h3>
@@ -122,8 +122,8 @@ export default function SobrePage() {
 
 function Card({ icon: Icon, title, text }: { icon: typeof Target; title: string; text: string }) {
   return (
-    <div className="rounded-2xl bg-card border border-border p-8 text-center md:text-left">
-      <div className="h-12 w-12 rounded-xl bg-brand text-brand-foreground grid place-items-center mx-auto md:mx-0">
+    <div className="rounded-2xl bg-card border border-border p-8 h-full flex flex-col items-center justify-center text-center">
+      <div className="h-12 w-12 rounded-xl bg-brand text-brand-foreground grid place-items-center">
         <Icon className="h-6 w-6" />
       </div>
       <h3 className="mt-6 font-display font-bold text-2xl">{title}</h3>

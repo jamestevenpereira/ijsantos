@@ -78,7 +78,7 @@ export function Footer() {
             </ul>
             <Link
               to="/contacto"
-              className="mt-6 inline-flex items-center justify-center rounded-md bg-brand text-brand-foreground px-4 py-2.5 text-sm font-semibold"
+              className="hidden"
             >
               Pedir Orçamento
             </Link>
@@ -86,7 +86,7 @@ export function Footer() {
         </div>
 
         <div className="mt-14 pt-6 border-t border-primary-foreground/10 flex flex-col gap-4 text-xs text-primary-foreground/60">
-          <ul className="flex flex-wrap items-center gap-x-5 gap-y-2 justify-center md:justify-start">
+          <ul className="flex flex-wrap items-center content-center justify-center gap-x-5 gap-y-2 text-center">
             <li>
               <Link to="/privacidade" className="hover:text-brand">Política de Privacidade & Cookies</Link>
             </li>
@@ -113,7 +113,7 @@ export function Footer() {
               </button>
             </li>
           </ul>
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-2">
+          <div className="flex flex-col items-center justify-center gap-2 text-center">
             <div>© {new Date().getFullYear()} {company.legalName}. Todos os direitos reservados.</div>
             <div>Construção · Remodelações · Limpezas Exteriores</div>
           </div>

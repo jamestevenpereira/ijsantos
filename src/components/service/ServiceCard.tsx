@@ -27,7 +27,7 @@ export function ServiceCard({ service }: { service: Service }) {
           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/10 to-transparent" />
-        <div className="absolute top-4 left-4 h-10 w-10 rounded-md bg-background/95 grid place-items-center text-primary">
+        <div className="absolute top-4 left-4 h-10 w-10 rounded-md border border-brand/35 bg-brand/20 text-brand grid place-items-center backdrop-blur-sm transition-colors group-hover:bg-brand group-hover:text-brand-foreground">
           <Icon className="h-5 w-5" />
         </div>
       </div>

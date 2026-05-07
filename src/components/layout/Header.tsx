@@ -36,7 +36,12 @@ export function Header() {
             <img
               src="/logo.png"
               alt="IJ Santos"
-              className="h-12 md:h-14 w-auto"
+              className="h-12 md:h-14 w-auto dark:hidden"
+            />
+            <img
+              src="/logo-light.png"
+              alt="IJ Santos"
+              className="hidden h-12 md:h-14 w-auto dark:block"
             />
           </Link>
 

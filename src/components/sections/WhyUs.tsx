@@ -20,16 +20,16 @@ export function WhyUs() {
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {items.map((it) => (
-            <div
+            <article
               key={it.title}
-              className="flex-wrap gap-x-5 gap-y-2 justify-center flex items-center md:justify-between"
+              className="h-full rounded-xl border border-border bg-card p-6 md:p-7 flex flex-col items-center justify-center text-center"
             >
-              <div className="h-11 w-11 rounded-lg bg-brand/10 text-brand grid place-items-center mx-auto md:mx-0 group-hover:bg-brand group-hover:text-brand-foreground transition-colors">
+              <div className="h-11 w-11 rounded-lg bg-brand/15 text-brand border border-brand/25 grid place-items-center">
                 <it.icon className="h-5 w-5" />
               </div>
               <h3 className="mt-5 font-display font-semibold text-lg text-foreground">{it.title}</h3>
               <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{it.desc}</p>
-            </div>
+            </article>
           ))}
         </div>
       </div>

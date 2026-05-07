@@ -158,7 +158,7 @@ export const services: Service[] = [
     short: "Telhados limpos, impermeabilizados e protegidos.",
     description:
       "Remoção de musgo, líquenes e sujidade acumulada, seguida de aplicação de tratamento antifungos e impermeabilizante para prolongar a vida útil do telhado.",
-    hero: img("photo-1632759145355-8b8b1a1c6f7c"),
+    hero: img("photo-1605276374104-dee2a0ed3cd6"),
     icon: "roof",
     benefits: [
       { title: "Mais durabilidade", desc: "Evita infiltrações e degradação das telhas." },

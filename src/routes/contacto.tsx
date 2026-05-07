@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { QuoteForm } from "@/components/forms/QuoteForm";
+import { CompanyMap } from "@/components/sections/CompanyMap";
 import { company } from "@/data/company";
 import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 
@@ -104,8 +105,8 @@ function ContactoPage() {
       {/* Map placeholder */}
       <section className="pb-20 md:pb-28">
         <div className="mx-auto max-w-7xl container-px">
-          <div className="relative overflow-hidden rounded-2xl border border-border aspect-[16/7] bg-surface">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,oklch(0.92_0_0/0.6),transparent_60%),radial-gradient(circle_at_70%_60%,oklch(0.55_0.22_27/0.12),transparent_60%)]" />
+          <CompanyMap className="rounded-2xl aspect-[16/7]" />
+            {/*
             <div className="absolute inset-0 grain opacity-40" />
             <div className="absolute inset-0 grid place-items-center text-primary">
               <div className="text-center">
@@ -116,7 +117,7 @@ function ContactoPage() {
                 <div className="mt-1 text-sm text-muted-foreground">Servimos toda a região centro</div>
               </div>
             </div>
-          </div>
+            */}
         </div>
       </section>
     </>
