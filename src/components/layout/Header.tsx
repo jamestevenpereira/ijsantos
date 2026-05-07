@@ -74,13 +74,14 @@ export function Header() {
 
           <div className="md:hidden flex items-center gap-2">
             <ThemeToggle />
-          <button
-            className="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-md border border-border"
-            aria-label="Menu"
-            onClick={() => setOpen((v) => !v)}
-          >
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+            <button
+              className="inline-flex items-center justify-center h-10 w-10 rounded-md border border-border"
+              aria-label="Menu"
+              onClick={() => setOpen((v) => !v)}
+            >
+              {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
       </div>
 
