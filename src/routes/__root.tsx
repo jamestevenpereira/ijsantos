@@ -9,6 +9,7 @@ import {
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppFAB } from "@/components/layout/WhatsAppFAB";
+import { CookieConsent } from "@/components/layout/CookieConsent";
 import { Toaster } from "@/components/ui/sonner";
 
 import appCss from "../styles.css?url";
@@ -120,6 +121,7 @@ function RootComponent() {
         <Footer />
       </div>
       <WhatsAppFAB />
+      <CookieConsent />
       <Toaster position="top-right" />
     </QueryClientProvider>
   );
