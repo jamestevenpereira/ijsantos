@@ -50,18 +50,18 @@ function ServiceDetail() {
           <img src={service.hero} alt={service.title} className="h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/30" />
         </div>
-        <div className="mx-auto max-w-7xl container-px py-20 md:py-28 text-primary-foreground">
-          <nav className="flex items-center gap-1 text-sm text-primary-foreground/70">
+        <div className="mx-auto max-w-7xl container-px py-20 md:py-28 text-primary-foreground text-center md:text-left">
+          <nav className="flex items-center gap-1 text-sm text-primary-foreground/70 justify-center md:justify-start">
             <Link to="/" className="hover:text-primary-foreground">Início</Link>
             <ChevronRight className="h-4 w-4" />
             <Link to="/servicos" className="hover:text-primary-foreground">Serviços</Link>
             <ChevronRight className="h-4 w-4" />
             <span className="text-primary-foreground">{service.title}</span>
           </nav>
-          <h1 className="mt-6 font-display text-4xl md:text-6xl font-bold tracking-tight max-w-3xl text-balance">
+          <h1 className="mt-6 font-display text-4xl md:text-6xl font-bold tracking-tight max-w-3xl mx-auto md:mx-0 text-balance">
             {service.title}
           </h1>
-          <p className="mt-5 text-lg md:text-xl text-primary-foreground/80 max-w-2xl">
+          <p className="mt-5 text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto md:mx-0">
             {service.short}
           </p>
           <div className="mt-8">
