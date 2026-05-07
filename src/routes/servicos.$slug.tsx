@@ -83,7 +83,7 @@ function ServiceDetail() {
             <p className="mt-6 text-muted-foreground text-lg leading-relaxed">{service.description}</p>
             <ul className="mt-8 space-y-3">
               {service.useCases.map((u) => (
-                <li key={u} className="flex items-start gap-3 text-foreground justify-center md:justify-start text-left">
+                <li key={u} className="flex items-start gap-3 text-foreground justify-center md:justify-start">
                   <Check className="h-5 w-5 text-brand mt-0.5 shrink-0" />
                   <span>{u}</span>
                 </li>
@@ -173,7 +173,7 @@ function ServiceDetail() {
                 <div key={i}>
                   <button
                     onClick={() => setOpenFaq(open ? null : i)}
-                    className="w-full flex items-center justify-between gap-4 py-5 text-left"
+                    className="w-full flex items-center justify-between gap-4 py-5"
                   >
                     <span className="font-display font-semibold text-foreground text-lg">{f.q}</span>
                     <span className={`text-brand text-2xl transition-transform ${open ? "rotate-45" : ""}`}>+</span>
