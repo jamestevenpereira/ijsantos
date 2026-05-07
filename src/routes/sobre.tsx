@@ -122,8 +122,8 @@ export default function SobrePage() {
 
 function Card({ icon: Icon, title, text }: { icon: typeof Target; title: string; text: string }) {
   return (
-    <div className="rounded-2xl bg-card border border-border p-8">
-      <div className="h-12 w-12 rounded-xl bg-brand text-brand-foreground grid place-items-center">
+    <div className="rounded-2xl bg-card border border-border p-8 text-center md:text-left">
+      <div className="h-12 w-12 rounded-xl bg-brand text-brand-foreground grid place-items-center mx-auto md:mx-0">
         <Icon className="h-6 w-6" />
       </div>
       <h3 className="mt-6 font-display font-bold text-2xl">{title}</h3>
