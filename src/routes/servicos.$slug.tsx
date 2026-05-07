@@ -173,7 +173,7 @@ function ServiceDetail() {
                 <div key={i}>
                   <button
                     onClick={() => setOpenFaq(open ? null : i)}
-                    className="w-full flex items-center justify-between gap-4 py-5 text-left"
+                    className="w-full flex items-center justify-between gap-4 py-5"
                   >
                     <span className="font-display font-semibold text-foreground text-lg">{f.q}</span>
                     <span className={`text-brand text-2xl transition-transform ${open ? "rotate-45" : ""}`}>+</span>
