@@ -88,9 +88,9 @@ function Index() {
       <section className="py-20 md:py-28">
         <div className="mx-auto max-w-7xl container-px grid gap-12 lg:grid-cols-2 lg:items-center">
           <div className="rounded-2xl overflow-hidden border border-border aspect-[4/3] bg-surface relative">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,oklch(0.92_0.02_70/0.5),transparent_60%),radial-gradient(circle_at_70%_60%,oklch(0.88_0.02_250/0.5),transparent_60%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,oklch(0.92_0_0/0.6),transparent_60%),radial-gradient(circle_at_70%_60%,oklch(0.55_0.22_27/0.12),transparent_60%)]" />
             <div className="absolute inset-0 grain opacity-40" />
-            <div className="absolute inset-0 grid place-items-center text-primary">
+            <div className="absolute inset-0 grid place-items-center text-foreground">
               <div className="text-center">
                 <MapPin className="h-10 w-10 mx-auto text-brand" />
                 <div className="mt-3 font-display text-xl font-bold">Região Centro</div>
@@ -99,7 +99,7 @@ function Index() {
             </div>
           </div>
 
-          <div>
+          <div className="text-center md:text-left">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Área de atuação</span>
             <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
               Local, próximo e disponível.
@@ -108,7 +108,7 @@ function Index() {
               Servimos clientes em toda a região centro. Resposta rápida, deslocações sem
               custo adicional dentro da nossa área de atuação.
             </p>
-            <ul className="mt-6 flex flex-wrap gap-2">
+            <ul className="mt-6 flex flex-wrap gap-2 justify-center md:justify-start">
               {company.areas.map((a) => (
                 <li key={a} className="rounded-full border border-border bg-card px-4 py-1.5 text-sm font-medium text-foreground">
                   {a}
