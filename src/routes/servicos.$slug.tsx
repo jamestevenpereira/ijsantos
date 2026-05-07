@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { getService, services } from "@/data/services";
+import { getService, services, type Service } from "@/data/services";
 import { CTABand } from "@/components/sections/CTABand";
 import { ArrowRight, Check, ChevronRight } from "lucide-react";
 import { useState } from "react";
@@ -39,7 +39,7 @@ export const Route = createFileRoute("/servicos/$slug")({
 });
 
 function ServiceDetail() {
-  const { service } = Route.useLoaderData();
+  const { service } = Route.useLoaderData() as { service: Service };
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   return (
