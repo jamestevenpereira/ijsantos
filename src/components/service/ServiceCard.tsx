@@ -31,10 +31,10 @@ export function ServiceCard({ service }: { service: Service }) {
           <Icon className="h-5 w-5" />
         </div>
       </div>
-      <div className="p-6 flex-1 flex flex-col">
+      <div className="p-6 flex-1 flex flex-col text-center md:text-left">
         <h3 className="font-display text-xl font-semibold text-foreground">{service.title}</h3>
         <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1">{service.short}</p>
-        <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand">
+        <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand justify-center md:justify-start">
           Saber mais <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </span>
       </div>

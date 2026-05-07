@@ -50,18 +50,18 @@ function ServiceDetail() {
           <img src={service.hero} alt={service.title} className="h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/30" />
         </div>
-        <div className="mx-auto max-w-7xl container-px py-20 md:py-28 text-primary-foreground">
-          <nav className="flex items-center gap-1 text-sm text-primary-foreground/70">
+        <div className="mx-auto max-w-7xl container-px py-20 md:py-28 text-primary-foreground text-center md:text-left">
+          <nav className="flex items-center gap-1 text-sm text-primary-foreground/70 justify-center md:justify-start">
             <Link to="/" className="hover:text-primary-foreground">Início</Link>
             <ChevronRight className="h-4 w-4" />
             <Link to="/servicos" className="hover:text-primary-foreground">Serviços</Link>
             <ChevronRight className="h-4 w-4" />
             <span className="text-primary-foreground">{service.title}</span>
           </nav>
-          <h1 className="mt-6 font-display text-4xl md:text-6xl font-bold tracking-tight max-w-3xl text-balance">
+          <h1 className="mt-6 font-display text-4xl md:text-6xl font-bold tracking-tight max-w-3xl mx-auto md:mx-0 text-balance">
             {service.title}
           </h1>
-          <p className="mt-5 text-lg md:text-xl text-primary-foreground/80 max-w-2xl">
+          <p className="mt-5 text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto md:mx-0">
             {service.short}
           </p>
           <div className="mt-8">
@@ -75,7 +75,7 @@ function ServiceDetail() {
       {/* Overview */}
       <section className="py-20 md:py-28">
         <div className="mx-auto max-w-7xl container-px grid gap-12 lg:grid-cols-2 lg:items-center">
-          <div>
+          <div className="text-center md:text-left">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Visão geral</span>
             <h2 className="mt-3 font-display text-3xl md:text-4xl font-bold tracking-tight text-balance">
               Um serviço pensado ao detalhe.
@@ -83,8 +83,8 @@ function ServiceDetail() {
             <p className="mt-6 text-muted-foreground text-lg leading-relaxed">{service.description}</p>
             <ul className="mt-8 space-y-3">
               {service.useCases.map((u) => (
-                <li key={u} className="flex items-start gap-3 text-foreground">
-                  <Check className="h-5 w-5 text-brand mt-0.5" />
+                <li key={u} className="flex items-start gap-3 text-foreground justify-center md:justify-start text-left">
+                  <Check className="h-5 w-5 text-brand mt-0.5 shrink-0" />
                   <span>{u}</span>
                 </li>
               ))}
@@ -97,7 +97,7 @@ function ServiceDetail() {
       {/* Benefits */}
       <section className="py-20 md:py-28 bg-surface">
         <div className="mx-auto max-w-7xl container-px">
-          <div className="max-w-2xl">
+          <div className="max-w-2xl mx-auto md:mx-0 text-center md:text-left">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Benefícios</span>
             <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
               O que ganha ao trabalhar connosco.
@@ -105,8 +105,8 @@ function ServiceDetail() {
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {service.benefits.map((b) => (
-              <div key={b.title} className="rounded-xl bg-card border border-border p-6">
-                <div className="h-9 w-9 rounded-md bg-brand/10 text-brand grid place-items-center">
+              <div key={b.title} className="rounded-xl bg-card border border-border p-6 text-center md:text-left">
+                <div className="h-9 w-9 rounded-md bg-brand/10 text-brand grid place-items-center mx-auto md:mx-0">
                   <Check className="h-5 w-5" />
                 </div>
                 <h3 className="mt-4 font-display font-semibold text-lg">{b.title}</h3>
@@ -120,7 +120,7 @@ function ServiceDetail() {
       {/* Process */}
       <section className="py-20 md:py-28">
         <div className="mx-auto max-w-7xl container-px">
-          <div className="max-w-2xl">
+          <div className="max-w-2xl mx-auto md:mx-0 text-center md:text-left">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">O nosso processo</span>
             <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
               Do primeiro contacto à entrega final.
@@ -128,7 +128,7 @@ function ServiceDetail() {
           </div>
           <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {service.process.map((p, i) => (
-              <div key={p.title} className="rounded-xl border border-border bg-card p-6">
+              <div key={p.title} className="rounded-xl border border-border bg-card p-6 text-center md:text-left">
                 <div className="font-display text-4xl font-bold text-brand/30">0{i + 1}</div>
                 <h3 className="mt-3 font-display font-semibold text-lg">{p.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{p.desc}</p>
@@ -141,7 +141,7 @@ function ServiceDetail() {
       {/* Gallery */}
       <section className="py-20 md:py-28 bg-surface">
         <div className="mx-auto max-w-7xl container-px">
-          <div className="max-w-2xl">
+          <div className="max-w-2xl mx-auto md:mx-0 text-center md:text-left">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Galeria</span>
             <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
               Trabalhos realizados.

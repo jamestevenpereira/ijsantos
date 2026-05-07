@@ -11,7 +11,7 @@ export function WhyUs() {
   return (
     <section className="py-20 md:py-28">
       <div className="mx-auto max-w-7xl container-px">
-        <div className="max-w-2xl">
+        <div className="max-w-2xl mx-auto md:mx-0 text-center md:text-left">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Porquê escolher-nos</span>
           <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
             Profissionalismo que sente em cada detalhe.
@@ -22,9 +22,9 @@ export function WhyUs() {
           {items.map((it) => (
             <div
               key={it.title}
-              className="group rounded-xl border border-border bg-card p-6 hover:border-brand/40 hover:shadow-md transition-all"
+              className="group rounded-xl border border-border bg-card p-6 text-center md:text-left hover:border-brand/40 hover:shadow-md transition-all"
             >
-              <div className="h-11 w-11 rounded-lg bg-brand/10 text-brand grid place-items-center group-hover:bg-brand group-hover:text-brand-foreground transition-colors">
+              <div className="h-11 w-11 rounded-lg bg-brand/10 text-brand grid place-items-center mx-auto md:mx-0 group-hover:bg-brand group-hover:text-brand-foreground transition-colors">
                 <it.icon className="h-5 w-5" />
               </div>
               <h3 className="mt-5 font-display font-semibold text-lg text-foreground">{it.title}</h3>

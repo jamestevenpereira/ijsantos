@@ -19,12 +19,12 @@ function ContactoPage() {
   return (
     <>
       <section className="bg-primary text-primary-foreground">
-        <div className="mx-auto max-w-7xl container-px py-20 md:py-28">
+        <div className="mx-auto max-w-7xl container-px py-20 md:py-28 text-center md:text-left">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Contacto</span>
-          <h1 className="mt-3 font-display text-4xl md:text-6xl font-bold tracking-tight max-w-3xl text-balance">
+          <h1 className="mt-3 font-display text-4xl md:text-6xl font-bold tracking-tight max-w-3xl mx-auto md:mx-0 text-balance">
             Vamos falar do seu projeto.
           </h1>
-          <p className="mt-6 text-lg text-primary-foreground/75 max-w-2xl">
+          <p className="mt-6 text-lg text-primary-foreground/75 max-w-2xl mx-auto md:mx-0">
             Preencha o formulário ou contacte-nos diretamente. Respondemos a todos os pedidos
             em menos de 24 horas, com orçamento gratuito e sem compromisso.
           </p>
@@ -105,7 +105,7 @@ function ContactoPage() {
       <section className="pb-20 md:pb-28">
         <div className="mx-auto max-w-7xl container-px">
           <div className="relative overflow-hidden rounded-2xl border border-border aspect-[16/7] bg-surface">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,oklch(0.92_0.02_70/0.5),transparent_60%),radial-gradient(circle_at_70%_60%,oklch(0.88_0.02_250/0.5),transparent_60%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,oklch(0.92_0_0/0.6),transparent_60%),radial-gradient(circle_at_70%_60%,oklch(0.55_0.22_27/0.12),transparent_60%)]" />
             <div className="absolute inset-0 grain opacity-40" />
             <div className="absolute inset-0 grid place-items-center text-primary">
               <div className="text-center">

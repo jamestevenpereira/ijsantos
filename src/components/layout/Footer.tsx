@@ -7,12 +7,12 @@ export function Footer() {
   return (
     <footer className="bg-primary text-primary-foreground mt-24">
       <div className="mx-auto max-w-7xl container-px py-16">
-        <div className="grid gap-12 md:grid-cols-4">
+        <div className="grid gap-12 md:grid-cols-4 text-center md:text-left">
           <div className="md:col-span-1">
             <img
               src="/logo-light.png"
               alt="IJ Santos"
-              className="h-14 w-auto mb-5"
+              className="h-14 w-auto mb-5 mx-auto md:mx-0"
             />
             <p className="text-sm text-primary-foreground/70 leading-relaxed">
               {company.legalName} — Construção civil e limpezas exteriores com rigor,
@@ -44,22 +44,22 @@ export function Footer() {
             <h4 className="font-display font-semibold text-sm uppercase tracking-wider mb-4">Contacto</h4>
             <ul className="space-y-3 text-sm text-primary-foreground/75">
               {company.phones.map((p) => (
-                <li key={p.href} className="flex items-start gap-2">
+                <li key={p.href} className="flex items-start gap-2 justify-center md:justify-start">
                   <Phone className="h-4 w-4 mt-0.5 text-brand shrink-0" />
                   <a href={p.href} className="hover:text-brand">{p.value}</a>
                 </li>
               ))}
-              <li className="flex items-start gap-2">
+              <li className="flex items-start gap-2 justify-center md:justify-start">
                 <Mail className="h-4 w-4 mt-0.5 text-brand shrink-0" />
                 <a href={company.emailHref} className="hover:text-brand">{company.email}</a>
               </li>
               {company.addresses.map((a) => (
-                <li key={a.value} className="flex items-start gap-2">
+                <li key={a.value} className="flex items-start gap-2 justify-center md:justify-start">
                   <MapPin className="h-4 w-4 mt-0.5 text-brand shrink-0" />
                   <span>{a.value}</span>
                 </li>
               ))}
-              <li className="flex items-start gap-2">
+              <li className="flex items-start gap-2 justify-center md:justify-start">
                 <Clock className="h-4 w-4 mt-0.5 text-brand shrink-0" />
                 <span>{company.hours}</span>
               </li>
@@ -69,7 +69,7 @@ export function Footer() {
 
           <div>
             <h4 className="font-display font-semibold text-sm uppercase tracking-wider mb-4">Área de atuação</h4>
-            <ul className="flex flex-wrap gap-2 text-xs">
+            <ul className="flex flex-wrap gap-2 text-xs justify-center md:justify-start">
               {company.areas.map((a) => (
                 <li key={a} className="rounded-full border border-primary-foreground/20 px-3 py-1 text-primary-foreground/80">
                   {a}
@@ -86,7 +86,7 @@ export function Footer() {
         </div>
 
         <div className="mt-14 pt-6 border-t border-primary-foreground/10 flex flex-col gap-4 text-xs text-primary-foreground/60">
-          <ul className="flex flex-wrap items-center gap-x-5 gap-y-2">
+          <ul className="flex flex-wrap items-center gap-x-5 gap-y-2 justify-center md:justify-start">
             <li>
               <Link to="/privacidade" className="hover:text-brand">Política de Privacidade & Cookies</Link>
             </li>

@@ -29,12 +29,12 @@ export default function SobrePage() {
           <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=2000&q=80" alt="" className="h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary/40" />
         </div>
-        <div className="mx-auto max-w-7xl container-px py-20 md:py-28 text-primary-foreground">
+        <div className="mx-auto max-w-7xl container-px py-20 md:py-28 text-primary-foreground text-center md:text-left">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Sobre nós</span>
-          <h1 className="mt-3 font-display text-4xl md:text-6xl font-bold tracking-tight max-w-3xl text-balance">
+          <h1 className="mt-3 font-display text-4xl md:text-6xl font-bold tracking-tight max-w-3xl mx-auto md:mx-0 text-balance">
             Construir bem é uma questão de princípio.
           </h1>
-          <p className="mt-6 text-lg md:text-xl text-primary-foreground/80 max-w-2xl">
+          <p className="mt-6 text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto md:mx-0">
             Somos uma empresa familiar portuguesa que cresceu obra a obra, cliente a cliente.
             Mais de 15 anos depois, continuamos a fazer o que fazemos melhor: trabalho honesto.
           </p>
@@ -48,7 +48,7 @@ export default function SobrePage() {
             <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=900&q=80" alt="" className="rounded-xl aspect-[4/5] object-cover" loading="lazy" />
             <img src="https://images.unsplash.com/photo-1503594384566-461fe158e797?auto=format&fit=crop&w=900&q=80" alt="" className="rounded-xl aspect-[4/5] object-cover mt-10" loading="lazy" />
           </div>
-          <div>
+          <div className="text-center md:text-left">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">A nossa história</span>
             <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
               Mais de uma década de obra feita.
@@ -95,7 +95,7 @@ export default function SobrePage() {
       {/* Why trust */}
       <section className="py-20 md:py-28 bg-surface">
         <div className="mx-auto max-w-7xl container-px">
-          <div className="max-w-2xl">
+          <div className="max-w-2xl mx-auto md:mx-0 text-center md:text-left">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Os nossos valores</span>
             <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
               Porque é que os clientes confiam em nós.
@@ -103,8 +103,8 @@ export default function SobrePage() {
           </div>
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {values.map((v) => (
-              <div key={v.title} className="rounded-xl bg-card border border-border p-7">
-                <div className="h-11 w-11 rounded-lg bg-brand/10 text-brand grid place-items-center">
+              <div key={v.title} className="rounded-xl bg-card border border-border p-7 text-center md:text-left">
+                <div className="h-11 w-11 rounded-lg bg-brand/10 text-brand grid place-items-center mx-auto md:mx-0">
                   <v.icon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-5 font-display font-semibold text-lg">{v.title}</h3>
@@ -122,8 +122,8 @@ export default function SobrePage() {
 
 function Card({ icon: Icon, title, text }: { icon: typeof Target; title: string; text: string }) {
   return (
-    <div className="rounded-2xl bg-card border border-border p-8">
-      <div className="h-12 w-12 rounded-xl bg-brand text-brand-foreground grid place-items-center">
+    <div className="rounded-2xl bg-card border border-border p-8 text-center md:text-left">
+      <div className="h-12 w-12 rounded-xl bg-brand text-brand-foreground grid place-items-center mx-auto md:mx-0">
         <Icon className="h-6 w-6" />
       </div>
       <h3 className="mt-6 font-display font-bold text-2xl">{title}</h3>

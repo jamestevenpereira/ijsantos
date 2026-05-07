@@ -1,113 +1,68 @@
-# IJ Santos — Modern Website Redesign Prototype
+## Objetivo
 
-A complete, premium frontend redesign for IJ Santos (construção civil + limpezas exteriores). Multi-page TanStack Start site, European Portuguese copy, polished and conversion-focused.
+Alinhar o design à identidade real do site atual da IJ Santos (cinza, preto, branco e vermelho) e melhorar a leitura no mobile centrando os textos das secções principais.
 
-## Brand & Visual Direction
+## 1. Nova paleta (substitui a atual ocre/slate)
 
-- **Palette**: white background, charcoal `#111827` text, deep slate `#1E293B` for surfaces, single muted accent (amber/ochre `#C2853B` evoking construction + warmth), soft neutrals for cards.
-- **Typography**: Inter for UI/body, a strong display sans (e.g. `Plus Jakarta Sans` or `Space Grotesk`) for headlines. Tight tracking, large H1s, generous line-height.
-- **Aesthetic**: lots of whitespace, large editorial imagery, subtle borders, soft shadows, rounded-lg cards, restrained micro-interactions (hover lifts, fade-ins on scroll).
-- **Imagery**: high-quality Unsplash placeholders (construction sites, façades, pressure washing, before/after pairs).
+Em `src/styles.css`, redefinir os tokens:
 
-## Site Structure (TanStack routes)
+- `--background`: branco puro (`oklch(1 0 0)`)
+- `--foreground` / `--ink`: preto profundo (`oklch(0.16 0 0)`)
+- `--surface`: cinza muito claro (`oklch(0.96 0 0)`) para secções alternadas
+- `--muted` / `--muted-foreground`: cinzas neutros (sem matiz azulado)
+- `--primary`: preto/cinza-escuro (`oklch(0.2 0 0)`) para superfícies escuras (hero, footer, CTA band)
+- `--primary-foreground`: branco
+- `--brand`: vermelho IJ Santos (`oklch(0.55 0.22 27)` — vermelho forte, próximo de #D81E1E)
+- `--brand-foreground`: branco (atualizar componentes que assumiam texto escuro sobre o ocre)
+- `--accent`: cinza claro neutro
+- `--border` / `--input`: cinza claro neutro (`oklch(0.9 0 0)`)
+- `--ring`: vermelho da brand
+- Modo `.dark`: manter coerente (preto/cinzas + vermelho)
 
-```
-src/routes/
-  __root.tsx           Sticky header + footer shell
-  index.tsx            Homepage
-  servicos.tsx         Services overview
-  servicos.$slug.tsx   Reusable service detail template
-  sobre.tsx            About
-  contacto.tsx         Contact
-```
+Remover qualquer matiz quente/azul residual nos gradientes decorativos (ex.: bloco "Região Centro" em `index.tsx` usa radial-gradients com tons ocre/azul → trocar por cinzas neutros + leve toque vermelho).
 
-Each route gets its own SEO `head()` (title, description, og:*).
+## 2. Ajustes de componentes que dependem da cor
 
-### Shared layout
-- **Sticky header**: logo wordmark "IJ SANTOS", nav (Início, Serviços, Sobre, Contacto), phone number + primary CTA "Pedir Orçamento". Mobile: slide-in sheet menu.
-- **Footer**: brand block, services links, contact info, area de atuação, ano + copyright, small "Pedir Orçamento" CTA.
-- **Floating WhatsApp button** on all pages (bottom-right).
+Verificar e ajustar onde o ocre era assumido como cor sobre fundo claro:
 
-### 1. Homepage (`/`)
-1. **Hero** — full-width image with dark overlay, H1 "Construímos e cuidamos do que é seu.", subheadline, dual CTA (Pedir Orçamento / Ligar Agora), trust strip (anos experiência, projetos, avaliação).
-2. **Intro** — 2-column: short company statement + key stats (15+ anos, 500+ obras, resposta <24h).
-3. **Serviços principais** — 6 service cards in a clean grid with icon, title, 1-line desc, "Saber mais →".
-4. **Porquê escolher-nos** — 4 trust pillars (Experiência, Qualidade, Pontualidade, Acompanhamento).
-5. **Como trabalhamos** — 4-step process with numbered cards (Contacto → Visita técnica → Orçamento → Execução).
-6. **Antes / Depois** — interactive before/after slider for façade washing, plus a small project highlights grid.
-7. **Testemunhos** — 3-card carousel with name, role, quote, star rating.
-8. **Área de atuação** — short block with map placeholder + cities served.
-9. **CTA band** — dark slate full-width "Peça o seu orçamento gratuito" with form-launch buttons.
-10. **Contacto preview** — phone, email, WhatsApp, hours.
+- `Header.tsx`: botão "Pedir Orçamento" passa a vermelho com texto branco; sublinhado de link ativo passa a vermelho.
+- `Footer.tsx`, `CTABand.tsx`, `Hero.tsx`: garantir contraste do CTA vermelho sobre fundo escuro (preto/cinza-escuro em vez de slate-azulado).
+- `ServiceCard.tsx`: ícones e hover passam a usar vermelho como acento sobre cinza/preto.
+- `WhatsAppFAB.tsx`: manter verde WhatsApp (não faz parte da paleta da marca, é convenção).
+- `BeforeAfter.tsx`: handle/divisória passa a branco com acento vermelho.
+- `Testimonials.tsx`, `WhyUs.tsx`, `ProcessSteps.tsx`: numerais/ícones de destaque a vermelho.
+- `CookieConsent.tsx`: botão primário a vermelho.
+- `QuoteForm.tsx`: focus ring e botão submit a vermelho.
 
-### 2. Services page (`/servicos`)
-- Page hero with title + subtitle
-- Two grouped sections: **Construção & Remodelação** and **Limpezas Exteriores**, each with rich service cards linking to detail pages
-- Mid-page CTA band
+Não é necessário tocar em ficheiros onde já se usam tokens semânticos (`bg-brand`, `text-brand`, etc.) — a troca de variável propaga-se automaticamente. A revisão acima é só para apanhar casos com cores hardcoded ou com pressupostos de contraste (ex.: texto escuro sobre ocre que agora seria texto escuro sobre vermelho — ilegível).
 
-Service catalog (each with slug + detail page):
-- `construcao-civil` — Construção Civil
-- `remodelacoes` — Remodelações & Reabilitação
-- `pinturas` — Pinturas Interiores e Exteriores
-- `limpeza-fachadas` — Limpeza de Fachadas
-- `limpeza-telhados` — Limpeza e Tratamento de Telhados
-- `limpeza-pavimentos` — Limpeza de Pavimentos Exteriores
+## 3. Textos centrados em mobile
 
-### 3. Service detail template (`/servicos/$slug`)
-Reusable layout driven by a local `services` data file:
-- Breadcrumb + hero (image, H1, short pitch, CTA)
-- Visão geral (2-col text + image)
-- Benefícios (icon grid, 4–6 items)
-- O nosso processo (numbered steps)
-- Casos de uso ideais (chips/list)
-- Galeria (4–6 image grid, lightbox-light)
-- FAQ acordeão (3–4 perguntas)
-- CTA final
+Aplicar `text-center md:text-left` (e equivalente para alinhamento de itens flex/grid: `items-center md:items-start`) nas secções com texto longo:
 
-### 4. About (`/sobre`)
-- Hero with company portrait/site image
-- Quem somos (story)
-- Missão, Visão, Valores (3 cards)
-- Presença local + zonas servidas
-- Equipa / compromisso
-- Trust strip (números) + CTA
+- `Hero.tsx`: título, subtítulo, par de CTAs e "trust badges".
+- `index.tsx`:
+  - Bloco "Sobre a IJ Santos"
+  - Cabeçalho "Os nossos serviços"
+  - Bloco "Área de atuação" (incluindo o wrap das tags)
+- `WhyUs.tsx`, `ProcessSteps.tsx`, `Testimonials.tsx`, `CTABand.tsx`: cabeçalhos e cards.
+- `servicos.tsx`, `servicos.$slug.tsx`, `sobre.tsx`, `contacto.tsx`: heros e cabeçalhos de secção.
+- `Footer.tsx`: blocos da grelha do footer centrados em mobile, alinhados à esquerda em `md:`.
+- `ServiceCard.tsx`: conteúdo do card centrado em mobile.
 
-### 5. Contact (`/contacto`)
-- Hero with title and short invitation
-- 2-col layout: **Form** (Nome, Email, Telefone, Tipo de serviço select, Mensagem, submit "Pedir Orçamento") + **Info side** (telefone, WhatsApp, email, morada, horário, redes)
-- Map placeholder (styled iframe-shaped block) below
-- Final reassurance line ("Resposta em menos de 24h")
+Listas com bullets/ícones (ex.: benefícios nos serviços, processo) — centrar o container, mas manter o ícone+texto alinhados de forma legível (usar `justify-center md:justify-start` no flex do item).
 
-## Content (European Portuguese)
-Polished, concise, trust-led copy throughout. Sample CTAs: "Pedir Orçamento", "Fale Connosco", "Solicitar Contacto", "Ligar Agora", "WhatsApp". Headings use action-oriented service language for SEO ("Limpeza de Fachadas em [região]", etc.).
+Botões dentro de blocos de texto: usar `mx-auto md:mx-0` para os centrar quando o texto está centrado.
 
-## Component Architecture
-```
-src/components/
-  layout/        Header, Footer, WhatsAppFAB, Container
-  sections/      Hero, ServiceGrid, ProcessSteps, BeforeAfter,
-                 Testimonials, TrustStrip, CTABand, StatsRow
-  ui/            (existing shadcn primitives reused)
-  service/       ServiceCard, ServiceDetailLayout, FAQ
-  forms/         QuoteForm, ContactForm (client-side only, toast on submit)
-src/data/
-  services.ts    Service catalog (slug, title, hero, benefits, process, FAQ, gallery)
-  testimonials.ts
-  company.ts     Phone, email, WhatsApp, address, hours
-```
+## 4. Verificação
 
-## Technical Notes
-- TanStack Start file routes; each route exports `head()` with route-specific SEO.
-- Tailwind v4 tokens extended in `src/styles.css` for brand color + display font.
-- Forms are prototype-only (no backend) — submit shows success toast via existing `sonner`.
-- Before/After uses a lightweight custom slider component (no new heavy deps).
-- All images via Unsplash URLs; lazy-loaded.
-- Fully responsive, mobile-first, sticky header, accessible focus states, AA contrast.
+Após as alterações, rever no preview mobile (390px) os ecrãs principais (Início, Serviços, Detalhe de serviço, Sobre, Contacto) para confirmar:
+- Paleta consistente cinza/preto/branco/vermelho sem resquícios de ocre.
+- Textos centrados em mobile, alinhados à esquerda em ≥ md.
+- Contraste AA mantido (especialmente vermelho sobre branco e branco sobre vermelho).
 
-## Out of Scope (prototype)
-- Real form submission / email delivery
-- CMS / blog
-- Auth, database, payments
-- Real map embed key (styled placeholder used)
+## Fora de âmbito
 
-After approval I will scaffold the routes, shared layout, data files, and all sections in one pass.
+- Não alterar imagens nem estrutura de páginas.
+- Não mexer em tipografia.
+- Não tocar em conteúdo / dados reais já integrados.
