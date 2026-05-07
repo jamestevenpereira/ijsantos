@@ -5,7 +5,7 @@ export function Testimonials() {
   return (
     <section className="py-20 md:py-28 bg-surface">
       <div className="mx-auto max-w-7xl container-px">
-        <div className="max-w-2xl">
+        <div className="max-w-2xl mx-auto md:mx-0 text-center md:text-left">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Testemunhos</span>
           <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
             Quem nos contrata, recomenda.
@@ -16,9 +16,9 @@ export function Testimonials() {
           {testimonials.slice(0, 3).map((t) => (
             <figure
               key={t.name}
-              className="rounded-2xl bg-card border border-border p-7 flex flex-col"
+              className="rounded-2xl bg-card border border-border p-7 flex flex-col text-center md:text-left"
             >
-              <div className="flex gap-0.5 text-brand mb-4">
+              <div className="flex gap-0.5 text-brand mb-4 justify-center md:justify-start">
                 {Array.from({ length: t.rating }).map((_, i) => (
                   <Star key={i} className="h-4 w-4 fill-current" />
                 ))}
