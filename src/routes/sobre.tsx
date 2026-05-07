@@ -48,7 +48,7 @@ export default function SobrePage() {
             <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=900&q=80" alt="" className="rounded-xl aspect-[4/5] object-cover" loading="lazy" />
             <img src="https://images.unsplash.com/photo-1503594384566-461fe158e797?auto=format&fit=crop&w=900&q=80" alt="" className="rounded-xl aspect-[4/5] object-cover mt-10" loading="lazy" />
           </div>
-          <div>
+          <div className="text-center md:text-left">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">A nossa história</span>
             <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
               Mais de uma década de obra feita.
