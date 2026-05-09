@@ -4,7 +4,7 @@ import { company } from "@/data/company";
 import { Award, Heart, ShieldCheck, Sparkles, Target, Users } from "lucide-react";
 import aboutTeam from "@/assets/about-team.jpg";
 import heroImage from "@/assets/hero-construction.jpg";
-import habitacional from "/portfolio/CONSTRUCAO-3.jpg?url";
+
 
 export const Route = createFileRoute("/sobre")({
   head: () => ({
@@ -29,7 +29,7 @@ export default function SobrePage() {
     <>
       <section className="relative isolate overflow-hidden">
         <div className="absolute inset-0 -z-10">
-          <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=2000&q=80" alt="" className="h-full w-full object-cover" />
+          <img src={heroImage} alt="" className="h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary/40" />
         </div>
         <div className="mx-auto max-w-7xl container-px py-20 md:py-28 text-primary-foreground text-center md:text-left">
@@ -48,8 +48,8 @@ export default function SobrePage() {
       <section className="py-20 md:py-28">
         <div className="mx-auto max-w-7xl container-px grid gap-12 lg:grid-cols-2 lg:items-center">
           <div className="grid grid-cols-2 gap-4">
-            <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=900&q=80" alt="" className="rounded-xl aspect-[4/5] object-cover" loading="lazy" />
-            <img src="https://images.unsplash.com/photo-1503594384566-461fe158e797?auto=format&fit=crop&w=900&q=80" alt="" className="rounded-xl aspect-[4/5] object-cover mt-10" loading="lazy" />
+            <img src={aboutTeam} alt="Equipa IJ Santos" className="rounded-xl aspect-[4/5] object-cover" loading="lazy" />
+            <img src="/portfolio/CONSTRUCAO-3.jpg" alt="Obra IJ Santos" className="rounded-xl aspect-[4/5] object-cover mt-10" loading="lazy" />
           </div>
           <div className="text-center md:text-left">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">A nossa história</span>
