@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Mail, MapPin, Phone, Clock, ExternalLink } from "lucide-react";
 import { company } from "@/data/company";
 import { services } from "@/data/services";
+import { localAreas } from "@/data/local-areas";
 
 export function Footer() {
   return (
@@ -69,6 +70,19 @@ export function Footer() {
 
           <div>
             <h4 className="font-display font-semibold text-sm uppercase tracking-wider mb-4">Área de atuação</h4>
+            <ul className="space-y-2 text-sm text-primary-foreground/75 mb-4">
+              {localAreas.map((a) => (
+                <li key={a.slug}>
+                  <Link
+                    to="/areas/$slug"
+                    params={{ slug: a.slug }}
+                    className="hover:text-brand transition-colors"
+                  >
+                    Construção em {a.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
             <ul className="flex flex-wrap gap-2 text-xs justify-center md:justify-start">
               {company.areas.map((a) => (
                 <li key={a} className="rounded-full border border-primary-foreground/20 px-3 py-1 text-primary-foreground/80">
@@ -76,12 +90,6 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-            <Link
-              to="/contacto"
-              className="hidden"
-            >
-              Pedir Orçamento
-            </Link>
           </div>
         </div>
 

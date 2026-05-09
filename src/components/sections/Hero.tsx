@@ -1,14 +1,18 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Phone } from "lucide-react";
 import { company } from "@/data/company";
+import heroImage from "@/assets/hero-construction.jpg";
 
 export function Hero() {
   return (
     <section className="relative isolate overflow-hidden">
       <div className="absolute inset-0 -z-10">
         <img
-          src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=2000&q=80"
-          alt="Obra de construção"
+          src={heroImage}
+          alt="Equipa IJ Santos em obra de construção civil"
+          width={1920}
+          height={1280}
+          fetchPriority="high"
           className="h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/40" />
