@@ -13,6 +13,7 @@ import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as ServicosRouteImport } from './routes/servicos'
 import { Route as ResolucaoLitigiosRouteImport } from './routes/resolucao-litigios'
 import { Route as PrivacidadeRouteImport } from './routes/privacidade'
+import { Route as PortefolioRouteImport } from './routes/portefolio'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ServicosSlugRouteImport } from './routes/servicos.$slug'
@@ -37,6 +38,11 @@ const PrivacidadeRoute = PrivacidadeRouteImport.update({
   path: '/privacidade',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortefolioRoute = PortefolioRouteImport.update({
+  id: '/portefolio',
+  path: '/portefolio',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactoRoute = ContactoRouteImport.update({
   id: '/contacto',
   path: '/contacto',
@@ -56,6 +62,7 @@ const ServicosSlugRoute = ServicosSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contacto': typeof ContactoRoute
+  '/portefolio': typeof PortefolioRoute
   '/privacidade': typeof PrivacidadeRoute
   '/resolucao-litigios': typeof ResolucaoLitigiosRoute
   '/servicos': typeof ServicosRouteWithChildren
@@ -65,6 +72,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contacto': typeof ContactoRoute
+  '/portefolio': typeof PortefolioRoute
   '/privacidade': typeof PrivacidadeRoute
   '/resolucao-litigios': typeof ResolucaoLitigiosRoute
   '/servicos': typeof ServicosRouteWithChildren
@@ -75,6 +83,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/contacto': typeof ContactoRoute
+  '/portefolio': typeof PortefolioRoute
   '/privacidade': typeof PrivacidadeRoute
   '/resolucao-litigios': typeof ResolucaoLitigiosRoute
   '/servicos': typeof ServicosRouteWithChildren
@@ -86,6 +95,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/contacto'
+    | '/portefolio'
     | '/privacidade'
     | '/resolucao-litigios'
     | '/servicos'
@@ -95,6 +105,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/contacto'
+    | '/portefolio'
     | '/privacidade'
     | '/resolucao-litigios'
     | '/servicos'
@@ -104,6 +115,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/contacto'
+    | '/portefolio'
     | '/privacidade'
     | '/resolucao-litigios'
     | '/servicos'
@@ -114,6 +126,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactoRoute: typeof ContactoRoute
+  PortefolioRoute: typeof PortefolioRoute
   PrivacidadeRoute: typeof PrivacidadeRoute
   ResolucaoLitigiosRoute: typeof ResolucaoLitigiosRoute
   ServicosRoute: typeof ServicosRouteWithChildren
@@ -148,6 +161,13 @@ declare module '@tanstack/react-router' {
       path: '/privacidade'
       fullPath: '/privacidade'
       preLoaderRoute: typeof PrivacidadeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portefolio': {
+      id: '/portefolio'
+      path: '/portefolio'
+      fullPath: '/portefolio'
+      preLoaderRoute: typeof PortefolioRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contacto': {
@@ -189,6 +209,7 @@ const ServicosRouteWithChildren = ServicosRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactoRoute: ContactoRoute,
+  PortefolioRoute: PortefolioRoute,
   PrivacidadeRoute: PrivacidadeRoute,
   ResolucaoLitigiosRoute: ResolucaoLitigiosRoute,
   ServicosRoute: ServicosRouteWithChildren,
