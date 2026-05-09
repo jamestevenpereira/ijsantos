@@ -30,17 +30,26 @@ export const Route = createFileRoute("/portefolio")({
 
 type Filter = "todos" | PortfolioCategory;
 
+const PAGE_SIZE = 12;
+
 function PortfolioPage() {
   const [filter, setFilter] = useState<Filter>("todos");
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const [page, setPage] = useState(1);
 
   const items = useMemo(
     () => (filter === "todos" ? portfolio : portfolio.filter((p) => p.category === filter)),
     [filter],
   );
 
+  const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const pageStart = (currentPage - 1) * PAGE_SIZE;
+  const pageItems = items.slice(pageStart, pageStart + PAGE_SIZE);
+
   useEffect(() => {
     setLightbox(null);
+    setPage(1);
   }, [filter]);
 
   useEffect(() => {
@@ -112,29 +121,73 @@ function PortfolioPage() {
           </div>
 
           <div className="mt-10 grid gap-3 sm:gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {items.map((p, i) => (
-              <button
-                key={p.src}
-                onClick={() => setLightbox(i)}
-                className="group relative overflow-hidden rounded-lg border border-border bg-muted aspect-square"
-                aria-label={`Abrir foto: ${p.alt}`}
-              >
-                <img
-                  src={p.thumb}
-                  alt={p.alt}
-                  loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <span className="absolute bottom-2 left-2 right-2 text-left text-xs font-semibold uppercase tracking-wider text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                  {categoryLabels[p.category]}
-                </span>
-              </button>
-            ))}
+            {pageItems.map((p, i) => {
+              const globalIndex = pageStart + i;
+              return (
+                <button
+                  key={p.src}
+                  onClick={() => setLightbox(globalIndex)}
+                  className="group relative overflow-hidden rounded-lg border border-border bg-muted aspect-square"
+                  aria-label={`Abrir foto: ${p.alt}`}
+                >
+                  <img
+                    src={p.thumb}
+                    alt={p.alt}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <span className="absolute bottom-2 left-2 right-2 text-left text-xs font-semibold uppercase tracking-wider text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                    {categoryLabels[p.category]}
+                  </span>
+                </button>
+              );
+            })}
           </div>
 
           {items.length === 0 && (
             <p className="text-center text-muted-foreground py-20">Sem trabalhos nesta categoria.</p>
+          )}
+
+          {totalPages > 1 && (
+            <nav
+              className="mt-10 flex items-center justify-center gap-2"
+              aria-label="Paginação do portefólio"
+            >
+              <button
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="h-10 px-4 rounded-md border border-border bg-card text-sm font-medium hover:border-brand/40 disabled:opacity-40 disabled:pointer-events-none inline-flex items-center gap-1"
+                aria-label="Página anterior"
+              >
+                <ChevronLeft className="h-4 w-4" /> Anterior
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => {
+                const active = n === currentPage;
+                return (
+                  <button
+                    key={n}
+                    onClick={() => setPage(n)}
+                    aria-current={active ? "page" : undefined}
+                    className={`h-10 w-10 rounded-md text-sm font-medium border transition-colors ${
+                      active
+                        ? "bg-brand text-brand-foreground border-brand"
+                        : "bg-card text-foreground border-border hover:border-brand/40"
+                    }`}
+                  >
+                    {n}
+                  </button>
+                );
+              })}
+              <button
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="h-10 px-4 rounded-md border border-border bg-card text-sm font-medium hover:border-brand/40 disabled:opacity-40 disabled:pointer-events-none inline-flex items-center gap-1"
+                aria-label="Próxima página"
+              >
+                Próxima <ChevronRight className="h-4 w-4" />
+              </button>
+            </nav>
           )}
         </div>
       </section>
