@@ -17,6 +17,7 @@ import { Route as PortefolioRouteImport } from './routes/portefolio'
 import { Route as ContactoRouteImport } from './routes/contacto'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ServicosSlugRouteImport } from './routes/servicos.$slug'
+import { Route as AreasSlugRouteImport } from './routes/areas.$slug'
 
 const SobreRoute = SobreRouteImport.update({
   id: '/sobre',
@@ -58,6 +59,11 @@ const ServicosSlugRoute = ServicosSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => ServicosRoute,
 } as any)
+const AreasSlugRoute = AreasSlugRouteImport.update({
+  id: '/areas/$slug',
+  path: '/areas/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -67,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/resolucao-litigios': typeof ResolucaoLitigiosRoute
   '/servicos': typeof ServicosRouteWithChildren
   '/sobre': typeof SobreRoute
+  '/areas/$slug': typeof AreasSlugRoute
   '/servicos/$slug': typeof ServicosSlugRoute
 }
 export interface FileRoutesByTo {
@@ -77,6 +84,7 @@ export interface FileRoutesByTo {
   '/resolucao-litigios': typeof ResolucaoLitigiosRoute
   '/servicos': typeof ServicosRouteWithChildren
   '/sobre': typeof SobreRoute
+  '/areas/$slug': typeof AreasSlugRoute
   '/servicos/$slug': typeof ServicosSlugRoute
 }
 export interface FileRoutesById {
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/resolucao-litigios': typeof ResolucaoLitigiosRoute
   '/servicos': typeof ServicosRouteWithChildren
   '/sobre': typeof SobreRoute
+  '/areas/$slug': typeof AreasSlugRoute
   '/servicos/$slug': typeof ServicosSlugRoute
 }
 export interface FileRouteTypes {
@@ -100,6 +109,7 @@ export interface FileRouteTypes {
     | '/resolucao-litigios'
     | '/servicos'
     | '/sobre'
+    | '/areas/$slug'
     | '/servicos/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -110,6 +120,7 @@ export interface FileRouteTypes {
     | '/resolucao-litigios'
     | '/servicos'
     | '/sobre'
+    | '/areas/$slug'
     | '/servicos/$slug'
   id:
     | '__root__'
@@ -120,6 +131,7 @@ export interface FileRouteTypes {
     | '/resolucao-litigios'
     | '/servicos'
     | '/sobre'
+    | '/areas/$slug'
     | '/servicos/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -131,6 +143,7 @@ export interface RootRouteChildren {
   ResolucaoLitigiosRoute: typeof ResolucaoLitigiosRoute
   ServicosRoute: typeof ServicosRouteWithChildren
   SobreRoute: typeof SobreRoute
+  AreasSlugRoute: typeof AreasSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -191,6 +204,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicosSlugRouteImport
       parentRoute: typeof ServicosRoute
     }
+    '/areas/$slug': {
+      id: '/areas/$slug'
+      path: '/areas/$slug'
+      fullPath: '/areas/$slug'
+      preLoaderRoute: typeof AreasSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -214,6 +234,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResolucaoLitigiosRoute: ResolucaoLitigiosRoute,
   ServicosRoute: ServicosRouteWithChildren,
   SobreRoute: SobreRoute,
+  AreasSlugRoute: AreasSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
