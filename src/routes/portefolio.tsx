@@ -30,17 +30,26 @@ export const Route = createFileRoute("/portefolio")({
 
 type Filter = "todos" | PortfolioCategory;
 
+const PAGE_SIZE = 12;
+
 function PortfolioPage() {
   const [filter, setFilter] = useState<Filter>("todos");
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const [page, setPage] = useState(1);
 
   const items = useMemo(
     () => (filter === "todos" ? portfolio : portfolio.filter((p) => p.category === filter)),
     [filter],
   );
 
+  const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const pageStart = (currentPage - 1) * PAGE_SIZE;
+  const pageItems = items.slice(pageStart, pageStart + PAGE_SIZE);
+
   useEffect(() => {
     setLightbox(null);
+    setPage(1);
   }, [filter]);
 
   useEffect(() => {
