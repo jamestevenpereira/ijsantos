@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { services } from "@/data/services";
+import { company } from "@/data/company";
 
 export function QuoteForm({ compact = false }: { compact?: boolean }) {
   const [loading, setLoading] = useState(false);
+  const [serviceSlug, setServiceSlug] = useState("");
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -11,11 +13,20 @@ export function QuoteForm({ compact = false }: { compact?: boolean }) {
     setTimeout(() => {
       setLoading(false);
       (e.target as HTMLFormElement).reset();
+      setServiceSlug("");
       toast.success("Pedido enviado!", {
         description: "Entraremos em contacto em menos de 24 horas.",
       });
     }, 700);
   };
+
+  const selectedService = services.find((s) => s.slug === serviceSlug);
+  const waMessage = encodeURIComponent(
+    selectedService
+      ? `Olá, gostaria de um orçamento para: ${selectedService.title}.`
+      : "Olá, gostaria de pedir um orçamento.",
+  );
+  const waHref = `${company.whatsapp}?text=${waMessage}`;
 
   return (
     <form onSubmit={onSubmit} className="grid gap-4">
@@ -29,7 +40,8 @@ export function QuoteForm({ compact = false }: { compact?: boolean }) {
         <select
           name="service"
           required
-          defaultValue=""
+          value={serviceSlug}
+          onChange={(e) => setServiceSlug(e.target.value)}
           className="rounded-md border border-input bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
         >
           <option value="" disabled>Selecione um serviço</option>
@@ -40,7 +52,9 @@ export function QuoteForm({ compact = false }: { compact?: boolean }) {
         </select>
       </div>
       <div className="grid gap-2">
-        <label className="text-sm font-medium text-foreground">Mensagem</label>
+        <label className="text-sm font-medium text-foreground">
+          Mensagem <span className="text-muted-foreground font-normal">(opcional)</span>
+        </label>
         <textarea
           name="message"
           rows={4}
@@ -55,6 +69,27 @@ export function QuoteForm({ compact = false }: { compact?: boolean }) {
       >
         {loading ? "A enviar..." : "Pedir Orçamento Gratuito"}
       </button>
+
+      <div className="relative my-1">
+        <div className="absolute inset-0 flex items-center" aria-hidden="true">
+          <div className="w-full border-t border-border" />
+        </div>
+        <div className="relative flex justify-center">
+          <span className="bg-card px-3 text-xs uppercase tracking-wider text-muted-foreground">
+            ou
+          </span>
+        </div>
+      </div>
+
+      <a
+        href={waHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center justify-center gap-2 rounded-md border border-border bg-background px-6 py-3 text-sm font-semibold hover:bg-accent transition"
+      >
+        Falar agora pelo WhatsApp
+      </a>
+
       <p className="text-xs text-muted-foreground text-center">
         Resposta em menos de 24 horas · Sem compromisso
       </p>

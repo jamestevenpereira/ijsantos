@@ -102,11 +102,46 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: React.ReactNode }) {
   const themeScript = `(function(){try{var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}var d=document.documentElement;if(t==='dark'){d.classList.add('dark');}d.style.colorScheme=t;}catch(e){}})();`;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "GeneralContractor",
+    name: "IJ Santos",
+    legalName: "Irmãos J. Santos, Lda.",
+    description:
+      "Construção civil, remodelações, pinturas e limpezas exteriores na região centro de Portugal.",
+    url: "https://ijsantos.com",
+    telephone: "+351926051178",
+    email: "jpsantos@ijsantos.com",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Rua da Shell, nº 13",
+      postalCode: "3520-074",
+      addressLocality: "Nelas",
+      addressCountry: "PT",
+    },
+    areaServed: [
+      "Nelas",
+      "Viseu",
+      "Mangualde",
+      "Carregal do Sal",
+      "Tondela",
+      "Seia",
+      "Gouveia",
+      "Coimbra",
+    ],
+    openingHours: "Mo-Sa 08:00-19:00",
+    priceRange: "€€",
+    sameAs: [],
+  };
   return (
     <html lang="pt-PT">
       <head>
         <HeadContent />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
       <body>
         {children}
