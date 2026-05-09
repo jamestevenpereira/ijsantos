@@ -9,6 +9,8 @@ import { VideosSection } from "@/components/sections/VideosSection";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { CTABand } from "@/components/sections/CTABand";
 import { CompanyMap } from "@/components/sections/CompanyMap";
+import { Stats } from "@/components/sections/Stats";
+import { TrustBand } from "@/components/sections/TrustBand";
 import { services } from "@/data/services";
 import { company } from "@/data/company";
 
@@ -111,6 +113,7 @@ function Index() {
       <ProcessSteps />
       <VideosSection />
       <BeforeAfter />
+      <TrustBand />
       <Testimonials />
 
       <section className="py-20 md:py-28">
