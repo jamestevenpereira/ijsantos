@@ -29,12 +29,15 @@ export const Route = createFileRoute("/servicos/$slug")({
       <Link to="/servicos" className="mt-6 inline-block text-brand font-semibold">Ver todos os serviços</Link>
     </div>
   ),
-  errorComponent: ({ error }) => (
-    <div className="py-32 text-center">
-      <h1 className="font-display text-2xl font-bold">Ocorreu um erro</h1>
-      <p className="mt-2 text-muted-foreground">{error.message}</p>
-    </div>
-  ),
+  errorComponent: ({ error }) => {
+    console.error("Service detail route error:", error);
+    return (
+      <div className="py-32 text-center">
+        <h1 className="font-display text-2xl font-bold">Ocorreu um erro</h1>
+        <p className="mt-2 text-muted-foreground">Não foi possível carregar este serviço. Tente novamente.</p>
+      </div>
+    );
+  },
   component: ServiceDetail,
 });
 
