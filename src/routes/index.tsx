@@ -42,6 +42,7 @@ function Index() {
   return (
     <>
       <Hero />
+      <Stats />
 
       <section className="py-20 md:py-28">
         <div className="mx-auto max-w-7xl container-px grid gap-12 lg:grid-cols-2 lg:items-center">
