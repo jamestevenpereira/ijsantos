@@ -2,6 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { CTABand } from "@/components/sections/CTABand";
 import { company } from "@/data/company";
 import { Award, Heart, ShieldCheck, Sparkles, Target, Users } from "lucide-react";
+import aboutTeam from "@/assets/about-team.jpg";
+import heroImage from "@/assets/hero-construction.jpg";
+import habitacional from "/portfolio/CONSTRUCAO-3.jpg?url";
 
 export const Route = createFileRoute("/sobre")({
   head: () => ({
