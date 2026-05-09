@@ -5,6 +5,7 @@ import { ServiceCard } from "@/components/service/ServiceCard";
 import { WhyUs } from "@/components/sections/WhyUs";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { BeforeAfter } from "@/components/sections/BeforeAfter";
+import { VideosSection } from "@/components/sections/VideosSection";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { CTABand } from "@/components/sections/CTABand";
 import { CompanyMap } from "@/components/sections/CompanyMap";
@@ -108,6 +109,7 @@ function Index() {
 
       <WhyUs />
       <ProcessSteps />
+      <VideosSection />
       <BeforeAfter />
       <Testimonials />
 
