@@ -1,4 +1,6 @@
 import { useRef, useState, useCallback, useEffect } from "react";
+import aboutTeam from "@/assets/about-team.jpg";
+import heroImage from "@/assets/hero-construction.jpg";
 
 export function BeforeAfter() {
   const [pos, setPos] = useState(50);
@@ -58,7 +60,7 @@ export function BeforeAfter() {
           }}
         >
           <img
-            src="https://images.unsplash.com/photo-1597047084897-51e81819a499?auto=format&fit=crop&w=1800&q=80"
+            src={heroImage}
             alt="Depois"
             className="absolute inset-0 h-full w-full object-cover"
             draggable={false}
@@ -68,7 +70,7 @@ export function BeforeAfter() {
             style={{ width: `${pos}%` }}
           >
             <img
-              src="https://images.unsplash.com/photo-1517089596392-fb9a9033e05b?auto=format&fit=crop&w=1800&q=80"
+              src={aboutTeam}
               alt="Antes"
               className="absolute inset-0 h-full w-full object-cover grayscale-[0.3] brightness-90"
               style={{ width: `${(100 / pos) * 100}%`, maxWidth: "none" }}
