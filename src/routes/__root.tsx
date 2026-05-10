@@ -80,8 +80,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:title", content: "IJ Santos · Construção e Limpezas Exteriores" },
       { name: "twitter:description", content: "Construção civil, remodelações e limpezas exteriores na região de Viseu. Orçamento gratuito." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/aa9a5e8b-aaea-486d-adfc-f02eb22390b6/id-preview-d473587f--e7cc4bdd-cf0f-48f6-9beb-4e41d7dd375a.lovable.app-1778190651347.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/aa9a5e8b-aaea-486d-adfc-f02eb22390b6/id-preview-d473587f--e7cc4bdd-cf0f-48f6-9beb-4e41d7dd375a.lovable.app-1778190651347.png" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
