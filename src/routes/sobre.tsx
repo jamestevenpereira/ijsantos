@@ -4,6 +4,7 @@ import { company } from "@/data/company";
 import { Award, Heart, ShieldCheck, Sparkles, Target, Users } from "lucide-react";
 import aboutTeam from "@/assets/about-team.jpg";
 import heroImage from "@/assets/hero-construction.jpg";
+import { media } from "@/lib/media";
 
 
 export const Route = createFileRoute("/sobre")({
@@ -49,7 +50,7 @@ export default function SobrePage() {
         <div className="mx-auto max-w-7xl container-px grid gap-12 lg:grid-cols-2 lg:items-center">
           <div className="grid grid-cols-2 gap-4">
             <img src={aboutTeam} alt="Equipa IJ Santos" className="rounded-xl aspect-[4/5] object-cover" loading="lazy" />
-            <img src="/portfolio/CONSTRUCAO-3.jpg" alt="Obra IJ Santos" className="rounded-xl aspect-[4/5] object-cover mt-10" loading="lazy" />
+            <img src={media("portfolio/CONSTRUCAO-3.jpg")} alt="Obra IJ Santos" className="rounded-xl aspect-[4/5] object-cover mt-10" loading="lazy" />
           </div>
           <div className="text-center md:text-left">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">A nossa história</span>
