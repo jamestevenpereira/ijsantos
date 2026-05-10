@@ -26,8 +26,7 @@ export const categoryOrder: PortfolioCategory[] = [
 import { media } from "@/lib/media";
 
 const full = (file: string) => media(`portfolio/${file}`);
-const thumb = (file: string) =>
-  media(`portfolio/thumbs/${file.replace(/\.jpg$/, "-400x400.jpg")}`);
+const thumb = (file: string) => media(`portfolio/thumbs/${file.replace(/\.jpg$/, "-400x400.jpg")}`);
 
 export type PortfolioItem = {
   src: string;
@@ -36,11 +35,12 @@ export type PortfolioItem = {
   alt: string;
 };
 
-const item = (
-  category: PortfolioCategory,
-  alt: string,
-  file: string,
-): PortfolioItem => ({ category, alt, src: full(file), thumb: thumb(file) });
+const item = (category: PortfolioCategory, alt: string, file: string): PortfolioItem => ({
+  category,
+  alt,
+  src: full(file),
+  thumb: thumb(file),
+});
 
 export const portfolio: PortfolioItem[] = [
   // — Pavilhões Industriais —
@@ -88,7 +88,11 @@ export const portfolio: PortfolioItem[] = [
   item("habitacional", "Moradia — pormenor", "8a46e699-81cd-4528-a16a-904c17c01ace.jpg"),
   item("habitacional", "Moradia — execução", "8b22d7fd-192e-4ed9-b761-68e757e6263b.jpg"),
   item("habitacional", "Moradia — exterior", "f732e2c3-d963-4719-b3f3-40cbb58ec20f.jpg"),
-  item("habitacional", "Moradia — pormenor", "58402403772__384D73FC-9850-419D-8992-E0347E484578.jpg"),
+  item(
+    "habitacional",
+    "Moradia — pormenor",
+    "58402403772__384D73FC-9850-419D-8992-E0347E484578.jpg",
+  ),
 ];
 
 export const videos: { src: string; poster?: string; title: string }[] = [
