@@ -21,11 +21,13 @@ export const categoryOrder: PortfolioCategory[] = [
   "habitacional",
 ];
 
-// Photos are served from /public/portfolio (originally sourced from the
-// client's existing site, ijsantos.com, and migrated to local hosting for
-// performance and resilience).
-const full = (file: string) => `/portfolio/${file}`;
-const thumb = (file: string) => `/portfolio/thumbs/${file.replace(/\.jpg$/, "-400x400.jpg")}`;
+// Photos are resolved through `media()` so they can live either in /public
+// (dev / fallback) or on Cloudflare R2 (production) via VITE_MEDIA_BASE_URL.
+import { media } from "@/lib/media";
+
+const full = (file: string) => media(`portfolio/${file}`);
+const thumb = (file: string) =>
+  media(`portfolio/thumbs/${file.replace(/\.jpg$/, "-400x400.jpg")}`);
 
 export type PortfolioItem = {
   src: string;
@@ -91,12 +93,12 @@ export const portfolio: PortfolioItem[] = [
 
 export const videos: { src: string; poster?: string; title: string }[] = [
   {
-    src: "/videos/obras-1.mp4",
+    src: media("videos/obras-1.mp4"),
     poster: full("PAVILHOES-1.jpg"),
     title: "Trabalhos em obra — IJ Santos",
   },
   {
-    src: "/videos/obras-2.mp4",
+    src: media("videos/obras-2.mp4"),
     poster: full("CONSTRUCAO-3.jpg"),
     title: "Construção e execução",
   },
