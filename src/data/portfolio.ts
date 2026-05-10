@@ -21,8 +21,7 @@ export const categoryOrder: PortfolioCategory[] = [
   "habitacional",
 ];
 
-// Photos are resolved through `media()` so they can live either in /public
-// (dev / fallback) or on Cloudflare R2 (production) via VITE_MEDIA_BASE_URL.
+// Photos are served from local files in /public for the current prototype.
 import { media } from "@/lib/media";
 
 const full = (file: string) => media(`portfolio/${file}`);

@@ -13,6 +13,9 @@ import { Stats } from "@/components/sections/Stats";
 import { TrustBand } from "@/components/sections/TrustBand";
 import { services } from "@/data/services";
 import { company } from "@/data/company";
+import aboutTeam from "@/assets/about-team.jpg";
+import heroImage from "@/assets/hero-construction.jpg";
+import servicesHero from "@/assets/services-hero.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -30,8 +33,7 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:image",
-        content:
-          "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1200&q=80",
+        content: heroImage,
       },
     ],
   }),
@@ -68,13 +70,13 @@ function Index() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <img
-              src="https://images.unsplash.com/photo-1503594384566-461fe158e797?auto=format&fit=crop&w=900&q=80"
+              src={aboutTeam}
               alt="Limpeza de fachada"
               className="rounded-xl aspect-[3/4] object-cover"
               loading="lazy"
             />
             <img
-              src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=900&q=80"
+              src={servicesHero}
               alt="Construção"
               className="rounded-xl aspect-[3/4] object-cover mt-8"
               loading="lazy"

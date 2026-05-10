@@ -1,3 +1,7 @@
+import aboutTeam from "@/assets/about-team.jpg";
+import heroConstruction from "@/assets/hero-construction.jpg";
+import servicesHero from "@/assets/services-hero.jpg";
+
 export type Service = {
   slug: string;
   group: "construcao" | "limpeza";
@@ -13,8 +17,12 @@ export type Service = {
   faq: { q: string; a: string }[];
 };
 
-const img = (id: string, w = 1400) =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`;
+const localImages = [heroConstruction, servicesHero, aboutTeam];
+
+const img = (id: string, _w = 1400) => {
+  const index = [...id].reduce((sum, char) => sum + char.charCodeAt(0), 0) % localImages.length;
+  return localImages[index];
+};
 
 export const services: Service[] = [
   {
