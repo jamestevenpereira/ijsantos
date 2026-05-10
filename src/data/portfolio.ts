@@ -93,12 +93,12 @@ export const portfolio: PortfolioItem[] = [
 
 export const videos: { src: string; poster?: string; title: string }[] = [
   {
-    src: "/videos/obras-1.mp4",
+    src: media("videos/obras-1.mp4"),
     poster: full("PAVILHOES-1.jpg"),
     title: "Trabalhos em obra — IJ Santos",
   },
   {
-    src: "/videos/obras-2.mp4",
+    src: media("videos/obras-2.mp4"),
     poster: full("CONSTRUCAO-3.jpg"),
     title: "Construção e execução",
   },
