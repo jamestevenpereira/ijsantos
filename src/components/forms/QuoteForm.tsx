@@ -7,17 +7,31 @@ export function QuoteForm({ compact = false }: { compact?: boolean }) {
   const [loading, setLoading] = useState(false);
   const [serviceSlug, setServiceSlug] = useState("");
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const form = e.currentTarget;
+    const data = Object.fromEntries(new FormData(form).entries());
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      (e.target as HTMLFormElement).reset();
+    try {
+      const res = await fetch("/api/contacto", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(out?.error ?? "Erro a enviar pedido.");
+      form.reset();
       setServiceSlug("");
       toast.success("Pedido enviado!", {
         description: "Entraremos em contacto em menos de 24 horas.",
       });
-    }, 700);
+    } catch (err) {
+      toast.error("Não foi possível enviar", {
+        description: err instanceof Error ? err.message : "Tente por telefone ou WhatsApp.",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const selectedService = services.find((s) => s.slug === serviceSlug);
@@ -30,6 +44,7 @@ export function QuoteForm({ compact = false }: { compact?: boolean }) {
 
   return (
     <form onSubmit={onSubmit} className="grid gap-4">
+      <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
       <div className={compact ? "grid gap-4" : "grid gap-4 sm:grid-cols-2"}>
         <Field label="Nome" name="name" required />
         <Field label="Telefone" name="phone" type="tel" required />
