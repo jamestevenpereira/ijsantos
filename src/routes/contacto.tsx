@@ -5,14 +5,30 @@ import { company } from "@/data/company";
 import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 
 export const Route = createFileRoute("/contacto")({
-  head: () => ({
-    meta: [
-      { title: "Contacto · IJ Santos" },
-      { name: "description", content: "Peça o seu orçamento gratuito. Telefone, email, WhatsApp — resposta em menos de 24 horas." },
-      { property: "og:title", content: "Contacto · IJ Santos" },
-      { property: "og:description", content: "Fale connosco. Resposta em menos de 24 horas." },
-    ],
-  }),
+  head: () => {
+    const title = "Contacto · Pedido de Orçamento — IJ Santos (Nelas)";
+    const description =
+      "Peça orçamento gratuito de construção civil, remodelações ou limpezas exteriores em Nelas, Viseu e região centro. Resposta em menos de 24 horas.";
+    const contactLd = {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      name: title,
+      description,
+      url: `${company.siteUrl}/contacto`,
+      mainEntity: { "@id": `${company.siteUrl}/#organization` },
+    };
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+      ],
+      scripts: [
+        { type: "application/ld+json", children: JSON.stringify(contactLd) },
+      ],
+    };
+  },
   component: ContactoPage,
 });
 
