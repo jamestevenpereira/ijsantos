@@ -1,68 +1,119 @@
-## Objetivo
+# Plano · SEO técnico, SSG e deploy Cloudflare
 
-Alinhar o design à identidade real do site atual da IJ Santos (cinza, preto, branco e vermelho) e melhorar a leitura no mobile centrando os textos das secções principais.
+## 1. Estratégia de renderização
 
-## 1. Nova paleta (substitui a atual ocre/slate)
+O projeto **já é TanStack Start (SSR)** — não é uma SPA cega. Os crawlers já recebem HTML completo. O que falta é gerar esse HTML **uma vez no build** (SSG) em vez de a cada request, para poder ser servido como ficheiros estáticos.
 
-Em `src/styles.css`, redefinir os tokens:
+**Decisão:** ativar **prerender** do TanStack Start para todas as rotas conhecidas → output 100% estático → deploy em **Cloudflare Pages** (com uma Pages Function só para o formulário).
 
-- `--background`: branco puro (`oklch(1 0 0)`)
-- `--foreground` / `--ink`: preto profundo (`oklch(0.16 0 0)`)
-- `--surface`: cinza muito claro (`oklch(0.96 0 0)`) para secções alternadas
-- `--muted` / `--muted-foreground`: cinzas neutros (sem matiz azulado)
-- `--primary`: preto/cinza-escuro (`oklch(0.2 0 0)`) para superfícies escuras (hero, footer, CTA band)
-- `--primary-foreground`: branco
-- `--brand`: vermelho IJ Santos (`oklch(0.55 0.22 27)` — vermelho forte, próximo de #D81E1E)
-- `--brand-foreground`: branco (atualizar componentes que assumiam texto escuro sobre o ocre)
-- `--accent`: cinza claro neutro
-- `--border` / `--input`: cinza claro neutro (`oklch(0.9 0 0)`)
-- `--ring`: vermelho da brand
-- Modo `.dark`: manter coerente (preto/cinzas + vermelho)
+Não é necessário migrar para Astro nem usar Worker de prerender por crawler.
 
-Remover qualquer matiz quente/azul residual nos gradientes decorativos (ex.: bloco "Região Centro" em `index.tsx` usa radial-gradients com tons ocre/azul → trocar por cinzas neutros + leve toque vermelho).
+## 2. Configuração de build (SSG)
 
-## 2. Ajustes de componentes que dependem da cor
+`vite.config.ts` — adicionar opção `prerender` ao plugin `tanstackStart`:
 
-Verificar e ajustar onde o ocre era assumido como cor sobre fundo claro:
+```text
+tanstackStart({
+  server: { entry: "server" },
+  prerender: {
+    enabled: true,
+    crawlLinks: true,
+    pages: [
+      "/", "/sobre", "/servicos", "/portefolio",
+      "/contacto", "/privacidade", "/resolucao-litigios",
+      // serviços (slugs novos, ver §4)
+      "/servicos/construcao-civil",
+      "/servicos/remodelacoes-reabilitacao",
+      "/servicos/pinturas-interiores-exteriores",
+      "/servicos/limpeza-fachadas",
+      "/servicos/limpeza-telhados",
+      "/servicos/limpeza-pavimentos-exteriores",
+      // áreas locais
+      "/areas/nelas", "/areas/viseu", "/areas/mangualde",
+      "/areas/tondela", "/areas/carregal-do-sal",
+      "/areas/seia", "/areas/gouveia", "/areas/coimbra",
+    ],
+  },
+}),
+```
 
-- `Header.tsx`: botão "Pedir Orçamento" passa a vermelho com texto branco; sublinhado de link ativo passa a vermelho.
-- `Footer.tsx`, `CTABand.tsx`, `Hero.tsx`: garantir contraste do CTA vermelho sobre fundo escuro (preto/cinza-escuro em vez de slate-azulado).
-- `ServiceCard.tsx`: ícones e hover passam a usar vermelho como acento sobre cinza/preto.
-- `WhatsAppFAB.tsx`: manter verde WhatsApp (não faz parte da paleta da marca, é convenção).
-- `BeforeAfter.tsx`: handle/divisória passa a branco com acento vermelho.
-- `Testimonials.tsx`, `WhyUs.tsx`, `ProcessSteps.tsx`: numerais/ícones de destaque a vermelho.
-- `CookieConsent.tsx`: botão primário a vermelho.
-- `QuoteForm.tsx`: focus ring e botão submit a vermelho.
+Trocar o preset Nitro de Worker para **static** (gera `dist/` pronto a servir). Eliminar/arquivar `wrangler.jsonc` e `src/server.ts` (deixam de ser usados como entry de produção).
 
-Não é necessário tocar em ficheiros onde já se usam tokens semânticos (`bg-brand`, `text-brand`, etc.) — a troca de variável propaga-se automaticamente. A revisão acima é só para apanhar casos com cores hardcoded ou com pressupostos de contraste (ex.: texto escuro sobre ocre que agora seria texto escuro sobre vermelho — ilegível).
+## 3. Cloudflare Pages
 
-## 3. Textos centrados em mobile
+- **Build command:** `bun run build`
+- **Output directory:** `dist` (ou `dist/client` consoante o preset; o plano confirma após build local)
+- **Worker necessário:** **Não.** Apenas uma **Pages Function** em `functions/api/contacto.ts` para receber o formulário (POST → Resend) — Resend API key como secret no painel Pages.
+- **`public/_headers`:** cache longa para `assets/*` e imagens; `Cache-Control: no-cache` para HTML.
+- **`public/_redirects`:** opcional, só para legacy paths se existirem.
 
-Aplicar `text-center md:text-left` (e equivalente para alinhamento de itens flex/grid: `items-center md:items-start`) nas secções com texto longo:
+## 4. Correções SEO obrigatórias
 
-- `Hero.tsx`: título, subtítulo, par de CTAs e "trust badges".
-- `index.tsx`:
-  - Bloco "Sobre a IJ Santos"
-  - Cabeçalho "Os nossos serviços"
-  - Bloco "Área de atuação" (incluindo o wrap das tags)
-- `WhyUs.tsx`, `ProcessSteps.tsx`, `Testimonials.tsx`, `CTABand.tsx`: cabeçalhos e cards.
-- `servicos.tsx`, `servicos.$slug.tsx`, `sobre.tsx`, `contacto.tsx`: heros e cabeçalhos de secção.
-- `Footer.tsx`: blocos da grelha do footer centrados em mobile, alinhados à esquerda em `md:`.
-- `ServiceCard.tsx`: conteúdo do card centrado em mobile.
+**a) Geografia (Nelas/Viseu, não Lisboa)** — atualizar `src/routes/__root.tsx`, `src/routes/index.tsx` e `Hero.tsx`: title, meta description, H1, OG, JSON-LD passam a falar de **Nelas, Viseu e região centro**.
 
-Listas com bullets/ícones (ex.: benefícios nos serviços, processo) — centrar o container, mas manter o ícone+texto alinhados de forma legível (usar `justify-center md:justify-start` no flex do item).
+**b) Slugs de serviços** — renomear em `src/data/services.ts`:
+- `remodelacoes` → `remodelacoes-reabilitacao`
+- `pinturas` → `pinturas-interiores-exteriores`
+- `limpeza-pavimentos` → `limpeza-pavimentos-exteriores`
 
-Botões dentro de blocos de texto: usar `mx-auto md:mx-0` para os centrar quando o texto está centrado.
+Cada página de serviço (`servicos.$slug.tsx`) já tem hero/benefícios/processo/galeria/FAQ/CTA. **Adicionar:**
+- title + meta description únicos com localidade
+- canonical
+- bloco de **links internos para áreas locais** relevantes ao serviço
+- JSON-LD `Service` + `FAQPage` + `BreadcrumbList`
 
-## 4. Verificação
+**c) Áreas locais** — expandir `src/data/local-areas.ts` com 5 novas localidades (Tondela, Carregal do Sal, Seia, Gouveia, Coimbra) com conteúdo único (intro, body, highlights, distanceNote). Cada `/areas/$slug` ganha:
+- title/desc/canonical próprios
+- lista de serviços prestados na zona com links para `/servicos/...`
+- FAQ local (3 perguntas)
+- JSON-LD `LocalBusiness` + `Service` com `areaServed` + `BreadcrumbList`
 
-Após as alterações, rever no preview mobile (390px) os ecrãs principais (Início, Serviços, Detalhe de serviço, Sobre, Contacto) para confirmar:
-- Paleta consistente cinza/preto/branco/vermelho sem resquícios de ocre.
-- Textos centrados em mobile, alinhados à esquerda em ≥ md.
-- Contraste AA mantido (especialmente vermelho sobre branco e branco sobre vermelho).
+**d) `public/sitemap.xml` e `public/robots.txt`** — gerar sitemap estático com todas as 19 rotas; robots permite tudo e aponta para o sitemap.
 
-## Fora de âmbito
+**e) Metadata global vs por rota** — root mantém defaults genéricos; cada rota define title/description/og/twitter/canonical próprios. OG image específica para home, sobre, cada serviço e cada área (reaproveitar imagens já existentes em `src/assets`).
 
-- Não alterar imagens nem estrutura de páginas.
-- Não mexer em tipografia.
-- Não tocar em conteúdo / dados reais já integrados.
+**f) JSON-LD global** no `__root.tsx`: `Organization` + `WebSite` + `LocalBusiness` (com sede em Nelas, telefones, horários, `areaServed` com as 8 localidades, `ContactPoint`).
+
+## 5. Performance
+
+- `width`/`height` em todos os `<img>` para evitar CLS
+- `fetchpriority="high"` + `loading="eager"` no LCP do Hero; restantes `loading="lazy"`
+- Pré-gerar variantes WebP/AVIF das imagens em `src/assets` no build (ou converter manualmente — já são poucas)
+- Remover JS desnecessário: `recharts`, `embla-carousel-react`, `vaul`, `cmdk`, `react-day-picker`, `input-otp`, `react-resizable-panels` parecem não usados no site institucional → auditar e remover
+- Fontes Google: usar `&display=swap` (já está) + `<link rel="preload">` para a fonte do H1
+
+## 6. Formulário de contacto
+
+`functions/api/contacto.ts` (Pages Function):
+- valida com Zod (nome, email, telefone, mensagem, honeypot)
+- envia via **Resend** para `jpsantos@ijsantos.com`
+- rate-limit simples por IP (KV opcional, ou só honeypot + tempo mínimo)
+- responde 200/400 em JSON; o `QuoteForm` faz `fetch('/api/contacto')`
+
+## 7. Legal (RGPD)
+
+Rever `/privacidade`: identificar responsável (Irmãos J. Santos, Lda., NIPC 503 534 633), finalidade (pedidos de orçamento via Resend), prazo de retenção, direitos RGPD, contacto. Atualizar `CookieConsent`: se não há analytics, basta banner informativo de cookies técnicos (sem consent gate).
+
+## 8. Entregáveis finais (no fim da implementação)
+
+- **Ficheiros alterados/criados:** lista completa
+- **Rotas finais:** 19 (1 home + 6 institucionais + 6 serviços + 8 áreas, ajustando totais)
+- **Estratégia:** SSG (prerender no build, output estático)
+- **Cloudflare Pages:**
+  - Build: `bun run build`
+  - Output: `dist`
+  - Worker: não — apenas 1 Pages Function (`functions/api/contacto.ts`)
+  - Secret: `RESEND_API_KEY`
+- **Checklist SEO de teste:**
+  1. `curl https://site/servicos/limpeza-fachadas` devolve HTML com H1 e conteúdo (não `<div id="root"></div>` vazio)
+  2. `/sitemap.xml` e `/robots.txt` acessíveis
+  3. Cada rota tem `<title>`, `<meta description>`, `<link rel="canonical">`, OG, Twitter Card únicos
+  4. JSON-LD validado em [validator.schema.org](https://validator.schema.org)
+  5. Lighthouse mobile ≥ 90 em Performance/SEO/Best Practices/Accessibility
+  6. Rich Results test passa em FAQPage e LocalBusiness
+  7. Form `/contacto` envia email via Resend e mostra confirmação
+
+## Riscos / pontos a confirmar
+
+- Preset estático do TanStack Start gera HTML por rota — confirmar nome exato da pasta de output após primeiro build (`dist`, `dist/client` ou `.output/public`); ajusto o passo Cloudflare Pages em conformidade.
+- Renomear slugs de serviços quebra links antigos: adiciono entradas em `_redirects` (`/servicos/pinturas /servicos/pinturas-interiores-exteriores 301`).
