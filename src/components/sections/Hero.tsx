@@ -22,14 +22,15 @@ export function Hero() {
         <div className="max-w-3xl text-center md:text-left">
           <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/5 px-3 py-1 text-xs uppercase tracking-[0.18em] backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-brand" />
-            Construção · Limpezas Exteriores
+            Nelas · Viseu · Região Centro
           </span>
           <h1 className="mt-6 text-4xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.05] text-balance">
             Construímos e cuidamos <span className="text-brand">do que é seu.</span>
           </h1>
           <p className="mt-6 text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto md:mx-0 leading-relaxed">
-            Há mais de 15 anos a entregar obras com rigor e a devolver fachadas, telhados e
-            pavimentos ao seu melhor estado. Profissionais locais. Resultado garantido.
+            Empresa local de Nelas com mais de 15 anos a entregar obra de construção civil,
+            remodelações e limpezas exteriores em Viseu, Mangualde e toda a região centro.
+            Profissionais próximos. Resultado garantido.
           </p>
 
           <div className="mt-10 flex flex-wrap gap-3 justify-center md:justify-start">
