@@ -60,7 +60,7 @@ export const services: Service[] = [
     ],
   },
   {
-    slug: "remodelacoes",
+    slug: "remodelacoes-reabilitacao",
     group: "construcao",
     title: "Remodelações & Reabilitação",
     short: "Renove o seu espaço com soluções modernas e duradouras.",
@@ -93,7 +93,7 @@ export const services: Service[] = [
     ],
   },
   {
-    slug: "pinturas",
+    slug: "pinturas-interiores-exteriores",
     group: "construcao",
     title: "Pinturas Interiores e Exteriores",
     short: "Acabamentos perfeitos, com tintas de alta durabilidade.",
@@ -193,7 +193,7 @@ export const services: Service[] = [
     ],
   },
   {
-    slug: "limpeza-pavimentos",
+    slug: "limpeza-pavimentos-exteriores",
     group: "limpeza",
     title: "Limpeza de Pavimentos Exteriores",
     short: "Pátios, passeios e estacionamentos como novos.",
