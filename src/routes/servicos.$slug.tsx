@@ -1,8 +1,12 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getService, services, type Service } from "@/data/services";
+import { localAreas } from "@/data/local-areas";
+import { company } from "@/data/company";
 import { CTABand } from "@/components/sections/CTABand";
-import { ArrowRight, Check, ChevronRight } from "lucide-react";
+import { ArrowRight, Check, ChevronRight, MapPin } from "lucide-react";
 import { useState } from "react";
+
+const SITE_URL = company.siteUrl;
 
 export const Route = createFileRoute("/servicos/$slug")({
   loader: ({ params }) => {
@@ -10,16 +14,70 @@ export const Route = createFileRoute("/servicos/$slug")({
     if (!service) throw notFound();
     return { service };
   },
-  head: ({ loaderData }) => {
+  head: ({ loaderData, params }) => {
     const s = loaderData?.service;
     if (!s) return { meta: [{ title: "Serviço · IJ Santos" }] };
+    const title = `${s.title} em Nelas, Viseu e Região Centro · IJ Santos`;
+    const description = `${s.short} Serviço executado em Nelas, Viseu, Mangualde, Tondela e toda a região centro. Orçamento gratuito.`;
+    const url = `${SITE_URL}/servicos/${params.slug}`;
+    const ogImage = typeof s.hero === "string" && s.hero.startsWith("http") ? s.hero : `${SITE_URL}/og-default.jpg`;
+
+    const serviceLd = {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: s.title,
+      description: s.description,
+      url,
+      provider: { "@id": `${SITE_URL}/#organization` },
+      areaServed: company.areas.map((name) => ({ "@type": "City", name })),
+      serviceType: s.title,
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: s.title,
+        itemListElement: s.useCases.map((u) => ({
+          "@type": "Offer",
+          itemOffered: { "@type": "Service", name: u },
+        })),
+      },
+    };
+
+    const faqLd = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: s.faq.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    };
+
+    const breadcrumbLd = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Início", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Serviços", item: `${SITE_URL}/servicos` },
+        { "@type": "ListItem", position: 3, name: s.title, item: url },
+      ],
+    };
+
     return {
       meta: [
-        { title: `${s.title} · IJ Santos` },
-        { name: "description", content: s.short },
-        { property: "og:title", content: `${s.title} · IJ Santos` },
-        { property: "og:description", content: s.short },
-        { property: "og:image", content: s.hero },
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "article" },
+        { property: "og:image", content: ogImage },
+        { property: "og:url", content: url },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+        { name: "twitter:image", content: ogImage },
+      ],
+      scripts: [
+        { type: "application/ld+json", children: JSON.stringify(serviceLd) },
+        { type: "application/ld+json", children: JSON.stringify(faqLd) },
+        { type: "application/ld+json", children: JSON.stringify(breadcrumbLd) },
       ],
     };
   },
@@ -62,7 +120,7 @@ function ServiceDetail() {
             <span className="text-primary-foreground">{service.title}</span>
           </nav>
           <h1 className="mt-6 font-display text-4xl md:text-6xl font-bold tracking-tight max-w-3xl mx-auto md:mx-0 text-balance">
-            {service.title}
+            {service.title} em Nelas, Viseu e região centro
           </h1>
           <p className="mt-5 text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto md:mx-0">
             {service.short}
@@ -185,6 +243,30 @@ function ServiceDetail() {
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* Local areas */}
+      <section className="py-16 bg-surface border-y border-border">
+        <div className="mx-auto max-w-7xl container-px text-center">
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+            Onde prestamos este serviço
+          </span>
+          <h2 className="mt-3 font-display text-2xl md:text-3xl font-bold">
+            {service.title} em toda a região centro
+          </h2>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            {localAreas.map((a) => (
+              <Link
+                key={a.slug}
+                to="/areas/$slug"
+                params={{ slug: a.slug }}
+                className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold hover:border-brand transition"
+              >
+                <MapPin className="h-3.5 w-3.5 text-brand" /> {a.name}
+              </Link>
+            ))}
           </div>
         </div>
       </section>

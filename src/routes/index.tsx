@@ -18,25 +18,33 @@ import heroImage from "@/assets/hero-construction.jpg";
 import servicesHero from "@/assets/services-hero.jpg";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "IJ Santos · Construção e Limpezas Exteriores em Lisboa" },
-      {
-        name: "description",
-        content:
-          "Empresa local de construção civil, remodelações, pinturas e limpeza de fachadas, telhados e pavimentos. Orçamento gratuito em 24 horas.",
-      },
-      { property: "og:title", content: "IJ Santos · Construção e Limpezas Exteriores" },
-      {
-        property: "og:description",
-        content: "Construção, remodelações e limpezas exteriores na região de Viseu.",
-      },
-      {
-        property: "og:image",
-        content: heroImage,
-      },
-    ],
-  }),
+  head: () => {
+    const title = "IJ Santos · Construção Civil e Limpezas Exteriores em Nelas e Viseu";
+    const description =
+      "Empresa de Nelas especializada em construção civil, remodelações, pinturas e limpeza de fachadas, telhados e pavimentos. Servimos Viseu, Mangualde e região centro. Orçamento gratuito em 24 horas.";
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+      ],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            name: title,
+            description,
+            url: "https://ijsantos.pt/",
+            isPartOf: { "@id": "https://ijsantos.pt/#website" },
+            about: { "@id": "https://ijsantos.pt/#organization" },
+          }),
+        },
+      ],
+    };
+  },
   component: Index,
 });
 

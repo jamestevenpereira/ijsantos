@@ -5,14 +5,32 @@ import { CTABand } from "@/components/sections/CTABand";
 import servicesHero from "@/assets/services-hero.jpg";
 
 export const Route = createFileRoute("/servicos")({
-  head: () => ({
-    meta: [
-      { title: "Serviços · IJ Santos" },
-      { name: "description", content: "Construção, remodelações, pinturas e limpezas exteriores: fachadas, telhados e pavimentos. Conheça todos os serviços." },
-      { property: "og:title", content: "Serviços · IJ Santos" },
-      { property: "og:description", content: "Tudo o que precisa para construir, renovar e cuidar do seu imóvel." },
-    ],
-  }),
+  head: () => {
+    const title = "Serviços de Construção e Limpezas Exteriores · IJ Santos (Nelas e Viseu)";
+    const description =
+      "Construção civil, remodelações, pinturas e limpeza de fachadas, telhados e pavimentos exteriores. Equipa local de Nelas com obra em Viseu, Mangualde e região centro.";
+    const itemListLd = {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      itemListElement: services.map((s, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        url: `https://ijsantos.pt/servicos/${s.slug}`,
+        name: s.title,
+      })),
+    };
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+      ],
+      scripts: [
+        { type: "application/ld+json", children: JSON.stringify(itemListLd) },
+      ],
+    };
+  },
   component: ServicosPage,
 });
 

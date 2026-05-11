@@ -43,12 +43,18 @@ export const company = {
     "Nelas",
     "Viseu",
     "Mangualde",
-    "Carregal do Sal",
     "Tondela",
+    "Carregal do Sal",
     "Seia",
     "Gouveia",
     "Coimbra",
   ],
+
+  // Canonical site URL (override after first publish if custom domain set)
+  siteUrl: "https://ijsantos.pt",
+
+  // Geographic coordinates (Nelas, sede)
+  geo: { lat: 40.5311, lng: -7.853 },
 
   livroReclamacoes: "https://www.livroreclamacoes.pt/Inicio/",
   odrEU: "https://webgate.ec.europa.eu/odr/main/?event=main.home.show",

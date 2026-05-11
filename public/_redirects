@@ -1,0 +1,4 @@
+# Legacy slugs → new SEO-friendly slugs
+/servicos/remodelacoes              /servicos/remodelacoes-reabilitacao         301
+/servicos/pinturas                  /servicos/pinturas-interiores-exteriores    301
+/servicos/limpeza-pavimentos        /servicos/limpeza-pavimentos-exteriores     301
