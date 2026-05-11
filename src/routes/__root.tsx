@@ -3,6 +3,7 @@ import {
   Outlet,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -11,8 +12,69 @@ import { Footer } from "@/components/layout/Footer";
 import { WhatsAppFAB } from "@/components/layout/WhatsAppFAB";
 import { CookieConsent } from "@/components/layout/CookieConsent";
 import { Toaster } from "@/components/ui/sonner";
+import { company } from "@/data/company";
 
 import appCss from "../styles.css?url";
+
+const SITE_URL = company.siteUrl;
+const DEFAULT_TITLE = "IJ Santos · Construção Civil e Limpezas Exteriores em Nelas e Viseu";
+const DEFAULT_DESC =
+  "Construção civil, remodelações, pinturas e limpezas exteriores (fachadas, telhados, pavimentos) em Nelas, Viseu, Mangualde e região centro. Orçamento gratuito em 24 horas.";
+const OG_IMAGE = `${SITE_URL}/og-default.jpg`;
+
+const ORGANIZATION_LD = {
+  "@context": "https://schema.org",
+  "@type": "GeneralContractor",
+  "@id": `${SITE_URL}/#organization`,
+  name: company.name,
+  legalName: company.legalName,
+  url: SITE_URL,
+  logo: `${SITE_URL}/logo.png`,
+  image: `${SITE_URL}/logo.png`,
+  telephone: company.phone,
+  email: company.email,
+  vatID: `PT${company.nipc.replace(/\s/g, "")}`,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Rua da Shell, nº 13",
+    postalCode: "3520-074",
+    addressLocality: "Nelas",
+    addressRegion: "Viseu",
+    addressCountry: "PT",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: company.geo.lat,
+    longitude: company.geo.lng,
+  },
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      opens: "08:00",
+      closes: "19:00",
+    },
+  ],
+  areaServed: company.areas.map((name) => ({ "@type": "City", name })),
+  contactPoint: company.phones.map((p) => ({
+    "@type": "ContactPoint",
+    telephone: p.value,
+    contactType: "customer service",
+    areaServed: "PT",
+    availableLanguage: ["Portuguese"],
+  })),
+  sameAs: [],
+};
+
+const WEBSITE_LD = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${SITE_URL}/#website`,
+  url: SITE_URL,
+  name: company.name,
+  inLanguage: "pt-PT",
+  publisher: { "@id": `${SITE_URL}/#organization` },
+};
 
 function NotFoundComponent() {
   return (
@@ -72,23 +134,44 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "IJ Santos · Construção e Limpezas Exteriores" },
-      { name: "description", content: "Construção civil, remodelações e limpezas exteriores na região de Viseu. Orçamento gratuito." },
-      { name: "author", content: "IJ Santos" },
-      { property: "og:title", content: "IJ Santos · Construção e Limpezas Exteriores" },
-      { property: "og:description", content: "Construção civil, remodelações e limpezas exteriores na região de Viseu. Orçamento gratuito." },
+      { title: DEFAULT_TITLE },
+      { name: "description", content: DEFAULT_DESC },
+      { name: "author", content: company.name },
+      { name: "robots", content: "index,follow,max-image-preview:large" },
+      { name: "geo.region", content: "PT-VIS" },
+      { name: "geo.placename", content: "Nelas, Viseu" },
+      { name: "geo.position", content: `${company.geo.lat};${company.geo.lng}` },
+      { name: "ICBM", content: `${company.geo.lat}, ${company.geo.lng}` },
+      { property: "og:site_name", content: company.name },
+      { property: "og:locale", content: "pt_PT" },
       { property: "og:type", content: "website" },
-      { name: "twitter:title", content: "IJ Santos · Construção e Limpezas Exteriores" },
-      { name: "twitter:description", content: "Construção civil, remodelações e limpezas exteriores na região de Viseu. Orçamento gratuito." },
+      { property: "og:title", content: DEFAULT_TITLE },
+      { property: "og:description", content: DEFAULT_DESC },
+      { property: "og:image", content: OG_IMAGE },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: DEFAULT_TITLE },
+      { name: "twitter:description", content: DEFAULT_DESC },
+      { name: "twitter:image", content: OG_IMAGE },
+      { name: "theme-color", content: "#0a0a0a" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "icon", href: "/favicon.ico" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap",
+      },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(ORGANIZATION_LD),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(WEBSITE_LD),
       },
     ],
   }),
@@ -98,12 +181,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
+function CanonicalLink() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const cleanPath = pathname === "/" ? "" : pathname.replace(/\/$/, "");
+  const href = `${SITE_URL}${cleanPath}`;
+  return <link rel="canonical" href={href} />;
+}
+
 function RootShell({ children }: { children: React.ReactNode }) {
   const themeScript = `(function(){try{var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}var d=document.documentElement;if(t==='dark'){d.classList.add('dark');}d.style.colorScheme=t;}catch(e){}})();`;
   return (
     <html lang="pt-PT">
       <head>
         <HeadContent />
+        <CanonicalLink />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>
