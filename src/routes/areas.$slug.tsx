@@ -7,7 +7,10 @@ import { services } from "@/data/services";
 import { getLocalArea, localAreas } from "@/data/local-areas";
 import { company } from "@/data/company";
 import { ArrowRight, MapPin, Phone } from "lucide-react";
+import { useState } from "react";
 import servicesHero from "@/assets/services-hero.jpg";
+
+const SITE_URL = company.siteUrl;
 
 export const Route = createFileRoute("/areas/$slug")({
   loader: ({ params }) => {
@@ -15,11 +18,57 @@ export const Route = createFileRoute("/areas/$slug")({
     if (!area) throw notFound();
     return { area };
   },
-  head: ({ loaderData }) => {
+  head: ({ loaderData, params }) => {
     if (!loaderData) return { meta: [] };
     const { area } = loaderData;
-    const title = `Construção e Limpezas em ${area.name} · IJ Santos`;
-    const desc = area.intro;
+    const title = `Construção Civil e Limpezas Exteriores em ${area.name} · IJ Santos`;
+    const desc = `${area.intro} Pedido de orçamento gratuito em 24 horas.`;
+    const url = `${SITE_URL}/areas/${params.slug}`;
+    const ogImage = `${SITE_URL}/og-default.jpg`;
+
+    const localBusinessLd = {
+      "@context": "https://schema.org",
+      "@type": "GeneralContractor",
+      name: `${company.name} — ${area.name}`,
+      description: desc,
+      url,
+      telephone: company.phone,
+      image: `${SITE_URL}/logo.png`,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Rua da Shell, nº 13",
+        postalCode: "3520-074",
+        addressLocality: "Nelas",
+        addressRegion: "Viseu",
+        addressCountry: "PT",
+      },
+      areaServed: {
+        "@type": "City",
+        name: area.name,
+        containedInPlace: { "@type": "AdministrativeArea", name: area.district },
+      },
+      parentOrganization: { "@id": `${SITE_URL}/#organization` },
+    };
+
+    const faqLd = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: area.faq.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    };
+
+    const breadcrumbLd = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Início", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: area.name, item: url },
+      ],
+    };
+
     return {
       meta: [
         { title },
@@ -27,34 +76,16 @@ export const Route = createFileRoute("/areas/$slug")({
         { property: "og:title", content: title },
         { property: "og:description", content: desc },
         { property: "og:type", content: "website" },
+        { property: "og:image", content: ogImage },
+        { property: "og:url", content: url },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: desc },
+        { name: "twitter:image", content: ogImage },
       ],
       scripts: [
-        {
-          type: "application/ld+json",
-          children: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Service",
-            serviceType: "Construção civil e limpezas exteriores",
-            provider: {
-              "@type": "GeneralContractor",
-              name: company.name,
-              telephone: company.phone,
-              address: {
-                "@type": "PostalAddress",
-                streetAddress: "Rua da Shell, nº 13",
-                postalCode: "3520-074",
-                addressLocality: "Nelas",
-                addressCountry: "PT",
-              },
-            },
-            areaServed: {
-              "@type": "City",
-              name: area.name,
-              containedInPlace: { "@type": "AdministrativeArea", name: area.district },
-            },
-            description: desc,
-          }),
-        },
+        { type: "application/ld+json", children: JSON.stringify(localBusinessLd) },
+        { type: "application/ld+json", children: JSON.stringify(faqLd) },
+        { type: "application/ld+json", children: JSON.stringify(breadcrumbLd) },
       ],
     };
   },
@@ -78,7 +109,7 @@ export const Route = createFileRoute("/areas/$slug")({
 
 function AreaPage() {
   const { area } = Route.useLoaderData();
-  const featured = services.slice(0, 3);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   return (
     <>
@@ -151,7 +182,7 @@ function AreaPage() {
 
       <TrustBand />
 
-      {/* Services preview */}
+      {/* All services in this area */}
       <section className="py-20 md:py-28 bg-surface">
         <div className="mx-auto max-w-7xl container-px">
           <div className="max-w-2xl">
@@ -164,17 +195,40 @@ function AreaPage() {
             </p>
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.map((s) => (
+            {services.map((s) => (
               <ServiceCard key={s.slug} service={s} />
             ))}
           </div>
-          <div className="mt-12 text-center">
-            <Link
-              to="/servicos"
-              className="inline-flex items-center gap-2 text-brand font-semibold"
-            >
-              Ver todos os serviços <ArrowRight className="h-4 w-4" />
-            </Link>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-20 md:py-28">
+        <div className="mx-auto max-w-3xl container-px">
+          <div className="text-center">
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+              Perguntas frequentes em {area.name}
+            </span>
+            <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
+              Dúvidas mais comuns.
+            </h2>
+          </div>
+          <div className="mt-10 divide-y divide-border border-y border-border">
+            {area.faq.map((f, i) => {
+              const open = openFaq === i;
+              return (
+                <div key={i}>
+                  <button
+                    onClick={() => setOpenFaq(open ? null : i)}
+                    className="w-full flex items-center justify-between gap-4 py-5 text-left"
+                  >
+                    <span className="font-display font-semibold text-foreground text-lg">{f.q}</span>
+                    <span className={`text-brand text-2xl transition-transform ${open ? "rotate-45" : ""}`}>+</span>
+                  </button>
+                  {open && <p className="pb-5 text-muted-foreground leading-relaxed">{f.a}</p>}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
