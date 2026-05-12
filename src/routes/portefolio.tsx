@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   portfolio,
-  categoryLabels,
   categoryOrder,
   type PortfolioCategory,
 } from "@/data/portfolio";
@@ -16,13 +16,14 @@ export const Route = createFileRoute("/portefolio")({
       {
         name: "description",
         content:
-          "Trabalhos reais executados pela IJ Santos: pavilhões industriais, lojas comerciais, infraestruturas, obras públicas e construção habitacional.",
+          "Portefólio de obras de construção civil, remodelação e limpezas exteriores executadas pela IJ Santos em Nelas, Viseu, Mangualde e região centro. +500 projetos concluídos com garantia.",
       },
       { property: "og:title", content: "Portefólio de obras · IJ Santos" },
       {
         property: "og:description",
         content: "Galeria de obras executadas pela IJ Santos em construção civil e obras públicas.",
       },
+      { property: "og:url", content: "https://ijsantos.pt/portefolio" },
     ],
   }),
   component: PortfolioPage,
@@ -33,6 +34,7 @@ type Filter = "todos" | PortfolioCategory;
 const PAGE_SIZE = 12;
 
 function PortfolioPage() {
+  const { t } = useTranslation();
   const [filter, setFilter] = useState<Filter>("todos");
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [page, setPage] = useState(1);
@@ -70,10 +72,10 @@ function PortfolioPage() {
   }, [lightbox, items.length]);
 
   const filters: { key: Filter; label: string; count: number }[] = [
-    { key: "todos", label: "Todos", count: portfolio.length },
+    { key: "todos", label: t("portfolio.filter_all"), count: portfolio.length },
     ...categoryOrder.map((c) => ({
       key: c,
-      label: categoryLabels[c],
+      label: t(`portfolio.cat.${c}`),
       count: portfolio.filter((p) => p.category === c).length,
     })),
   ];
@@ -83,15 +85,13 @@ function PortfolioPage() {
       <section className="bg-primary text-primary-foreground">
         <div className="mx-auto max-w-7xl container-px py-20 md:py-28 text-center md:text-left">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
-            Portefólio
+            {t("portfolio.label")}
           </span>
           <h1 className="mt-3 font-display text-4xl md:text-6xl font-bold tracking-tight text-balance max-w-3xl mx-auto md:mx-0">
-            Obras que falam por si.
+            {t("portfolio.title")}
           </h1>
           <p className="mt-6 text-lg text-primary-foreground/75 max-w-2xl mx-auto md:mx-0">
-            Transformamos desafios em estruturas sólidas. Conheça uma seleção de trabalhos
-            executados pela IJ Santos em pavilhões, lojas, infraestruturas, obras públicas e
-            construção habitacional.
+            {t("portfolio.body")}
           </p>
         </div>
       </section>
@@ -128,7 +128,7 @@ function PortfolioPage() {
                   key={p.src}
                   onClick={() => setLightbox(globalIndex)}
                   className="group relative overflow-hidden rounded-lg border border-border bg-muted aspect-square"
-                  aria-label={`Abrir foto: ${p.alt}`}
+                  aria-label={`${t("portfolio.open_photo")} ${p.alt}`}
                 >
                   <img
                     src={p.thumb}
@@ -138,7 +138,7 @@ function PortfolioPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   <span className="absolute bottom-2 left-2 right-2 text-left text-xs font-semibold uppercase tracking-wider text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                    {categoryLabels[p.category]}
+                    {t(`portfolio.cat.${p.category}`)}
                   </span>
                 </button>
               );
@@ -146,21 +146,21 @@ function PortfolioPage() {
           </div>
 
           {items.length === 0 && (
-            <p className="text-center text-muted-foreground py-20">Sem trabalhos nesta categoria.</p>
+            <p className="text-center text-muted-foreground py-20">{t("portfolio.empty")}</p>
           )}
 
           {totalPages > 1 && (
             <nav
               className="mt-10 flex items-center justify-center gap-2"
-              aria-label="Paginação do portefólio"
+              aria-label={t("portfolio.pagination")}
             >
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
                 className="h-10 px-4 rounded-md border border-border bg-card text-sm font-medium hover:border-brand/40 disabled:opacity-40 disabled:pointer-events-none inline-flex items-center gap-1"
-                aria-label="Página anterior"
+                aria-label={t("portfolio.prev")}
               >
-                <ChevronLeft className="h-4 w-4" /> Anterior
+                <ChevronLeft className="h-4 w-4" /> {t("portfolio.prev")}
               </button>
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => {
                 const active = n === currentPage;
@@ -183,9 +183,9 @@ function PortfolioPage() {
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
                 className="h-10 px-4 rounded-md border border-border bg-card text-sm font-medium hover:border-brand/40 disabled:opacity-40 disabled:pointer-events-none inline-flex items-center gap-1"
-                aria-label="Próxima página"
+                aria-label={t("portfolio.next")}
               >
-                Próxima <ChevronRight className="h-4 w-4" />
+                {t("portfolio.next")} <ChevronRight className="h-4 w-4" />
               </button>
             </nav>
           )}
@@ -236,7 +236,7 @@ function PortfolioPage() {
               className="max-h-[80vh] max-w-[96vw] object-contain rounded-lg shadow-2xl"
             />
             <figcaption className="mt-3 text-center text-white/80 text-sm">
-              {categoryLabels[items[lightbox].category]} — {lightbox + 1} / {items.length}
+              {t(`portfolio.cat.${items[lightbox].category}`)} — {lightbox + 1} / {items.length}
             </figcaption>
           </figure>
         </div>

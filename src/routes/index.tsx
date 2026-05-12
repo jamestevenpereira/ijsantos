@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Hero } from "@/components/sections/Hero";
 import { ServiceCard } from "@/components/service/ServiceCard";
 import { WhyUs } from "@/components/sections/WhyUs";
@@ -7,6 +8,7 @@ import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { BeforeAfter } from "@/components/sections/BeforeAfter";
 import { VideosSection } from "@/components/sections/VideosSection";
 import { Testimonials } from "@/components/sections/Testimonials";
+import { BlogPreview } from "@/components/sections/BlogPreview";
 import { CTABand } from "@/components/sections/CTABand";
 import { CompanyMap } from "@/components/sections/CompanyMap";
 import { Stats } from "@/components/sections/Stats";
@@ -28,6 +30,7 @@ export const Route = createFileRoute("/")({
         { name: "description", content: description },
         { property: "og:title", content: title },
         { property: "og:description", content: description },
+        { property: "og:url", content: `${company.siteUrl}/` },
       ],
       scripts: [
         {
@@ -49,6 +52,8 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const { t } = useTranslation();
+
   return (
     <>
       <Hero />
@@ -58,22 +63,19 @@ function Index() {
         <div className="mx-auto max-w-7xl container-px grid gap-12 lg:grid-cols-2 lg:items-center">
           <div className="text-center md:text-left">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
-              Sobre a IJ Santos
+              {t("index.about_label")}
             </span>
             <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
-              Uma empresa local com obra feita e nome a defender.
+              {t("index.about_title")}
             </h2>
             <p className="mt-6 text-muted-foreground text-lg leading-relaxed">
-              Somos uma equipa portuguesa especializada em construção civil e limpezas
-              exteriores. Trabalhamos com clientes particulares, empresas e condomínios em
-              toda a região de Viseu, com um compromisso simples: entregar trabalho bem
-              feito, no tempo combinado e sem surpresas.
+              {t("index.about_body")}
             </p>
             <Link
               to="/sobre"
               className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-brand hover:gap-3 transition-all"
             >
-              Conheça a empresa <ArrowRight className="h-4 w-4" />
+              {t("index.about_link")} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -98,17 +100,17 @@ function Index() {
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 text-center md:text-left">
             <div className="max-w-2xl mx-auto md:mx-0">
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
-                Os nossos serviços
+                {t("index.services_label")}
               </span>
               <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
-                Tudo o que precisa para construir e cuidar do seu imóvel.
+                {t("index.services_title")}
               </h2>
             </div>
             <Link
               to="/servicos"
               className="inline-flex items-center gap-2 text-sm font-semibold text-brand justify-center md:justify-start"
             >
-              Ver todos os serviços <ArrowRight className="h-4 w-4" />
+              {t("index.services_link")} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
 
@@ -126,6 +128,7 @@ function Index() {
       <BeforeAfter />
       <TrustBand />
       <Testimonials />
+      <BlogPreview />
 
       <section className="py-20 md:py-28">
         <div className="mx-auto max-w-7xl container-px grid gap-12 lg:grid-cols-2 lg:items-center">
@@ -133,14 +136,13 @@ function Index() {
 
           <div className="text-center md:text-left">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
-              Área de atuação
+              {t("index.area_label")}
             </span>
             <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
-              Local, próximo e disponível.
+              {t("index.area_title")}
             </h2>
             <p className="mt-6 text-muted-foreground text-lg leading-relaxed">
-              Servimos clientes em toda a região centro. Resposta rápida, deslocações sem
-              custo adicional dentro da nossa área de atuação.
+              {t("index.area_body")}
             </p>
             <ul className="mt-6 flex flex-wrap gap-2 justify-center md:justify-start">
               {company.areas.map((a) => (

@@ -1,29 +1,34 @@
 import { ShieldCheck, FileCheck2, Clock4, Award } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { useInView, fadeUp } from "@/hooks/useInView";
 
-const items = [
-  { icon: ShieldCheck, title: "Empresa registada", desc: "Irmãos J. Santos, Lda. — NIPC 503 534 633" },
-  { icon: FileCheck2, title: "Garantia escrita", desc: "Todas as obras com garantia segundo a lei em vigor" },
-  { icon: Clock4, title: "Resposta em 24h", desc: "Orçamento sem compromisso após visita técnica" },
-  { icon: Award, title: "+15 anos de experiência", desc: "Centenas de obras concluídas na região centro" },
-];
+const icons = [ShieldCheck, FileCheck2, Clock4, Award];
+const keys = ["item1", "item2", "item3", "item4"] as const;
 
 export function TrustBand() {
+  const { t } = useTranslation();
+  const { ref, inView } = useInView();
+
   return (
-    <section className="py-16 md:py-20" aria-label="Garantias e confiança">
+    <section ref={ref} className="py-16 md:py-20" aria-label="Garantias e confiança">
       <div className="mx-auto max-w-7xl container-px">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {items.map(({ icon: Icon, title, desc }) => (
-            <div
-              key={title}
-              className="rounded-xl border border-border bg-card p-6 flex flex-col gap-3"
-            >
-              <span className="inline-grid place-items-center h-10 w-10 rounded-lg bg-brand/10 text-brand">
-                <Icon className="h-5 w-5" />
-              </span>
-              <h3 className="font-semibold text-foreground">{title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">{desc}</p>
-            </div>
-          ))}
+          {keys.map((k, i) => {
+            const Icon = icons[i];
+            return (
+              <div
+                key={k}
+                className={`rounded-xl border border-border bg-card p-6 flex flex-col items-center justify-center text-center gap-3 ${fadeUp(inView)}`}
+                style={{ transitionDelay: `${i * 80}ms` }}
+              >
+                <span className="inline-grid place-items-center h-10 w-10 rounded-lg bg-brand/10 text-brand">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <h3 className="font-semibold text-foreground">{t(`trustband.${k}_title`)}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{t(`trustband.${k}_desc`)}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

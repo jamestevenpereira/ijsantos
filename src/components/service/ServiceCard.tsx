@@ -1,6 +1,7 @@
 import type { Service } from "@/data/services";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Hammer, Wrench, PaintBucket, SprayCan, Home, Construction } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const iconMap = {
   hammer: Hammer,
@@ -12,17 +13,19 @@ const iconMap = {
 } as const;
 
 export function ServiceCard({ service }: { service: Service }) {
+  const { t } = useTranslation();
   const Icon = iconMap[service.icon];
   return (
     <Link
       to="/servicos/$slug"
       params={{ slug: service.slug }}
+      aria-label={t(service.title)}
       className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card hover:border-brand/40 transition-all hover:-translate-y-1 hover:shadow-xl"
     >
       <div className="relative aspect-[16/10] overflow-hidden">
         <img
           src={service.hero}
-          alt={service.title}
+          alt={t(service.title)}
           loading="lazy"
           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
@@ -32,10 +35,10 @@ export function ServiceCard({ service }: { service: Service }) {
         </div>
       </div>
       <div className="p-6 flex-1 flex flex-col text-center md:text-left">
-        <h3 className="font-display text-xl font-semibold text-foreground">{service.title}</h3>
-        <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1">{service.short}</p>
+        <h3 className="font-display text-xl font-semibold text-foreground">{t(service.title)}</h3>
+        <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1">{t(service.short)}</p>
         <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand justify-center md:justify-start">
-          Saber mais <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          {t("servicecard.learn_more")} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </span>
       </div>
     </Link>

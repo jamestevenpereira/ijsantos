@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { services } from "@/data/services";
 import { ServiceCard } from "@/components/service/ServiceCard";
 import { CTABand } from "@/components/sections/CTABand";
@@ -16,7 +17,7 @@ export const Route = createFileRoute("/servicos")({
         "@type": "ListItem",
         position: i + 1,
         url: `https://ijsantos.pt/servicos/${s.slug}`,
-        name: s.title,
+        name: s.slug,
       })),
     };
     return {
@@ -25,6 +26,7 @@ export const Route = createFileRoute("/servicos")({
         { name: "description", content: description },
         { property: "og:title", content: title },
         { property: "og:description", content: description },
+        { property: "og:url", content: "https://ijsantos.pt/servicos" },
       ],
       scripts: [
         { type: "application/ld+json", children: JSON.stringify(itemListLd) },
@@ -35,6 +37,7 @@ export const Route = createFileRoute("/servicos")({
 });
 
 function ServicosPage() {
+  const { t } = useTranslation();
   const construcao = services.filter((s) => s.group === "construcao");
   const limpeza = services.filter((s) => s.group === "limpeza");
 
@@ -42,25 +45,36 @@ function ServicosPage() {
     <>
       <section className="relative isolate overflow-hidden">
         <div className="absolute inset-0 -z-10">
-          <img src={servicesHero} alt="" className="h-full w-full object-cover" />
+          <img src={servicesHero} alt="" fetchPriority="high" className="h-full w-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary/50" />
         </div>
         <div className="mx-auto max-w-7xl container-px py-20 md:py-28 text-primary-foreground text-center md:text-left">
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Serviços</span>
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">{t("servicos.label")}</span>
           <h1 className="mt-3 font-display text-4xl md:text-6xl font-bold tracking-tight text-balance max-w-3xl mx-auto md:mx-0">
-            Soluções completas para construir, renovar e cuidar.
+            {t("servicos.title")}
           </h1>
           <p className="mt-6 text-lg text-primary-foreground/80 max-w-2xl mx-auto md:mx-0">
-            Da obra nova à manutenção exterior, oferecemos um leque de serviços executados
-            com rigor, materiais de qualidade e profissionais experientes.
+            {t("servicos.body")}
           </p>
         </div>
       </section>
 
-      <Group title="Construção & Remodelação" subtitle="Da estrutura aos acabamentos." items={construcao} />
+      <Group
+        title={t("servicos.construcao_title")}
+        subtitle={t("servicos.construcao_subtitle")}
+        items={construcao}
+      />
       <CTABand />
-      <Group title="Limpezas Exteriores" subtitle="Devolva o brilho ao seu imóvel." items={limpeza} alt />
-      <CTABand title="Não encontra o serviço que procura?" subtitle="Fale connosco — fazemos propostas personalizadas." />
+      <Group
+        title={t("servicos.limpeza_title")}
+        subtitle={t("servicos.limpeza_subtitle")}
+        items={limpeza}
+        alt
+      />
+      <CTABand
+        title={t("servicos.not_found_title")}
+        subtitle={t("servicos.not_found_subtitle")}
+      />
     </>
   );
 }

@@ -1,3 +1,5 @@
+import "@/i18n";
+import i18n from "@/i18n";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -7,9 +9,12 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppFAB } from "@/components/layout/WhatsAppFAB";
+import { MobileCTA } from "@/components/layout/MobileCTA";
 import { CookieConsent } from "@/components/layout/CookieConsent";
 import { Toaster } from "@/components/ui/sonner";
 import { company } from "@/data/company";
@@ -77,20 +82,19 @@ const WEBSITE_LD = {
 };
 
 function NotFoundComponent() {
+  const { t } = useTranslation();
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-display font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Página não encontrada</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          A página que procura não existe ou foi movida.
-        </p>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">{t("notfound.title")}</h2>
+        <p className="mt-2 text-sm text-muted-foreground">{t("notfound.body")}</p>
         <div className="mt-6">
           <a
             href="/"
             className="inline-flex items-center justify-center rounded-md bg-brand text-brand-foreground px-5 py-2.5 text-sm font-semibold"
           >
-            Voltar à página inicial
+            {t("notfound.back")}
           </a>
         </div>
       </div>
@@ -101,27 +105,24 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
+  const { t } = useTranslation();
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          Ocorreu um erro a carregar esta página
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Tente novamente ou volte ao início.
-        </p>
+        <h1 className="text-xl font-semibold tracking-tight text-foreground">{t("error.title")}</h1>
+        <p className="mt-2 text-sm text-muted-foreground">{t("error.body")}</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => { router.invalidate(); reset(); }}
             className="inline-flex items-center justify-center rounded-md bg-brand text-brand-foreground px-4 py-2 text-sm font-semibold"
           >
-            Tentar de novo
+            {t("error.retry")}
           </button>
           <a
             href="/"
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium"
           >
-            Início
+            {t("error.home")}
           </a>
         </div>
       </div>
@@ -153,14 +154,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:description", content: DEFAULT_DESC },
       { name: "twitter:image", content: OG_IMAGE },
       { name: "theme-color", content: "#0a0a0a" },
-      { title: "IJSantos" },
-      { property: "og:title", content: "IJSantos" },
-      { name: "twitter:title", content: "IJSantos" },
-      { name: "description", content: "A modern website prototype for IJ Santos, showcasing construction and exterior cleaning services." },
-      { property: "og:description", content: "A modern website prototype for IJ Santos, showcasing construction and exterior cleaning services." },
-      { name: "twitter:description", content: "A modern website prototype for IJ Santos, showcasing construction and exterior cleaning services." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/aa9a5e8b-aaea-486d-adfc-f02eb22390b6/id-preview-d473587f--e7cc4bdd-cf0f-48f6-9beb-4e41d7dd375a.lovable.app-1778190651347.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/aa9a5e8b-aaea-486d-adfc-f02eb22390b6/id-preview-d473587f--e7cc4bdd-cf0f-48f6-9beb-4e41d7dd375a.lovable.app-1778190651347.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -193,7 +186,13 @@ function CanonicalLink() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const cleanPath = pathname === "/" ? "" : pathname.replace(/\/$/, "");
   const href = `${SITE_URL}${cleanPath}`;
-  return <link rel="canonical" href={href} />;
+  return (
+    <>
+      <link rel="canonical" href={href} />
+      <link rel="alternate" hrefLang="pt-PT" href={href} />
+      <link rel="alternate" hrefLang="x-default" href={href} />
+    </>
+  );
 }
 
 function RootShell({ children }: { children: React.ReactNode }) {
@@ -213,18 +212,38 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
+function PageTransition() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  return (
+    <div key={pathname} className="page-transition">
+      <Outlet />
+    </div>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("ijs.lang");
+      if (saved === "en" || saved === "pt") {
+        i18n.changeLanguage(saved);
+      }
+    } catch { /* noop */ }
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex min-h-screen flex-col">
         <Header />
-        <main className="flex-1">
-          <Outlet />
+        <main className="flex-1 pb-[72px] md:pb-0">
+          <PageTransition />
         </main>
         <Footer />
       </div>
       <WhatsAppFAB />
+      <MobileCTA />
       <CookieConsent />
       <Toaster position="top-right" />
     </QueryClientProvider>

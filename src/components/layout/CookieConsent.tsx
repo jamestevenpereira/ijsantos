@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Cookie, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 type Prefs = {
   necessary: true;
@@ -47,6 +48,7 @@ function save(p: Prefs) {
 }
 
 export function CookieConsent() {
+  const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
   const [showBanner, setShowBanner] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -98,12 +100,11 @@ export function CookieConsent() {
               <Cookie className="h-5 w-5" />
             </div>
             <div>
-              <div className="font-display font-bold text-base">Utilizamos cookies</div>
+              <div className="font-display font-bold text-base">{t("cookie.banner_title")}</div>
               <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
-                Usamos cookies para melhorar a sua experiência. Pode aceitar todos, rejeitar
-                ou personalizar as suas preferências. Saiba mais na{" "}
+                {t("cookie.banner_body")}{" "}
                 <Link to="/privacidade" className="text-brand hover:underline">
-                  Política de Privacidade
+                  {t("cookie.banner_privacy_link")}
                 </Link>
                 .
               </p>
@@ -114,19 +115,19 @@ export function CookieConsent() {
               onClick={acceptAll}
               className="flex-1 min-w-[110px] inline-flex items-center justify-center rounded-md bg-brand text-brand-foreground px-4 py-2.5 text-sm font-semibold"
             >
-              Aceitar tudo
+              {t("cookie.accept")}
             </button>
             <button
               onClick={rejectAll}
               className="flex-1 min-w-[110px] inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-2.5 text-sm font-medium"
             >
-              Rejeitar tudo
+              {t("cookie.reject")}
             </button>
             <button
               onClick={() => setShowModal(true)}
               className="w-full inline-flex items-center justify-center rounded-md px-3 py-2 text-xs font-medium text-muted-foreground hover:text-foreground"
             >
-              Personalizar preferências
+              {t("cookie.customize")}
             </button>
           </div>
         </div>
@@ -143,15 +144,15 @@ export function CookieConsent() {
             <div className="sticky top-0 bg-card border-b border-border flex items-start justify-between gap-4 p-6">
               <div>
                 <h2 id="cookie-prefs-title" className="font-display text-xl md:text-2xl font-bold">
-                  Personalize as preferências de consentimento
+                  {t("cookie.modal_title")}
                 </h2>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Encontre informações detalhadas sobre cada categoria de consentimento.
+                  {t("cookie.modal_subtitle")}
                 </p>
               </div>
               <button
                 onClick={() => setShowModal(false)}
-                aria-label="Fechar"
+                aria-label={t("cookie.close")}
                 className="h-9 w-9 rounded-md border border-border grid place-items-center hover:bg-muted shrink-0"
               >
                 <X className="h-4 w-4" />
@@ -159,46 +160,39 @@ export function CookieConsent() {
             </div>
 
             <div className="p-6 space-y-3 text-sm text-muted-foreground">
-              <p>
-                Os cookies categorizados como «Necessários» são armazenados no seu navegador,
-                pois são essenciais para ativar as funcionalidades básicas do site.
-              </p>
-              <p>
-                Também utilizamos cookies de terceiros que ajudam a analisar como utiliza este
-                site, armazenam as suas preferências e fornecem conteúdo relevante. Estes
-                cookies só serão armazenados com o seu consentimento prévio.
-              </p>
+              <p>{t("cookie.modal_body1")}</p>
+              <p>{t("cookie.modal_body2")}</p>
             </div>
 
             <div className="px-6 pb-6 space-y-3">
               <Category
-                title="Necessários"
-                description="Necessários para ativar as funcionalidades básicas deste site, como fornecer login seguro ou ajustar as preferências de consentimento. Não armazenam dados de identificação pessoal."
+                title={t("cookie.necessary_title")}
+                description={t("cookie.necessary_desc")}
                 checked
                 disabled
-                badge="Sempre ativo"
+                badge={t("cookie.always_active")}
               />
               <Category
-                title="Funcionais"
-                description="Ajudam a executar funcionalidades como partilhar conteúdo em redes sociais, recolher feedback e outros recursos de terceiros."
+                title={t("cookie.functional_title")}
+                description={t("cookie.functional_desc")}
                 checked={prefs.functional}
                 onChange={(v) => setPrefs((p) => ({ ...p, functional: v }))}
               />
               <Category
-                title="Analíticos"
-                description="Utilizados para compreender como os visitantes interagem com o site (número de visitantes, taxa de rejeição, origem do tráfego, etc.)."
+                title={t("cookie.analytics_title")}
+                description={t("cookie.analytics_desc")}
                 checked={prefs.analytics}
                 onChange={(v) => setPrefs((p) => ({ ...p, analytics: v }))}
               />
               <Category
-                title="Desempenho"
-                description="Usados para compreender e analisar os principais índices de desempenho do site, oferecendo uma melhor experiência de utilizador."
+                title={t("cookie.performance_title")}
+                description={t("cookie.performance_desc")}
                 checked={prefs.performance}
                 onChange={(v) => setPrefs((p) => ({ ...p, performance: v }))}
               />
               <Category
-                title="Publicidade"
-                description="Utilizados para fornecer aos visitantes anúncios personalizados com base nas páginas visitadas anteriormente e analisar a eficácia das campanhas."
+                title={t("cookie.advertising_title")}
+                description={t("cookie.advertising_desc")}
                 checked={prefs.advertising}
                 onChange={(v) => setPrefs((p) => ({ ...p, advertising: v }))}
               />
@@ -209,19 +203,19 @@ export function CookieConsent() {
                 onClick={rejectAll}
                 className="inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-2.5 text-sm font-medium"
               >
-                Rejeitar tudo
+                {t("cookie.reject")}
               </button>
               <button
                 onClick={savePrefs}
                 className="inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-2.5 text-sm font-medium"
               >
-                Guardar preferências
+                {t("cookie.save_prefs")}
               </button>
               <button
                 onClick={acceptAll}
                 className="inline-flex items-center justify-center rounded-md bg-brand text-brand-foreground px-4 py-2.5 text-sm font-semibold"
               >
-                Aceitar tudo
+                {t("cookie.accept")}
               </button>
             </div>
           </div>

@@ -1,10 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { QuoteForm } from "@/components/forms/QuoteForm";
 import { CompanyMap } from "@/components/sections/CompanyMap";
 import { company } from "@/data/company";
 import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 
 export const Route = createFileRoute("/contacto")({
+  validateSearch: (search: Record<string, unknown>): { servico?: string } => {
+    const s = typeof search.servico === "string" ? search.servico : undefined;
+    return s ? { servico: s } : {};
+  },
   head: () => {
     const title = "Contacto · Pedido de Orçamento — IJ Santos (Nelas)";
     const description =
@@ -23,6 +28,7 @@ export const Route = createFileRoute("/contacto")({
         { name: "description", content: description },
         { property: "og:title", content: title },
         { property: "og:description", content: description },
+        { property: "og:url", content: `${company.siteUrl}/contacto` },
       ],
       scripts: [
         { type: "application/ld+json", children: JSON.stringify(contactLd) },
@@ -33,17 +39,19 @@ export const Route = createFileRoute("/contacto")({
 });
 
 function ContactoPage() {
+  const { t } = useTranslation();
+  const { servico } = Route.useSearch();
+
   return (
     <>
       <section className="bg-primary text-primary-foreground">
         <div className="mx-auto max-w-7xl container-px py-20 md:py-28 text-center md:text-left">
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Contacto</span>
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">{t("contact.label")}</span>
           <h1 className="mt-3 font-display text-4xl md:text-6xl font-bold tracking-tight max-w-3xl mx-auto md:mx-0 text-balance">
-            Vamos falar do seu projeto.
+            {t("contact.title")}
           </h1>
           <p className="mt-6 text-lg text-primary-foreground/75 max-w-2xl mx-auto md:mx-0">
-            Preencha o formulário ou contacte-nos diretamente. Respondemos a todos os pedidos
-            em menos de 24 horas, com orçamento gratuito e sem compromisso.
+            {t("contact.body")}
           </p>
         </div>
       </section>
@@ -51,10 +59,10 @@ function ContactoPage() {
       <section className="py-20 md:py-24">
         <div className="mx-auto max-w-7xl container-px grid gap-12 lg:grid-cols-5">
           <div className="lg:col-span-3 rounded-2xl border border-border bg-card p-7 md:p-10 shadow-sm">
-            <h2 className="font-display text-2xl md:text-3xl font-bold">Pedido de orçamento</h2>
-            <p className="mt-2 text-muted-foreground">Conte-nos o que precisa.</p>
+            <h2 className="font-display text-2xl md:text-3xl font-bold">{t("contact.quote_title")}</h2>
+            <p className="mt-2 text-muted-foreground">{t("contact.quote_subtitle")}</p>
             <div className="mt-8">
-              <QuoteForm />
+              <QuoteForm defaultService={servico ?? ""} />
             </div>
           </div>
 
@@ -64,7 +72,7 @@ function ContactoPage() {
                 <div className="h-11 w-11 rounded-lg bg-brand/10 text-brand grid place-items-center">
                   <Phone className="h-5 w-5" />
                 </div>
-                <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Telefones</div>
+                <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("contact.phones")}</div>
               </div>
               <ul className="mt-4 space-y-2.5">
                 {company.phones.map((p) => (
@@ -82,7 +90,7 @@ function ContactoPage() {
                 <div className="h-11 w-11 rounded-lg bg-brand/10 text-brand grid place-items-center">
                   <Mail className="h-5 w-5" />
                 </div>
-                <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Emails</div>
+                <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("contact.emails")}</div>
               </div>
               <ul className="mt-4 space-y-2.5">
                 {company.emails.map((e) => (
@@ -94,14 +102,14 @@ function ContactoPage() {
               </ul>
             </div>
 
-            <InfoCard icon={MessageCircle} title="WhatsApp" value="Mensagem direta" href={company.whatsapp} external />
+            <InfoCard icon={MessageCircle} title="WhatsApp" value={t("contact.whatsapp_value")} href={company.whatsapp} external />
 
             <div className="rounded-xl border border-border bg-card p-5">
               <div className="flex items-center gap-3">
                 <div className="h-11 w-11 rounded-lg bg-brand/10 text-brand grid place-items-center">
                   <MapPin className="h-5 w-5" />
                 </div>
-                <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Moradas</div>
+                <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{t("contact.addresses")}</div>
               </div>
               <ul className="mt-4 space-y-3">
                 {company.addresses.map((a) => (
@@ -113,27 +121,14 @@ function ContactoPage() {
               </ul>
             </div>
 
-            <InfoCard icon={Clock} title="Horário" value={company.hours} />
+            <InfoCard icon={Clock} title={t("contact.hours")} value={company.hours} />
           </aside>
         </div>
       </section>
 
-      {/* Map placeholder */}
       <section className="pb-20 md:pb-28">
         <div className="mx-auto max-w-7xl container-px">
           <CompanyMap className="rounded-2xl aspect-[16/7]" />
-            {/*
-            <div className="absolute inset-0 grain opacity-40" />
-            <div className="absolute inset-0 grid place-items-center text-primary">
-              <div className="text-center">
-                <div className="inline-flex h-12 w-12 rounded-full bg-brand text-brand-foreground items-center justify-center">
-                  <MapPin className="h-6 w-6" />
-                </div>
-                <div className="mt-4 font-display text-2xl font-bold">{company.address}</div>
-                <div className="mt-1 text-sm text-muted-foreground">Servimos toda a região centro</div>
-              </div>
-            </div>
-            */}
         </div>
       </section>
     </>

@@ -60,9 +60,9 @@ export const company = {
   odrEU: "https://webgate.ec.europa.eu/odr/main/?event=main.home.show",
 
   stats: [
-    { value: "15+", label: "Anos de experiência" },
-    { value: "500+", label: "Obras concluídas" },
-    { value: "<24h", label: "Resposta a pedidos" },
-    { value: "4.9/5", label: "Avaliação dos clientes" },
+    { value: "15+", label: "stats.yearsExperience" },
+    { value: "500+", label: "stats.completedWorks" },
+    { value: "<24h", label: "stats.responseTime" },
+    { value: "4.9/5", label: "stats.clientRating" },
   ],
 };
