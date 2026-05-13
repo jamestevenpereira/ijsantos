@@ -232,6 +232,8 @@ function PageTransition() {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isAdmin = pathname.startsWith("/admin");
 
   useEffect(() => {
     try {
@@ -241,6 +243,15 @@ function RootComponent() {
       }
     } catch { /* noop */ }
   }, []);
+
+  if (isAdmin) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <PageTransition />
+        <Toaster position="top-right" theme="dark" />
+      </QueryClientProvider>
+    );
+  }
 
   return (
     <QueryClientProvider client={queryClient}>

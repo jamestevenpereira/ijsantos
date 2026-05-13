@@ -1,119 +1,101 @@
-# Plano · SEO técnico, SSG e deploy Cloudflare
+## Backoffice IJ Santos — Plano
 
-## 1. Estratégia de renderização
+Construir um backoffice protegido para gerir o portefólio, integrado com o site público.
 
-O projeto **já é TanStack Start (SSR)** — não é uma SPA cega. Os crawlers já recebem HTML completo. O que falta é gerar esse HTML **uma vez no build** (SSG) em vez de a cada request, para poder ser servido como ficheiros estáticos.
+### 1. Backend (Lovable Cloud)
 
-**Decisão:** ativar **prerender** do TanStack Start para todas as rotas conhecidas → output 100% estático → deploy em **Cloudflare Pages** (com uma Pages Function só para o formulário).
+Ativar Lovable Cloud (Supabase). Criar:
 
-Não é necessário migrar para Astro nem usar Worker de prerender por crawler.
+- **Tabela `portfolio_items`**: `id uuid pk`, `storage_path text`, `public_url text`, `category text`, `title text null`, `created_at timestamptz default now()`.
+- **Bucket `portfolio`** (público, para leitura direta de URLs).
+- **RLS**:
+  - `select` público (anon + authenticated)
+  - `insert` / `delete` apenas authenticated
+- **Storage policies**: leitura pública; upload/delete apenas authenticated.
+- Conta admin: criada manualmente mais tarde no painel Cloud (decisão do utilizador).
 
-## 2. Configuração de build (SSG)
+### 2. Rotas novas
 
-`vite.config.ts` — adicionar opção `prerender` ao plugin `tanstackStart`:
-
-```text
-tanstackStart({
-  server: { entry: "server" },
-  prerender: {
-    enabled: true,
-    crawlLinks: true,
-    pages: [
-      "/", "/sobre", "/servicos", "/portefolio",
-      "/contacto", "/privacidade", "/resolucao-litigios",
-      // serviços (slugs novos, ver §4)
-      "/servicos/construcao-civil",
-      "/servicos/remodelacoes-reabilitacao",
-      "/servicos/pinturas-interiores-exteriores",
-      "/servicos/limpeza-fachadas",
-      "/servicos/limpeza-telhados",
-      "/servicos/limpeza-pavimentos-exteriores",
-      // áreas locais
-      "/areas/nelas", "/areas/viseu", "/areas/mangualde",
-      "/areas/tondela", "/areas/carregal-do-sal",
-      "/areas/seia", "/areas/gouveia", "/areas/coimbra",
-    ],
-  },
-}),
+```
+src/routes/admin.login.tsx          → /admin/login (pública)
+src/routes/_admin.tsx               → layout protegido (beforeLoad redirect)
+src/routes/_admin/admin.tsx         → /admin (dashboard, redirect → /admin/portfolio)
+src/routes/_admin/admin.portfolio.tsx → /admin/portfolio
 ```
 
-Trocar o preset Nitro de Worker para **static** (gera `dist/` pronto a servir). Eliminar/arquivar `wrangler.jsonc` e `src/server.ts` (deixam de ser usados como entry de produção).
+Layout `_admin` com sidebar escura (#1A1A1A), link "Portefólio", botão Logout. `beforeLoad` chama `supabase.auth.getSession()`; se não houver sessão → `redirect /admin/login`. `/admin/login` redireciona para `/admin/portfolio` se já autenticado.
 
-## 3. Cloudflare Pages
+### 3. Componentes
 
-- **Build command:** `bun run build`
-- **Output directory:** `dist` (ou `dist/client` consoante o preset; o plano confirma após build local)
-- **Worker necessário:** **Não.** Apenas uma **Pages Function** em `functions/api/contacto.ts` para receber o formulário (POST → Resend) — Resend API key como secret no painel Pages.
-- **`public/_headers`:** cache longa para `assets/*` e imagens; `Cache-Control: no-cache` para HTML.
-- **`public/_redirects`:** opcional, só para legacy paths se existirem.
+- `src/components/admin/AdminSidebar.tsx` — nav + logout
+- `src/components/admin/PhotoUploader.tsx` — dropzone (input file), seletor de categoria, título opcional, barra de progresso, upload para Storage + insert na tabela
+- `src/components/admin/PhotoGrid.tsx` — grid 3-4 col, filtros pill por categoria, card com imagem, badge, título, botão delete
+- `src/components/admin/DeleteConfirmDialog.tsx` — shadcn AlertDialog "Tem a certeza que quer remover esta foto?"
+- `src/components/admin/LoginForm.tsx` — card centrado, fundo #111, botão vermelho #DC2626, mensagens em pt-PT
 
-## 4. Correções SEO obrigatórias
+Toda a comunicação com Supabase via `@/integrations/supabase/client` (browser). Estado com TanStack Query (`portfolio_items` queryKey) + invalidação após mutations. Toasts via `sonner`.
 
-**a) Geografia (Nelas/Viseu, não Lisboa)** — atualizar `src/routes/__root.tsx`, `src/routes/index.tsx` e `Hero.tsx`: title, meta description, H1, OG, JSON-LD passam a falar de **Nelas, Viseu e região centro**.
+### 4. Categorias (constante)
 
-**b) Slugs de serviços** — renomear em `src/data/services.ts`:
-- `remodelacoes` → `remodelacoes-reabilitacao`
-- `pinturas` → `pinturas-interiores-exteriores`
-- `limpeza-pavimentos` → `limpeza-pavimentos-exteriores`
+```ts
+export const PORTFOLIO_CATEGORIES = [
+  "Pavilhões Industriais",
+  "Lojas Comerciais",
+  "Infraestruturas",
+  "Obras Públicas",
+  "Construção Habitacional",
+] as const;
+```
 
-Cada página de serviço (`servicos.$slug.tsx`) já tem hero/benefícios/processo/galeria/FAQ/CTA. **Adicionar:**
-- title + meta description únicos com localidade
-- canonical
-- bloco de **links internos para áreas locais** relevantes ao serviço
-- JSON-LD `Service` + `FAQPage` + `BreadcrumbList`
+Em `src/data/portfolio-categories.ts`, partilhado entre admin e público.
 
-**c) Áreas locais** — expandir `src/data/local-areas.ts` com 5 novas localidades (Tondela, Carregal do Sal, Seia, Gouveia, Coimbra) com conteúdo único (intro, body, highlights, distanceNote). Cada `/areas/$slug` ganha:
-- title/desc/canonical próprios
-- lista de serviços prestados na zona com links para `/servicos/...`
-- FAQ local (3 perguntas)
-- JSON-LD `LocalBusiness` + `Service` com `areaServed` + `BreadcrumbList`
+### 5. Integração com /portefolio público
 
-**d) `public/sitemap.xml` e `public/robots.txt`** — gerar sitemap estático com todas as 19 rotas; robots permite tudo e aponta para o sitemap.
+Atualizar `src/routes/portefolio.tsx` para:
+- Ler de `portfolio_items` via Supabase client (TanStack Query, `staleTime: 60s`).
+- Se a query devolver array vazio → fallback para as imagens estáticas atuais em `src/data/portfolio.ts` (mantém o site funcional enquanto o cliente não carrega nada).
+- Filtros por categoria reutilizam `PORTFOLIO_CATEGORIES`.
+- Mantém SSR/prerender — o fetch corre no cliente; durante prerender mostra o fallback estático.
 
-**e) Metadata global vs por rota** — root mantém defaults genéricos; cada rota define title/description/og/twitter/canonical próprios. OG image específica para home, sobre, cada serviço e cada área (reaproveitar imagens já existentes em `src/assets`).
+### 6. UX / detalhes
 
-**f) JSON-LD global** no `__root.tsx`: `Organization` + `WebSite` + `LocalBusiness` (com sede em Nelas, telefones, horários, `areaServed` com as 8 localidades, `ContactPoint`).
+- pt-PT em todos os labels ("Entrar", "Carregar foto", "Categoria", "Título (opcional)", "Remover", "Sair").
+- Mensagem erro login: "Credenciais inválidas. Tente novamente."
+- Loading states em botões (Loader2 spinner) e skeletons no grid.
+- Responsive (sidebar colapsa em tablet via shadcn Sheet ou breakpoint).
+- Sem registo, sem reset de password, sem gestão de utilizadores.
 
-## 5. Performance
+### 7. Ficheiros novos / alterados
 
-- `width`/`height` em todos os `<img>` para evitar CLS
-- `fetchpriority="high"` + `loading="eager"` no LCP do Hero; restantes `loading="lazy"`
-- Pré-gerar variantes WebP/AVIF das imagens em `src/assets` no build (ou converter manualmente — já são poucas)
-- Remover JS desnecessário: `recharts`, `embla-carousel-react`, `vaul`, `cmdk`, `react-day-picker`, `input-otp`, `react-resizable-panels` parecem não usados no site institucional → auditar e remover
-- Fontes Google: usar `&display=swap` (já está) + `<link rel="preload">` para a fonte do H1
+**Novos**
+- `src/routes/admin.login.tsx`
+- `src/routes/_admin.tsx`
+- `src/routes/_admin/admin.tsx`
+- `src/routes/_admin/admin.portfolio.tsx`
+- `src/components/admin/AdminSidebar.tsx`
+- `src/components/admin/LoginForm.tsx`
+- `src/components/admin/PhotoUploader.tsx`
+- `src/components/admin/PhotoGrid.tsx`
+- `src/components/admin/DeleteConfirmDialog.tsx`
+- `src/data/portfolio-categories.ts`
+- `src/lib/portfolio-db.ts` (helpers: `listItems`, `uploadItem`, `deleteItem`)
+- migração SQL (tabela + RLS + bucket + policies)
 
-## 6. Formulário de contacto
+**Alterados**
+- `src/routes/portefolio.tsx` — passa a ler da BD com fallback estático
+- `src/routes/__root.tsx` — exclui rotas `/admin` de elementos públicos (header/footer/CTA mobile/WhatsApp FAB) condicional ao pathname
+- `public/robots.txt` — `Disallow: /admin`
+- `public/sitemap.xml` — garantir que /admin não aparece
 
-`functions/api/contacto.ts` (Pages Function):
-- valida com Zod (nome, email, telefone, mensagem, honeypot)
-- envia via **Resend** para `jpsantos@ijsantos.com`
-- rate-limit simples por IP (KV opcional, ou só honeypot + tempo mínimo)
-- responde 200/400 em JSON; o `QuoteForm` faz `fetch('/api/contacto')`
+### 8. Segurança
 
-## 7. Legal (RGPD)
+- RLS estrita (insert/delete só authenticated).
+- Validação Zod no formulário (file size ≤ 10 MB, mime image/*, título ≤ 120 chars, categoria do enum).
+- `beforeLoad` do layout `_admin` + listener `onAuthStateChange` para logout automático em todas as tabs.
+- Nada de roles custom (single-user invite-only conforme briefing).
 
-Rever `/privacidade`: identificar responsável (Irmãos J. Santos, Lda., NIPC 503 534 633), finalidade (pedidos de orçamento via Resend), prazo de retenção, direitos RGPD, contacto. Atualizar `CookieConsent`: se não há analytics, basta banner informativo de cookies técnicos (sem consent gate).
+### 9. Pós-implementação (passos manuais do utilizador)
 
-## 8. Entregáveis finais (no fim da implementação)
-
-- **Ficheiros alterados/criados:** lista completa
-- **Rotas finais:** 19 (1 home + 6 institucionais + 6 serviços + 8 áreas, ajustando totais)
-- **Estratégia:** SSG (prerender no build, output estático)
-- **Cloudflare Pages:**
-  - Build: `bun run build`
-  - Output: `dist`
-  - Worker: não — apenas 1 Pages Function (`functions/api/contacto.ts`)
-  - Secret: `RESEND_API_KEY`
-- **Checklist SEO de teste:**
-  1. `curl https://site/servicos/limpeza-fachadas` devolve HTML com H1 e conteúdo (não `<div id="root"></div>` vazio)
-  2. `/sitemap.xml` e `/robots.txt` acessíveis
-  3. Cada rota tem `<title>`, `<meta description>`, `<link rel="canonical">`, OG, Twitter Card únicos
-  4. JSON-LD validado em [validator.schema.org](https://validator.schema.org)
-  5. Lighthouse mobile ≥ 90 em Performance/SEO/Best Practices/Accessibility
-  6. Rich Results test passa em FAQPage e LocalBusiness
-  7. Form `/contacto` envia email via Resend e mostra confirmação
-
-## Riscos / pontos a confirmar
-
-- Preset estático do TanStack Start gera HTML por rota — confirmar nome exato da pasta de output após primeiro build (`dist`, `dist/client` ou `.output/public`); ajusto o passo Cloudflare Pages em conformidade.
-- Renomear slugs de serviços quebra links antigos: adiciono entradas em `_redirects` (`/servicos/pinturas /servicos/pinturas-interiores-exteriores 301`).
+1. Criar utilizador admin no painel Lovable Cloud → Auth → Users → Add user.
+2. Definir email/password.
+3. Iniciar sessão em `/admin/login` e começar a carregar fotos.
