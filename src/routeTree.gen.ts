@@ -15,9 +15,13 @@ import { Route as ResolucaoLitigiosRouteImport } from './routes/resolucao-litigi
 import { Route as PrivacidadeRouteImport } from './routes/privacidade'
 import { Route as PortefolioRouteImport } from './routes/portefolio'
 import { Route as ContactoRouteImport } from './routes/contacto'
+import { Route as AdminRouteImport } from './routes/_admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ServicosSlugRouteImport } from './routes/servicos.$slug'
 import { Route as AreasSlugRouteImport } from './routes/areas.$slug'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AdminAdminIndexRouteImport } from './routes/_admin/admin.index'
+import { Route as AdminAdminPortfolioRouteImport } from './routes/_admin/admin.portfolio'
 
 const SobreRoute = SobreRouteImport.update({
   id: '/sobre',
@@ -49,6 +53,10 @@ const ContactoRoute = ContactoRouteImport.update({
   path: '/contacto',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/_admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -64,6 +72,21 @@ const AreasSlugRoute = AreasSlugRouteImport.update({
   path: '/areas/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminAdminIndexRoute = AdminAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAdminPortfolioRoute = AdminAdminPortfolioRouteImport.update({
+  id: '/admin/portfolio',
+  path: '/admin/portfolio',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -73,8 +96,11 @@ export interface FileRoutesByFullPath {
   '/resolucao-litigios': typeof ResolucaoLitigiosRoute
   '/servicos': typeof ServicosRouteWithChildren
   '/sobre': typeof SobreRoute
+  '/admin/login': typeof AdminLoginRoute
   '/areas/$slug': typeof AreasSlugRoute
   '/servicos/$slug': typeof ServicosSlugRoute
+  '/admin/portfolio': typeof AdminAdminPortfolioRoute
+  '/admin/': typeof AdminAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -84,20 +110,27 @@ export interface FileRoutesByTo {
   '/resolucao-litigios': typeof ResolucaoLitigiosRoute
   '/servicos': typeof ServicosRouteWithChildren
   '/sobre': typeof SobreRoute
+  '/admin/login': typeof AdminLoginRoute
   '/areas/$slug': typeof AreasSlugRoute
   '/servicos/$slug': typeof ServicosSlugRoute
+  '/admin/portfolio': typeof AdminAdminPortfolioRoute
+  '/admin': typeof AdminAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_admin': typeof AdminRouteWithChildren
   '/contacto': typeof ContactoRoute
   '/portefolio': typeof PortefolioRoute
   '/privacidade': typeof PrivacidadeRoute
   '/resolucao-litigios': typeof ResolucaoLitigiosRoute
   '/servicos': typeof ServicosRouteWithChildren
   '/sobre': typeof SobreRoute
+  '/admin/login': typeof AdminLoginRoute
   '/areas/$slug': typeof AreasSlugRoute
   '/servicos/$slug': typeof ServicosSlugRoute
+  '/_admin/admin/portfolio': typeof AdminAdminPortfolioRoute
+  '/_admin/admin/': typeof AdminAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -109,8 +142,11 @@ export interface FileRouteTypes {
     | '/resolucao-litigios'
     | '/servicos'
     | '/sobre'
+    | '/admin/login'
     | '/areas/$slug'
     | '/servicos/$slug'
+    | '/admin/portfolio'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -120,29 +156,38 @@ export interface FileRouteTypes {
     | '/resolucao-litigios'
     | '/servicos'
     | '/sobre'
+    | '/admin/login'
     | '/areas/$slug'
     | '/servicos/$slug'
+    | '/admin/portfolio'
+    | '/admin'
   id:
     | '__root__'
     | '/'
+    | '/_admin'
     | '/contacto'
     | '/portefolio'
     | '/privacidade'
     | '/resolucao-litigios'
     | '/servicos'
     | '/sobre'
+    | '/admin/login'
     | '/areas/$slug'
     | '/servicos/$slug'
+    | '/_admin/admin/portfolio'
+    | '/_admin/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
   ContactoRoute: typeof ContactoRoute
   PortefolioRoute: typeof PortefolioRoute
   PrivacidadeRoute: typeof PrivacidadeRoute
   ResolucaoLitigiosRoute: typeof ResolucaoLitigiosRoute
   ServicosRoute: typeof ServicosRouteWithChildren
   SobreRoute: typeof SobreRoute
+  AdminLoginRoute: typeof AdminLoginRoute
   AreasSlugRoute: typeof AreasSlugRoute
 }
 
@@ -190,6 +235,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_admin': {
+      id: '/_admin'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -211,8 +263,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AreasSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_admin/admin/': {
+      id: '/_admin/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminAdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/_admin/admin/portfolio': {
+      id: '/_admin/admin/portfolio'
+      path: '/admin/portfolio'
+      fullPath: '/admin/portfolio'
+      preLoaderRoute: typeof AdminAdminPortfolioRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
+
+interface AdminRouteChildren {
+  AdminAdminPortfolioRoute: typeof AdminAdminPortfolioRoute
+  AdminAdminIndexRoute: typeof AdminAdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAdminPortfolioRoute: AdminAdminPortfolioRoute,
+  AdminAdminIndexRoute: AdminAdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface ServicosRouteChildren {
   ServicosSlugRoute: typeof ServicosSlugRoute
@@ -228,12 +313,14 @@ const ServicosRouteWithChildren = ServicosRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
   ContactoRoute: ContactoRoute,
   PortefolioRoute: PortefolioRoute,
   PrivacidadeRoute: PrivacidadeRoute,
   ResolucaoLitigiosRoute: ResolucaoLitigiosRoute,
   ServicosRoute: ServicosRouteWithChildren,
   SobreRoute: SobreRoute,
+  AdminLoginRoute: AdminLoginRoute,
   AreasSlugRoute: AreasSlugRoute,
 }
 export const routeTree = rootRouteImport
