@@ -15,17 +15,19 @@ const iconMap = {
 export function ServiceCard({ service }: { service: Service }) {
   const { t } = useTranslation();
   const Icon = iconMap[service.icon];
+  const title = t(service.title);
+
   return (
     <Link
       to="/servicos/$slug"
       params={{ slug: service.slug }}
-      aria-label={t(service.title)}
+      aria-label={`${t("servicecard.learn_more")} sobre ${title}`}
       className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card hover:border-brand/40 transition-all hover:-translate-y-1 hover:shadow-xl"
     >
       <div className="relative aspect-[16/10] overflow-hidden">
         <img
           src={service.hero}
-          alt={t(service.title)}
+          alt={title}
           loading="lazy"
           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
@@ -35,7 +37,7 @@ export function ServiceCard({ service }: { service: Service }) {
         </div>
       </div>
       <div className="p-6 flex-1 flex flex-col text-center md:text-left">
-        <h3 className="font-display text-xl font-semibold text-foreground">{t(service.title)}</h3>
+        <h3 className="font-display text-xl font-semibold text-foreground">{title}</h3>
         <p className="mt-2 text-sm text-muted-foreground leading-relaxed flex-1">{t(service.short)}</p>
         <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand justify-center md:justify-start">
           {t("servicecard.learn_more")} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

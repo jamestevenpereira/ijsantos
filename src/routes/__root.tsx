@@ -202,6 +202,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
         <CanonicalLink />
+        <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>

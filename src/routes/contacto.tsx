@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
+import type { ComponentType } from "react";
 import { useTranslation } from "react-i18next";
 import { QuoteForm } from "@/components/forms/QuoteForm";
 import { CompanyMap } from "@/components/sections/CompanyMap";
 import { company } from "@/data/company";
-import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { Clock, Mail, MapPin, Phone } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 
 export const Route = createFileRoute("/contacto")({
   validateSearch: (search: Record<string, unknown>): { servico?: string } => {
@@ -102,7 +104,7 @@ function ContactoPage() {
               </ul>
             </div>
 
-            <InfoCard icon={MessageCircle} title="WhatsApp" value={t("contact.whatsapp_value")} href={company.whatsapp} external />
+            <InfoCard icon={WhatsAppIcon} title="WhatsApp" value={t("contact.whatsapp_value")} href={company.whatsapp} external />
 
             <div className="rounded-xl border border-border bg-card p-5">
               <div className="flex items-center gap-3">
@@ -137,7 +139,7 @@ function ContactoPage() {
 
 function InfoCard({
   icon: Icon, title, value, href, external,
-}: { icon: typeof Phone; title: string; value: string; href?: string; external?: boolean }) {
+}: { icon: ComponentType<{ className?: string }>; title: string; value: string; href?: string; external?: boolean }) {
   const content = (
     <div className="group flex items-start gap-4 rounded-xl border border-border bg-card p-5 hover:border-brand/40 transition">
       <div className="h-11 w-11 rounded-lg bg-brand/10 text-brand grid place-items-center group-hover:bg-brand group-hover:text-brand-foreground transition">

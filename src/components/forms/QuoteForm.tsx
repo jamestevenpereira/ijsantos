@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { ArrowRight, Check, ChevronLeft } from "lucide-react";
 import { services } from "@/data/services";
 import { company } from "@/data/company";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 
 export function QuoteForm({ compact = false, defaultService = "" }: { compact?: boolean; defaultService?: string }) {
   const { t } = useTranslation();
@@ -216,6 +217,7 @@ export function QuoteForm({ compact = false, defaultService = "" }: { compact?: 
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 rounded-md border border-border bg-background px-6 py-3 text-sm font-semibold hover:bg-accent transition"
           >
+            <WhatsAppIcon className="h-4 w-4 text-[#25D366]" />
             {t("form.whatsapp")}
           </a>
           <p className="text-xs text-muted-foreground text-center">{t("form.note")}</p>
