@@ -19,6 +19,7 @@ import { Route as AdminRouteImport } from './routes/_admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ServicosSlugRouteImport } from './routes/servicos.$slug'
 import { Route as AreasSlugRouteImport } from './routes/areas.$slug'
+import { Route as AdminResetPasswordRouteImport } from './routes/admin.reset-password'
 import { Route as AdminRecuperarRouteImport } from './routes/admin.recuperar'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminAdminIndexRouteImport } from './routes/_admin/admin.index'
@@ -73,6 +74,11 @@ const AreasSlugRoute = AreasSlugRouteImport.update({
   path: '/areas/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminResetPasswordRoute = AdminResetPasswordRouteImport.update({
+  id: '/admin/reset-password',
+  path: '/admin/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRecuperarRoute = AdminRecuperarRouteImport.update({
   id: '/admin/recuperar',
   path: '/admin/recuperar',
@@ -104,6 +110,7 @@ export interface FileRoutesByFullPath {
   '/sobre': typeof SobreRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/recuperar': typeof AdminRecuperarRoute
+  '/admin/reset-password': typeof AdminResetPasswordRoute
   '/areas/$slug': typeof AreasSlugRoute
   '/servicos/$slug': typeof ServicosSlugRoute
   '/admin/portfolio': typeof AdminAdminPortfolioRoute
@@ -119,6 +126,7 @@ export interface FileRoutesByTo {
   '/sobre': typeof SobreRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/recuperar': typeof AdminRecuperarRoute
+  '/admin/reset-password': typeof AdminResetPasswordRoute
   '/areas/$slug': typeof AreasSlugRoute
   '/servicos/$slug': typeof ServicosSlugRoute
   '/admin/portfolio': typeof AdminAdminPortfolioRoute
@@ -136,6 +144,7 @@ export interface FileRoutesById {
   '/sobre': typeof SobreRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/recuperar': typeof AdminRecuperarRoute
+  '/admin/reset-password': typeof AdminResetPasswordRoute
   '/areas/$slug': typeof AreasSlugRoute
   '/servicos/$slug': typeof ServicosSlugRoute
   '/_admin/admin/portfolio': typeof AdminAdminPortfolioRoute
@@ -153,6 +162,7 @@ export interface FileRouteTypes {
     | '/sobre'
     | '/admin/login'
     | '/admin/recuperar'
+    | '/admin/reset-password'
     | '/areas/$slug'
     | '/servicos/$slug'
     | '/admin/portfolio'
@@ -168,6 +178,7 @@ export interface FileRouteTypes {
     | '/sobre'
     | '/admin/login'
     | '/admin/recuperar'
+    | '/admin/reset-password'
     | '/areas/$slug'
     | '/servicos/$slug'
     | '/admin/portfolio'
@@ -184,6 +195,7 @@ export interface FileRouteTypes {
     | '/sobre'
     | '/admin/login'
     | '/admin/recuperar'
+    | '/admin/reset-password'
     | '/areas/$slug'
     | '/servicos/$slug'
     | '/_admin/admin/portfolio'
@@ -201,6 +213,7 @@ export interface RootRouteChildren {
   SobreRoute: typeof SobreRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminRecuperarRoute: typeof AdminRecuperarRoute
+  AdminResetPasswordRoute: typeof AdminResetPasswordRoute
   AreasSlugRoute: typeof AreasSlugRoute
 }
 
@@ -276,6 +289,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AreasSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/reset-password': {
+      id: '/admin/reset-password'
+      path: '/admin/reset-password'
+      fullPath: '/admin/reset-password'
+      preLoaderRoute: typeof AdminResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/recuperar': {
       id: '/admin/recuperar'
       path: '/admin/recuperar'
@@ -342,6 +362,7 @@ const rootRouteChildren: RootRouteChildren = {
   SobreRoute: SobreRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminRecuperarRoute: AdminRecuperarRoute,
+  AdminResetPasswordRoute: AdminResetPasswordRoute,
   AreasSlugRoute: AreasSlugRoute,
 }
 export const routeTree = rootRouteImport
