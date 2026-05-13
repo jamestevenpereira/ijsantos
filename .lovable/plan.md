@@ -1,101 +1,118 @@
-## Backoffice IJ Santos — Plano
+## Objetivo
 
-Construir um backoffice protegido para gerir o portefólio, integrado com o site público.
+Melhorar o admin do portefólio (`/admin/portfolio`) com três funcionalidades:
 
-### 1. Backend (Lovable Cloud)
+1. **Upload em lote** — várias imagens de uma vez, mesma categoria.
+2. **Ordenação manual** — definir a ordem de exibição no site público.
+3. **Lightbox** — pré-visualização grande ao clicar numa foto.
 
-Ativar Lovable Cloud (Supabase). Criar:
+---
 
-- **Tabela `portfolio_items`**: `id uuid pk`, `storage_path text`, `public_url text`, `category text`, `title text null`, `created_at timestamptz default now()`.
-- **Bucket `portfolio`** (público, para leitura direta de URLs).
-- **RLS**:
-  - `select` público (anon + authenticated)
-  - `insert` / `delete` apenas authenticated
-- **Storage policies**: leitura pública; upload/delete apenas authenticated.
-- Conta admin: criada manualmente mais tarde no painel Cloud (decisão do utilizador).
+## 1. Base de dados
 
-### 2. Rotas novas
+Adicionar coluna `sort_order` à tabela `portfolio_items` para controlar a ordem.
 
-```
-src/routes/admin.login.tsx          → /admin/login (pública)
-src/routes/_admin.tsx               → layout protegido (beforeLoad redirect)
-src/routes/_admin/admin.tsx         → /admin (dashboard, redirect → /admin/portfolio)
-src/routes/_admin/admin.portfolio.tsx → /admin/portfolio
+```sql
+ALTER TABLE public.portfolio_items
+  ADD COLUMN sort_order integer NOT NULL DEFAULT 0;
+
+CREATE INDEX idx_portfolio_items_sort
+  ON public.portfolio_items (category, sort_order, created_at DESC);
 ```
 
-Layout `_admin` com sidebar escura (#1A1A1A), link "Portefólio", botão Logout. `beforeLoad` chama `supabase.auth.getSession()`; se não houver sessão → `redirect /admin/login`. `/admin/login` redireciona para `/admin/portfolio` se já autenticado.
+Nova policy `UPDATE` (apenas autenticados) para permitir reordenar:
 
-### 3. Componentes
-
-- `src/components/admin/AdminSidebar.tsx` — nav + logout
-- `src/components/admin/PhotoUploader.tsx` — dropzone (input file), seletor de categoria, título opcional, barra de progresso, upload para Storage + insert na tabela
-- `src/components/admin/PhotoGrid.tsx` — grid 3-4 col, filtros pill por categoria, card com imagem, badge, título, botão delete
-- `src/components/admin/DeleteConfirmDialog.tsx` — shadcn AlertDialog "Tem a certeza que quer remover esta foto?"
-- `src/components/admin/LoginForm.tsx` — card centrado, fundo #111, botão vermelho #DC2626, mensagens em pt-PT
-
-Toda a comunicação com Supabase via `@/integrations/supabase/client` (browser). Estado com TanStack Query (`portfolio_items` queryKey) + invalidação após mutations. Toasts via `sonner`.
-
-### 4. Categorias (constante)
-
-```ts
-export const PORTFOLIO_CATEGORIES = [
-  "Pavilhões Industriais",
-  "Lojas Comerciais",
-  "Infraestruturas",
-  "Obras Públicas",
-  "Construção Habitacional",
-] as const;
+```sql
+CREATE POLICY "Authenticated can update portfolio items"
+  ON public.portfolio_items FOR UPDATE
+  TO authenticated USING (true) WITH CHECK (true);
 ```
 
-Em `src/data/portfolio-categories.ts`, partilhado entre admin e público.
+Backfill: `sort_order` inicial = posição por `created_at DESC` dentro da categoria.
 
-### 5. Integração com /portefolio público
+---
 
-Atualizar `src/routes/portefolio.tsx` para:
-- Ler de `portfolio_items` via Supabase client (TanStack Query, `staleTime: 60s`).
-- Se a query devolver array vazio → fallback para as imagens estáticas atuais em `src/data/portfolio.ts` (mantém o site funcional enquanto o cliente não carrega nada).
-- Filtros por categoria reutilizam `PORTFOLIO_CATEGORIES`.
-- Mantém SSR/prerender — o fetch corre no cliente; durante prerender mostra o fallback estático.
+## 2. Upload em lote
 
-### 6. UX / detalhes
+Alterar `PhotoUploader` (em `_admin/admin.portfolio.tsx`):
 
-- pt-PT em todos os labels ("Entrar", "Carregar foto", "Categoria", "Título (opcional)", "Remover", "Sair").
-- Mensagem erro login: "Credenciais inválidas. Tente novamente."
-- Loading states em botões (Loader2 spinner) e skeletons no grid.
-- Responsive (sidebar colapsa em tablet via shadcn Sheet ou breakpoint).
-- Sem registo, sem reset de password, sem gestão de utilizadores.
+- Input `<input type="file" multiple accept="image/*">`.
+- Lista visível dos ficheiros selecionados (nome + tamanho + remover).
+- Um único campo de **categoria** aplicado a todos.
+- Campo de título opcional **partilhado** (pode ficar em branco; aplicado a todos os ficheiros do lote, ou ignorado se vazio).
+- Barra de progresso global: `X de N carregadas`, com `<Progress />` (já existe em `components/ui/progress.tsx`).
+- Upload **sequencial** (1 a 1) para evitar saturar a ligação e dar feedback fiável; toast por sucesso/erro agregado no fim (`"5 fotos carregadas, 1 falhou"`).
+- Validações por ficheiro: ≤10 MB, `image/*`. Ficheiros inválidos são saltados com aviso, não abortam o lote.
+- Novos itens recebem `sort_order = max(sort_order da categoria) + 1` (ou 0 se vazio) — calculado no `uploadPortfolioItem`.
 
-### 7. Ficheiros novos / alterados
+`src/lib/portfolio-db.ts`: ajustar `uploadPortfolioItem` para calcular `sort_order` automaticamente, e expor `reorderPortfolioItems(updates: { id, sort_order }[])` (faz `update` em batch, um por item).
+
+---
+
+## 3. Ordenação (drag-and-drop)
+
+Biblioteca: **`@dnd-kit/core` + `@dnd-kit/sortable`** (leve, acessível, padrão React 19/TS).
+
+Comportamento:
+
+- Reordenação **dentro do filtro ativo** (categoria selecionada ou "Todas").
+  - Se filtro = "Todas": ordena globalmente; `sort_order` é único entre todas as fotos.
+  - Se filtro = categoria: ordena só dentro dessa categoria.
+- Sortable grid com handle visível ao hover (ícone `GripVertical` no canto superior esquerdo do card, espelhando o botão de delete à direita).
+- Ao largar:
+  1. Atualização otimista no React Query cache.
+  2. `reorderPortfolioItems()` envia novos `sort_order` para os itens afetados.
+  3. Toast `"Ordem guardada"` ou rollback + toast de erro.
+- Ordenação default na query: `ORDER BY sort_order ASC, created_at DESC`.
+
+Componentes novos:
+
+- `SortablePhotoCard.tsx` — wrapper `useSortable` à volta do `<article>` existente.
+- Container `<DndContext><SortableContext items={...}>` no grid.
+
+---
+
+## 4. Lightbox
+
+Usar o `Dialog` do shadcn (`components/ui/dialog.tsx`) — sem nova dependência.
+
+- Clique na imagem (não no botão delete, não no handle de drag) abre o modal.
+- Conteúdo: imagem grande (max `90vh`, `object-contain`, fundo `#0F0F0F`), título, categoria, data de criação formatada (pt-PT), botão "Remover" (abre o `AlertDialog` existente) e botão "Fechar".
+- Acessibilidade: `Esc` fecha (Dialog já trata), `aria-label` na imagem.
+- Sem navegação prev/next nesta iteração (mantém o scope simples; pode ser extra mais tarde se for útil).
+
+---
+
+## Ficheiros a alterar / criar
+
+**Migração**
+- `supabase/migrations/<timestamp>_portfolio_sort_order.sql`
 
 **Novos**
-- `src/routes/admin.login.tsx`
-- `src/routes/_admin.tsx`
-- `src/routes/_admin/admin.tsx`
-- `src/routes/_admin/admin.portfolio.tsx`
-- `src/components/admin/AdminSidebar.tsx`
-- `src/components/admin/LoginForm.tsx`
-- `src/components/admin/PhotoUploader.tsx`
-- `src/components/admin/PhotoGrid.tsx`
-- `src/components/admin/DeleteConfirmDialog.tsx`
-- `src/data/portfolio-categories.ts`
-- `src/lib/portfolio-db.ts` (helpers: `listItems`, `uploadItem`, `deleteItem`)
-- migração SQL (tabela + RLS + bucket + policies)
+- `src/components/admin/SortablePhotoCard.tsx`
+- `src/components/admin/PhotoLightbox.tsx`
+- `src/components/admin/BatchUploader.tsx` (extrair o formulário do ficheiro de rota para legibilidade)
 
-**Alterados**
-- `src/routes/portefolio.tsx` — passa a ler da BD com fallback estático
-- `src/routes/__root.tsx` — exclui rotas `/admin` de elementos públicos (header/footer/CTA mobile/WhatsApp FAB) condicional ao pathname
-- `public/robots.txt` — `Disallow: /admin`
-- `public/sitemap.xml` — garantir que /admin não aparece
+**Editados**
+- `src/lib/portfolio-db.ts` — `sort_order` no insert; `reorderPortfolioItems()`; `listPortfolioItems()` ordena por `sort_order`.
+- `src/routes/_admin/admin.portfolio.tsx` — integra os 3 componentes acima, DnD context, estado do lightbox.
+- `src/routes/portefolio.tsx` — usar `sort_order` na ordenação pública.
+- `package.json` — adicionar `@dnd-kit/core` e `@dnd-kit/sortable`.
 
-### 8. Segurança
+---
 
-- RLS estrita (insert/delete só authenticated).
-- Validação Zod no formulário (file size ≤ 10 MB, mime image/*, título ≤ 120 chars, categoria do enum).
-- `beforeLoad` do layout `_admin` + listener `onAuthStateChange` para logout automático em todas as tabs.
-- Nada de roles custom (single-user invite-only conforme briefing).
+## Notas de UX (pt-PT)
 
-### 9. Pós-implementação (passos manuais do utilizador)
+- Botão de upload muda para `"Carregar N fotos"` quando há lote.
+- Mensagem de progresso: `"A carregar 3 de 7…"`.
+- Tooltip no handle de drag: `"Arrastar para reordenar"`.
+- Toast final do lote: `"5 fotos carregadas com sucesso."` ou `"4 carregadas, 1 falhou."`.
 
-1. Criar utilizador admin no painel Lovable Cloud → Auth → Users → Add user.
-2. Definir email/password.
-3. Iniciar sessão em `/admin/login` e começar a carregar fotos.
+---
+
+## Fora deste plano
+
+- Edição de título/categoria de fotos existentes.
+- Reordenação por botões (substituída pelo drag-and-drop, que cobre mesma necessidade com melhor UX).
+- Navegação prev/next no lightbox.
+- Paginação (continua sem ser necessária <100 fotos).
