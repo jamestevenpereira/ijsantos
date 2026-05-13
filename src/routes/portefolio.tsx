@@ -102,11 +102,11 @@ function PortfolioPage() {
   }, [lightbox, items.length]);
 
   const filters: { key: Filter; label: string; count: number }[] = [
-    { key: "todos", label: t("portfolio.filter_all"), count: portfolio.length },
+    { key: "todos", label: t("portfolio.filter_all"), count: allItems.length },
     ...categoryOrder.map((c) => ({
       key: c,
       label: t(`portfolio.cat.${c}`),
-      count: portfolio.filter((p) => p.category === c).length,
+      count: allItems.filter((p) => p.category === c).length,
     })),
   ];
 
