@@ -119,6 +119,13 @@ function LoginPage() {
             {loading && <Loader2 className="h-4 w-4 animate-spin" />}
             Entrar
           </button>
+
+          <Link
+            to="/admin/recuperar"
+            className="block text-center text-sm text-white/60 hover:text-white"
+          >
+            Esqueceu-se da palavra-passe?
+          </Link>
         </form>
       </div>
     </div>
