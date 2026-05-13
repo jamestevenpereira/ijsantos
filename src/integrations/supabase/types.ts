@@ -22,6 +22,8 @@ export type Database = {
           public_url: string
           sort_order: number
           storage_path: string
+          thumb_storage_path: string | null
+          thumb_url: string | null
           title: string | null
         }
         Insert: {
@@ -31,6 +33,8 @@ export type Database = {
           public_url: string
           sort_order?: number
           storage_path: string
+          thumb_storage_path?: string | null
+          thumb_url?: string | null
           title?: string | null
         }
         Update: {
@@ -40,6 +44,8 @@ export type Database = {
           public_url?: string
           sort_order?: number
           storage_path?: string
+          thumb_storage_path?: string | null
+          thumb_url?: string | null
           title?: string | null
         }
         Relationships: []

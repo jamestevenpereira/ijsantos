@@ -1,10 +1,13 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { PortfolioCategoryName } from "@/data/portfolio-categories";
+import { processImage } from "@/lib/image-processing";
 
 export type PortfolioDbItem = {
   id: string;
   storage_path: string;
   public_url: string;
+  thumb_storage_path: string | null;
+  thumb_url: string | null;
   category: PortfolioCategoryName;
   title: string | null;
   created_at: string;
@@ -36,33 +39,47 @@ async function nextSortOrder(category: PortfolioCategoryName): Promise<number> {
   return (data?.sort_order ?? 0) + 1;
 }
 
+async function uploadToBucket(file: File, prefix: string): Promise<{ path: string; url: string }> {
+  const ext = file.name.split(".").pop()?.toLowerCase() || "webp";
+  const path = `${prefix}${crypto.randomUUID()}.${ext}`;
+  const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
+    cacheControl: "31536000",
+    contentType: file.type || "image/webp",
+    upsert: false,
+  });
+  if (error) throw error;
+  const { data: pub } = supabase.storage.from(BUCKET).getPublicUrl(path);
+  return { path, url: pub.publicUrl };
+}
+
 export async function uploadPortfolioItem(params: {
   file: File;
   category: PortfolioCategoryName;
   title?: string | null;
 }): Promise<PortfolioDbItem> {
   const { file, category, title } = params;
-  const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
-  const safeName = `${crypto.randomUUID()}.${ext}`;
-  const storagePath = `${safeName}`;
 
-  const { error: uploadErr } = await supabase.storage
-    .from(BUCKET)
-    .upload(storagePath, file, {
-      cacheControl: "31536000",
-      contentType: file.type || "image/jpeg",
-      upsert: false,
-    });
-  if (uploadErr) throw uploadErr;
+  // Gera versões otimizadas no browser antes de enviar.
+  const { full, thumb } = await processImage(file);
 
-  const { data: pub } = supabase.storage.from(BUCKET).getPublicUrl(storagePath);
+  const fullRes = await uploadToBucket(full, "");
+  let thumbRes: { path: string; url: string } | null = null;
+  try {
+    thumbRes = await uploadToBucket(thumb, "thumbs/");
+  } catch (e) {
+    // Se o thumb falhar, continuamos só com o full.
+    console.warn("Thumb upload falhou:", e);
+  }
+
   const sort_order = await nextSortOrder(category);
 
   const { data, error } = await supabase
     .from("portfolio_items")
     .insert({
-      storage_path: storagePath,
-      public_url: pub.publicUrl,
+      storage_path: fullRes.path,
+      public_url: fullRes.url,
+      thumb_storage_path: thumbRes?.path ?? null,
+      thumb_url: thumbRes?.url ?? null,
       category,
       title: title?.trim() || null,
       sort_order,
@@ -70,7 +87,9 @@ export async function uploadPortfolioItem(params: {
     .select("*")
     .single();
   if (error) {
-    await supabase.storage.from(BUCKET).remove([storagePath]);
+    await supabase.storage.from(BUCKET).remove(
+      thumbRes ? [fullRes.path, thumbRes.path] : [fullRes.path],
+    );
     throw error;
   }
   return data as PortfolioDbItem;
@@ -82,13 +101,39 @@ export async function deletePortfolioItem(item: PortfolioDbItem): Promise<void> 
     .delete()
     .eq("id", item.id);
   if (delErr) throw delErr;
-  await supabase.storage.from(BUCKET).remove([item.storage_path]);
+  const paths = [item.storage_path];
+  if (item.thumb_storage_path) paths.push(item.thumb_storage_path);
+  await supabase.storage.from(BUCKET).remove(paths);
+}
+
+export async function updatePortfolioItem(params: {
+  id: string;
+  title: string | null;
+  category: PortfolioCategoryName;
+  currentCategory: PortfolioCategoryName;
+}): Promise<PortfolioDbItem> {
+  const { id, title, category, currentCategory } = params;
+  const patch: { title: string | null; category: PortfolioCategoryName; sort_order?: number } = {
+    title: title?.trim() ? title.trim() : null,
+    category,
+  };
+  // Mover para o fim da nova categoria, se houver mudança.
+  if (category !== currentCategory) {
+    patch.sort_order = await nextSortOrder(category);
+  }
+  const { data, error } = await supabase
+    .from("portfolio_items")
+    .update(patch)
+    .eq("id", id)
+    .select("*")
+    .single();
+  if (error) throw error;
+  return data as PortfolioDbItem;
 }
 
 export async function reorderPortfolioItems(
   updates: { id: string; sort_order: number }[],
 ): Promise<void> {
-  // Postgrest não suporta bulk update por id diferente; enviamos em paralelo.
   const results = await Promise.all(
     updates.map((u) =>
       supabase

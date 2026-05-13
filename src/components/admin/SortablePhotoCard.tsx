@@ -35,7 +35,7 @@ export function SortablePhotoCard({ item, onPreview, onDelete }: Props) {
         aria-label={`Pré-visualizar ${item.title ?? item.category}`}
       >
         <img
-          src={item.public_url}
+          src={item.thumb_url ?? item.public_url}
           alt={item.title ?? item.category}
           loading="lazy"
           className="h-full w-full object-cover"
