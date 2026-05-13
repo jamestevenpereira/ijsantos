@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
@@ -7,6 +8,8 @@ import {
   categoryOrder,
   type PortfolioCategory,
 } from "@/data/portfolio";
+import { slugToCategoryName } from "@/data/portfolio-categories";
+import { listPortfolioItems } from "@/lib/portfolio-db";
 import { CTABand } from "@/components/sections/CTABand";
 
 export const Route = createFileRoute("/portefolio")({
@@ -39,9 +42,36 @@ function PortfolioPage() {
   const [lightbox, setLightbox] = useState<number | null>(null);
   const [page, setPage] = useState(1);
 
+  const { data: dbItems = [] } = useQuery({
+    queryKey: ["portfolio_items"],
+    queryFn: listPortfolioItems,
+    staleTime: 60_000,
+  });
+
+  // Merge DB items (preferred, newest first) with static fallback. DB items
+  // map their full category name back to the legacy slug used by the UI.
+  const allItems = useMemo(() => {
+    const nameToSlug = Object.fromEntries(
+      Object.entries(slugToCategoryName).map(([slug, name]) => [name, slug as PortfolioCategory]),
+    );
+    const dbMapped = dbItems
+      .map((d) => {
+        const slug = nameToSlug[d.category];
+        if (!slug) return null;
+        return {
+          src: d.public_url,
+          thumb: d.public_url,
+          category: slug,
+          alt: d.title ?? d.category,
+        };
+      })
+      .filter(Boolean) as typeof portfolio;
+    return dbMapped.length > 0 ? [...dbMapped, ...portfolio] : portfolio;
+  }, [dbItems]);
+
   const items = useMemo(
-    () => (filter === "todos" ? portfolio : portfolio.filter((p) => p.category === filter)),
-    [filter],
+    () => (filter === "todos" ? allItems : allItems.filter((p) => p.category === filter)),
+    [filter, allItems],
   );
 
   const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
