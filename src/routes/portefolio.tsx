@@ -60,7 +60,7 @@ function PortfolioPage() {
         if (!slug) return null;
         return {
           src: d.public_url,
-          thumb: d.public_url,
+          thumb: d.thumb_url ?? d.public_url,
           category: slug,
           alt: d.title ?? d.category,
         };
