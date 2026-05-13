@@ -20,6 +20,7 @@ export type Database = {
           created_at: string
           id: string
           public_url: string
+          sort_order: number
           storage_path: string
           title: string | null
         }
@@ -28,6 +29,7 @@ export type Database = {
           created_at?: string
           id?: string
           public_url: string
+          sort_order?: number
           storage_path: string
           title?: string | null
         }
@@ -36,6 +38,7 @@ export type Database = {
           created_at?: string
           id?: string
           public_url?: string
+          sort_order?: number
           storage_path?: string
           title?: string | null
         }
