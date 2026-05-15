@@ -31,3 +31,9 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+
+# Claude Code / AI agent files
+.agents/
+.claude/skills/
+.claude/worktrees/
+skills-lock.json

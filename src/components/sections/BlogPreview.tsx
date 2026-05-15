@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { ArrowRight, Clock } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { blogPosts } from "@/data/blog";
@@ -38,8 +39,10 @@ export function BlogPreview() {
               { day: "numeric", month: "long", year: "numeric" }
             );
             return (
-              <article
+              <Link
                 key={post.slug}
+                to="/blog/$slug"
+                params={{ slug: post.slug }}
                 className={`group flex flex-col rounded-2xl border border-border bg-card overflow-hidden hover:border-brand/40 transition-all hover:-translate-y-1 hover:shadow-lg ${fadeUp(gridInView)}`}
                 style={{ transitionDelay: `${i * 100}ms` }}
               >
@@ -73,7 +76,7 @@ export function BlogPreview() {
                     {t("blog.read_more")} <ArrowRight className="h-4 w-4" />
                   </span>
                 </div>
-              </article>
+              </Link>
             );
           })}
         </div>
