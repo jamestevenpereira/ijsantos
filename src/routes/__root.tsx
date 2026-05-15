@@ -25,7 +25,7 @@ const SITE_URL = company.siteUrl;
 const DEFAULT_TITLE = "IJ Santos · Construção Civil e Limpezas Exteriores em Nelas e Viseu";
 const DEFAULT_DESC =
   "Construção civil, remodelações, pinturas e limpezas exteriores (fachadas, telhados, pavimentos) em Nelas, Viseu, Mangualde e região centro. Orçamento gratuito em 24 horas.";
-const OG_IMAGE = `${SITE_URL}/og-default.jpg`;
+const OG_IMAGE = `${SITE_URL}/logo.png`;
 
 const ORGANIZATION_LD = {
   "@context": "https://schema.org",
@@ -154,14 +154,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:description", content: DEFAULT_DESC },
       { name: "twitter:image", content: OG_IMAGE },
       { name: "theme-color", content: "#0a0a0a" },
-      { title: "Lovable App" },
-      { property: "og:title", content: "Lovable App" },
-      { name: "twitter:title", content: "Lovable App" },
-      { name: "description", content: "- A modern website prototype for IJ Santos, showcasing construction, remodeling, painting, and exterior cleaning services." },
-      { property: "og:description", content: "- A modern website prototype for IJ Santos, showcasing construction, remodeling, painting, and exterior cleaning services." },
-      { name: "twitter:description", content: "- A modern website prototype for IJ Santos, showcasing construction, remodeling, painting, and exterior cleaning services." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/5c282a3d-a861-4306-9c46-9bbcd77f251c/id-preview-bae9affe--e7cc4bdd-cf0f-48f6-9beb-4e41d7dd375a.lovable.app-1778668867916.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/5c282a3d-a861-4306-9c46-9bbcd77f251c/id-preview-bae9affe--e7cc4bdd-cf0f-48f6-9beb-4e41d7dd375a.lovable.app-1778668867916.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
