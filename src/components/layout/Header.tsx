@@ -20,7 +20,7 @@ function LanguageSwitcher({ className = "" }: { className?: string }) {
     <div className={`flex items-center gap-1 text-sm font-medium ${className}`}>
       <button
         onClick={() => switchTo("en")}
-        className={current === "en" ? "text-foreground" : "text-muted-foreground hover:text-foreground transition-colors"}
+        className={`focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:rounded-sm ${current === "en" ? "text-foreground" : "text-muted-foreground hover:text-foreground transition-colors"}`}
         aria-label="Switch to English"
       >
         EN
@@ -28,7 +28,7 @@ function LanguageSwitcher({ className = "" }: { className?: string }) {
       <span className="text-border select-none">/</span>
       <button
         onClick={() => switchTo("pt")}
-        className={current === "pt" ? "text-foreground" : "text-muted-foreground hover:text-foreground transition-colors"}
+        className={`focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:rounded-sm ${current === "pt" ? "text-foreground" : "text-muted-foreground hover:text-foreground transition-colors"}`}
         aria-label="Mudar para Português"
       >
         PT
@@ -93,7 +93,7 @@ export function Header() {
                 activeOptions={{ exact: n.to === "/" }}
                 activeProps={{ className: "text-foreground" }}
                 inactiveProps={{ className: "text-muted-foreground" }}
-                className="px-4 py-2 text-sm font-medium hover:text-foreground transition-colors data-[status=active]:after:opacity-100 relative after:opacity-0 after:absolute after:left-4 after:right-4 after:-bottom-0.5 after:h-px after:bg-brand"
+                className="px-4 py-2 text-sm font-medium hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:rounded-sm data-[status=active]:after:opacity-100 relative after:opacity-0 after:absolute after:left-4 after:right-4 after:-bottom-0.5 after:h-px after:bg-brand"
               >
                 {n.label}
               </Link>
@@ -103,7 +103,7 @@ export function Header() {
           <div className="hidden md:flex items-center gap-3">
             <a
               href={company.phoneHref}
-              className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-brand transition-colors"
+              className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-brand transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:rounded-sm"
             >
               <Phone className="h-4 w-4" />
               {company.phone}
@@ -111,8 +111,9 @@ export function Header() {
             <LanguageSwitcher />
             <ThemeToggle />
             <span
-              className="flex items-center gap-1.5 overflow-hidden transition-all duration-500"
-              style={{ maxWidth: pastHero ? "160px" : "0px", opacity: pastHero ? 1 : 0 }}
+              className={`flex items-center gap-1.5 overflow-hidden whitespace-nowrap transition-all duration-500 ${
+                pastHero ? "max-w-[160px] opacity-100" : "max-w-0 opacity-0 pointer-events-none"
+              }`}
             >
               <span className="h-1.5 w-1.5 rounded-full bg-brand shrink-0" />
               <span className="text-xs font-medium text-muted-foreground whitespace-nowrap">{t("header.urgency")}</span>
@@ -128,8 +129,9 @@ export function Header() {
           <div className="md:hidden flex items-center gap-2">
             <ThemeToggle />
             <span
-              className="overflow-hidden transition-all duration-300"
-              style={{ maxWidth: pastHero ? "120px" : "0px", opacity: pastHero ? 1 : 0 }}
+              className={`overflow-hidden transition-all duration-300 ${
+                pastHero ? "max-w-[120px] opacity-100" : "max-w-0 opacity-0 pointer-events-none"
+              }`}
             >
               <Link
                 to="/contacto"
@@ -141,6 +143,8 @@ export function Header() {
             <button
               className="inline-flex items-center justify-center h-10 w-10 rounded-md border border-border"
               aria-label="Menu"
+              aria-expanded={open}
+              aria-controls="mobile-nav"
               onClick={() => setOpen((v) => !v)}
             >
               {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -150,7 +154,7 @@ export function Header() {
       </div>
 
       {open && (
-        <div className="md:hidden border-t border-border bg-background">
+        <div id="mobile-nav" className="md:hidden border-t border-border bg-background">
           <div className="mx-auto max-w-7xl container-px py-4 flex flex-col gap-1 items-center">
             {nav.map((n) => (
               <Link
