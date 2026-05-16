@@ -9,7 +9,6 @@ export function ProcessSteps() {
   const { ref: gridRef, inView: gridInView } = useInView();
 
   const steps = stepKeys.map((k) => ({
-    n: k.replace("step", "0"),
     title: t(`process.${k}_title`),
     desc: t(`process.${k}_desc`),
   }));
@@ -35,16 +34,13 @@ export function ProcessSteps() {
         <div ref={gridRef} className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4 relative">
           {steps.map((s, i) => (
             <div
-              key={s.n}
+              key={s.title}
               className={`relative rounded-xl bg-card border border-border p-7 text-center md:text-left ${fadeUp(gridInView)}`}
               style={{ transitionDelay: `${i * 100}ms` }}
             >
               <div className="font-display text-5xl font-bold text-brand/30">0{i + 1}</div>
               <h3 className="mt-4 font-display font-semibold text-lg text-foreground">{s.title}</h3>
               <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
-              {i < steps.length - 1 && (
-                <div className="hidden md:block absolute top-10 -right-3 h-px w-6 bg-border" />
-              )}
             </div>
           ))}
         </div>
