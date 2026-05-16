@@ -25,7 +25,7 @@ const SITE_URL = company.siteUrl;
 const DEFAULT_TITLE = "IJ Santos · Construção Civil e Limpezas Exteriores em Nelas e Viseu";
 const DEFAULT_DESC =
   "Construção civil, remodelações, pinturas e limpezas exteriores (fachadas, telhados, pavimentos) em Nelas, Viseu, Mangualde e região centro. Orçamento gratuito em 24 horas.";
-const OG_IMAGE = `${SITE_URL}/logo.png`;
+const OG_IMAGE = `${SITE_URL}/og-image.jpg`;
 
 const ORGANIZATION_LD = {
   "@context": "https://schema.org",
@@ -161,6 +161,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
+        rel: "preload",
+        as: "style",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap",
+      },
+      {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap",
       },
@@ -206,6 +211,12 @@ function RootShell({ children }: { children: React.ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:rounded-md focus:bg-brand focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-brand-foreground"
+        >
+          Saltar para o conteúdo
+        </a>
         {children}
         <Scripts />
       </body>
@@ -249,7 +260,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <div className="flex min-h-screen flex-col">
         <Header />
-        <main className="flex-1 pb-[72px] md:pb-0">
+        <main className="flex-1 pb-[72px] md:pb-0" id="main-content">
           <PageTransition />
         </main>
         <Footer />
