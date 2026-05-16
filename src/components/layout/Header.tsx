@@ -129,7 +129,7 @@ export function Header() {
           <div className="md:hidden flex items-center gap-2">
             <ThemeToggle />
             <span
-              className={`overflow-hidden transition-all duration-300 ${
+              className={`overflow-hidden whitespace-nowrap transition-all duration-300 ${
                 pastHero ? "max-w-[120px] opacity-100" : "max-w-0 opacity-0 pointer-events-none"
               }`}
             >
