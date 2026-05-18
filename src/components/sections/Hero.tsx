@@ -8,7 +8,9 @@ import heroImage from "@/assets/hero-construction.jpg";
 export function Hero() {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const anim = `motion-safe:transition-all motion-safe:duration-700 motion-safe:ease-out ${
     mounted ? "opacity-100 translate-y-0" : "motion-safe:opacity-0 motion-safe:translate-y-4"
@@ -19,6 +21,8 @@ export function Hero() {
       <div className="absolute inset-0 -z-10">
         <img
           src={heroImage}
+          srcSet={`${heroImage}?width=640&format=webp 640w, ${heroImage}?width=1280&format=webp 1280w, ${heroImage} 1920w`}
+          sizes="100vw"
           alt="Equipa IJ Santos em obra de construção civil"
           width={1920}
           height={1280}
@@ -41,7 +45,8 @@ export function Hero() {
             className={`mt-6 text-4xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.1] md:leading-[1.05] text-balance ${anim}`}
             style={{ transitionDelay: "100ms" }}
           >
-            {t("hero.title")}<span className="text-brand">{t("hero.title_highlight")}</span>
+            {t("hero.title")}
+            <span className="text-brand">{t("hero.title_highlight")}</span>
           </h1>
           <p
             className={`mt-6 text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto md:mx-0 leading-relaxed ${anim}`}
@@ -67,7 +72,6 @@ export function Hero() {
               <Phone className="h-4 w-4" /> {company.phone}
             </a>
           </div>
-
         </div>
       </div>
     </section>

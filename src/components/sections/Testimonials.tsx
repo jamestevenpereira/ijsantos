@@ -11,8 +11,13 @@ export function Testimonials() {
   return (
     <section className="py-20 md:py-28 bg-surface">
       <div className="mx-auto max-w-7xl container-px">
-        <div ref={headingRef} className={`max-w-2xl mx-auto md:mx-0 text-center md:text-left ${fadeUp(headingInView)}`}>
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">{t("testimonials.label")}</span>
+        <div
+          ref={headingRef}
+          className={`max-w-2xl mx-auto md:mx-0 text-center md:text-left ${fadeUp(headingInView)}`}
+        >
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+            {t("testimonials.label")}
+          </span>
           <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
             {t("testimonials.title")}
           </h2>
@@ -31,7 +36,7 @@ export function Testimonials() {
                 ))}
               </div>
               <blockquote className="text-foreground leading-relaxed flex-1">
-                "{te.quote}"
+                “{te.quote}”
               </blockquote>
               <figcaption className="mt-6 pt-5 border-t border-border">
                 <div className="font-semibold text-foreground">{te.name}</div>

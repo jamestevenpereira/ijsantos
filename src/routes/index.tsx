@@ -82,12 +82,16 @@ function Index() {
             <img
               src={aboutTeam}
               alt="Limpeza de fachada"
+              width={480}
+              height={640}
               className="rounded-xl aspect-[3/4] object-cover"
               loading="lazy"
             />
             <img
               src={servicesHero}
               alt="Construção"
+              width={480}
+              height={640}
               className="rounded-xl aspect-[3/4] object-cover mt-8"
               loading="lazy"
             />
