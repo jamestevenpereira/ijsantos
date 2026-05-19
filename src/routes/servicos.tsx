@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { services } from "@/data/services";
 import { ServiceCard } from "@/components/service/ServiceCard";
 import { CTABand } from "@/components/sections/CTABand";
+import { PageHero } from "@/components/layout/PageHero";
 import servicesHero from "@/assets/services-hero.jpg";
 
 export const Route = createFileRoute("/servicos")({
@@ -43,21 +44,13 @@ function ServicosPage() {
 
   return (
     <>
-      <section className="relative isolate overflow-hidden">
-        <div className="absolute inset-0 -z-10">
-          <img src={servicesHero} alt="" fetchPriority="high" className="h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary/50" />
-        </div>
-        <div className="mx-auto max-w-7xl container-px py-20 md:py-28 text-primary-foreground text-center md:text-left">
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">{t("servicos.label")}</span>
-          <h1 className="mt-3 font-display text-4xl md:text-6xl font-bold tracking-tight text-balance max-w-3xl mx-auto md:mx-0">
-            {t("servicos.title")}
-          </h1>
-          <p className="mt-6 text-lg text-primary-foreground/80 max-w-2xl mx-auto md:mx-0">
-            {t("servicos.body")}
-          </p>
-        </div>
-      </section>
+      <PageHero
+        image={servicesHero}
+        label={t("servicos.label")}
+        title={t("servicos.title")}
+        subtitle={t("servicos.body")}
+        height="tall"
+      />
 
       <Group
         title={t("servicos.construcao_title")}
