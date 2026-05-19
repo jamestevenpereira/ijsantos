@@ -24,25 +24,18 @@ export function CTABand({
             <h2 className="font-display text-3xl md:text-4xl font-bold leading-tight text-balance">
               {title ?? t("cta.title")}
             </h2>
-            <p className="mt-3 text-primary-foreground/75 text-lg">{subtitle ?? t("cta.subtitle")}</p>
+            <p className="mt-3 text-primary-foreground/75 text-lg">
+              {subtitle ?? t("cta.subtitle")}
+            </p>
           </div>
           <div className="flex flex-wrap gap-3 justify-center md:justify-start">
-            {serviceSlug ? (
-              <Link
-                to="/contacto"
-                search={{ servico: serviceSlug }}
-                className="inline-flex items-center gap-2 rounded-md bg-brand text-brand-foreground px-6 py-3.5 text-sm font-semibold hover:brightness-95 transition"
-              >
-                {t("cta.btn_quote")} <ArrowRight className="h-4 w-4" />
-              </Link>
-            ) : (
-              <Link
-                to="/contacto"
-                className="inline-flex items-center gap-2 rounded-md bg-brand text-brand-foreground px-6 py-3.5 text-sm font-semibold hover:brightness-95 transition"
-              >
-                {t("cta.btn_quote")} <ArrowRight className="h-4 w-4" />
-              </Link>
-            )}
+            <Link
+              to="/contacto"
+              {...(serviceSlug ? { search: { servico: serviceSlug } } : {})}
+              className="inline-flex items-center gap-2 rounded-md bg-brand text-brand-foreground px-6 py-3.5 text-sm font-semibold hover:brightness-95 transition"
+            >
+              {t("cta.btn_quote")} <ArrowRight className="h-4 w-4" />
+            </Link>
             <a
               href={company.phoneHref}
               className="inline-flex items-center gap-2 rounded-md border border-primary-foreground/30 px-6 py-3.5 text-sm font-semibold hover:bg-primary-foreground/10 transition"
