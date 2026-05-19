@@ -51,7 +51,6 @@ export function Hero() {
     >
       {/* Full-bleed photo */}
       <div className="absolute inset-0 -z-10">
-        {/* @ts-ignore fetchPriority is valid HTML5 but may not be in React types */}
         <img
           src={heroImage}
           alt="Equipa IJ Santos em obra de construção civil"
@@ -68,7 +67,7 @@ export function Hero() {
       <div className="absolute top-6 left-5 md:left-10 flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.04] px-3 py-1.5 backdrop-blur-sm">
         <span className="h-1.5 w-1.5 rounded-full bg-brand shrink-0" />
         <span className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/65">
-          Nelas · Viseu · Região Centro
+          {t("hero.badge")}
         </span>
       </div>
 
@@ -97,7 +96,7 @@ export function Hero() {
         </div>
 
         <h1
-          className="font-display text-[2rem] md:text-[2.5rem] lg:text-[2.75rem] font-black text-white leading-[1.05] tracking-tight text-balance"
+          className="text-[2rem] md:text-[2.5rem] lg:text-[2.75rem] font-black text-white leading-[1.05] tracking-tight text-balance"
           style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
         >
           {t("hero.title")}
