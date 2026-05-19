@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import aboutTeam from "@/assets/about-team.jpg";
 import heroImage from "@/assets/hero-construction.jpg";
 import { media } from "@/lib/media";
+import { PageHero } from "@/components/layout/PageHero";
 
 export const Route = createFileRoute("/sobre")({
   head: () => ({
@@ -38,23 +39,13 @@ function SobrePage() {
 
   return (
     <>
-      <section className="relative isolate overflow-hidden">
-        <div className="absolute inset-0 -z-10">
-          <img src={heroImage} alt="" fetchPriority="high" className="h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-primary/40" />
-        </div>
-        <div className="mx-auto max-w-7xl container-px py-20 md:py-28 text-primary-foreground text-center md:text-left">
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
-            {t("sobre.label")}
-          </span>
-          <h1 className="mt-3 font-display text-4xl md:text-6xl font-bold tracking-tight max-w-3xl mx-auto md:mx-0 text-balance">
-            {t("sobre.title")}
-          </h1>
-          <p className="mt-6 text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto md:mx-0">
-            {t("sobre.body")}
-          </p>
-        </div>
-      </section>
+      <PageHero
+        image={heroImage}
+        label={t("sobre.label")}
+        title={t("sobre.title")}
+        subtitle={t("sobre.body")}
+        height="tall"
+      />
 
       <section className="py-20 md:py-28">
         <div className="mx-auto max-w-7xl container-px grid gap-12 lg:grid-cols-2 lg:items-center">
