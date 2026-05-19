@@ -30,7 +30,7 @@ export function WhyUs() {
               {t("whyus.label")}
             </span>
             <h2
-              className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-white text-balance"
+              className="mt-3 text-3xl md:text-5xl font-bold tracking-tight text-white text-balance"
               style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
             >
               {t("whyus.title")}
@@ -48,8 +48,8 @@ export function WhyUs() {
               key={k}
               className={[
                 "py-8 lg:py-0",
-                "border-b border-white/[0.07] last:border-b-0",
-                "lg:border-b-0 lg:border-r lg:last:border-r-0",
+                "border-b border-white/[0.07] last:border-b-0 sm:[&:nth-child(n+3)]:border-b-0 lg:border-b-0",
+                "lg:border-r lg:last:border-r-0",
                 i > 0 ? "lg:pl-7" : "lg:pl-0",
                 i < 3 ? "lg:pr-7" : "lg:pr-0",
                 fadeUp(gridInView),
@@ -60,7 +60,7 @@ export function WhyUs() {
                 {String(i + 1).padStart(2, "0")} —
               </div>
               <h3
-                className="font-display font-bold text-base text-white leading-snug mb-3"
+                className="font-bold text-base text-white leading-snug mb-3"
                 style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
               >
                 {t(`whyus.${k}_title`)}
