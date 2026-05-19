@@ -27,9 +27,9 @@ export function Testimonials() {
           </h2>
         </div>
 
-        <div ref={bodyRef} className={`mt-12 space-y-4 ${fadeUp(bodyInView)}`}>
+        <div ref={bodyRef} className="mt-12 space-y-4">
           {/* Featured testimonial */}
-          <figure className="relative rounded-2xl bg-primary p-8 md:p-10 overflow-hidden">
+          <figure className={`relative rounded-2xl bg-primary p-8 md:p-10 overflow-hidden ${fadeUp(bodyInView)}`}>
             {/* Decorative quote mark */}
             <div
               className="absolute top-0 left-6 leading-none font-black select-none pointer-events-none"
@@ -54,7 +54,19 @@ export function Testimonials() {
                 className="text-lg md:text-xl font-bold text-primary-foreground leading-relaxed max-w-2xl"
                 style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
               >
-                &ldquo;{featured.quote}&rdquo;
+                {featured.highlight ? (
+                  <>
+                    &ldquo;
+                    {featured.quote.split(featured.highlight).map((part, idx, arr) => (
+                      idx < arr.length - 1 ? (
+                        <span key={idx}>{part}<span className="text-brand">{featured.highlight}</span></span>
+                      ) : part
+                    ))}
+                    &rdquo;
+                  </>
+                ) : (
+                  <>&ldquo;{featured.quote}&rdquo;</>
+                )}
               </blockquote>
 
               <figcaption className="mt-7 flex items-center gap-3">
@@ -63,7 +75,7 @@ export function Testimonials() {
                 </div>
                 <div>
                   <div className="text-sm font-semibold text-primary-foreground">{featured.name}</div>
-                  <div className="text-xs text-primary-foreground/40">{featured.role}</div>
+                  <div className="text-xs text-primary-foreground/60">{featured.role}</div>
                 </div>
               </figcaption>
             </div>

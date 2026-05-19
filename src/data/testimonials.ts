@@ -1,10 +1,19 @@
-export const testimonials = [
+export interface Testimonial {
+  name: string;
+  role: string;
+  quote: string;
+  rating: number;
+  highlight?: string;
+}
+
+export const testimonials: Testimonial[] = [
   {
     name: "Marta Ferreira",
     role: "Proprietária, Cascais",
     quote:
       "A IJ Santos remodelou a nossa moradia do início ao fim. Cumpriram prazos, foram impecáveis na limpeza e o resultado superou expectativas.",
     rating: 5,
+    highlight: "resultado superou expectativas",
   },
   {
     name: "Carlos Mendes",
