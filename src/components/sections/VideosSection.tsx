@@ -40,16 +40,16 @@ export function VideosSection() {
   };
 
   return (
-    <section className="py-20 md:py-28 bg-surface">
+    <section className="py-20 md:py-28 bg-primary">
       <div className="mx-auto max-w-7xl container-px">
         <div ref={headingRef} className={`max-w-2xl mx-auto md:mx-0 text-center md:text-left ${fadeUp(headingInView)}`}>
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
             {t("videos.label")}
           </span>
-          <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
+          <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance text-primary-foreground">
             {t("videos.title")}
           </h2>
-          <p className="mt-4 text-muted-foreground text-lg">
+          <p className="mt-4 text-primary-foreground/50 text-lg">
             {t("videos.body")}
           </p>
         </div>
@@ -60,7 +60,7 @@ export function VideosSection() {
               key={v.src}
               ref={(el) => { triggerRefs.current[i] = el; }}
               onClick={() => setActive(i)}
-              className={`group relative overflow-hidden rounded-2xl border border-border bg-card aspect-video text-left ${fadeUp(gridInView)}`}
+              className={`group relative overflow-hidden rounded-2xl border border-white/[0.1] bg-primary/50 aspect-video text-left ${fadeUp(gridInView)}`}
               style={{ transitionDelay: `${i * 150}ms` }}
               aria-label={`${t("videos.play")} ${v.title}`}
             >
