@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Hero } from "@/components/sections/Hero";
+import { ServiceCard } from "@/components/service/ServiceCard";
+import { Stats } from "@/components/sections/Stats";
 import { WhyUs } from "@/components/sections/WhyUs";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { BeforeAfter } from "@/components/sections/BeforeAfter";
@@ -54,6 +56,7 @@ function Index() {
   return (
     <>
       <Hero />
+      <Stats />
 
       <section className="py-20 md:py-28">
         <div className="mx-auto max-w-7xl container-px grid gap-12 lg:grid-cols-2 lg:items-center">
@@ -124,63 +127,9 @@ function Index() {
             </Link>
           </div>
 
-          {/* Bento grid — 5 services, feature card spans 2 rows */}
-          <div
-            className="mt-14 grid gap-2 grid-cols-1 sm:grid-cols-2 lg:[grid-template-columns:2fr_1fr_1fr] lg:[grid-template-rows:280px_200px]"
-          >
-            {services.slice(0, 5).map((s, i) => (
-              <Link
-                key={s.slug}
-                to="/servicos/$slug"
-                params={{ slug: s.slug }}
-                aria-label={t(s.title)}
-                className={[
-                  "group relative rounded-xl overflow-hidden",
-                  "h-48 sm:h-auto sm:min-h-[280px] lg:min-h-0",
-                  i === 0 ? "sm:col-span-2 lg:col-span-1 lg:row-span-2" : "",
-                ].join(" ")}
-              >
-                {/* Photo */}
-                <img
-                  src={s.hero}
-                  alt=""
-                  loading={i === 0 ? "eager" : "lazy"}
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                />
-
-                {/* Colour overlay */}
-                {i === 2 ? (
-                  <div className="absolute inset-0 bg-brand/90" />
-                ) : i === 3 ? (
-                  <div className="absolute inset-0 bg-surface/[0.88]" />
-                ) : (
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
-                )}
-
-                {/* Arrow circle */}
-                <div
-                  className={[
-                    "absolute top-3 right-3 h-7 w-7 rounded-full flex items-center justify-center",
-                    "transition-colors",
-                    i === 3 ? "bg-black/[0.07] dark:bg-white/10 text-foreground dark:text-white" : "bg-white/10 text-white",
-                  ].join(" ")}
-                >
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </div>
-
-                {/* Title */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
-                  <h3
-                    className={[
-                      "font-display font-bold leading-tight",
-                      i === 0 ? "text-xl md:text-[1.4rem]" : "text-base",
-                      i === 3 ? "text-foreground" : "text-white",
-                    ].join(" ")}
-                  >
-                    {t(s.title)}
-                  </h3>
-                </div>
-              </Link>
+          <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {services.map((s) => (
+              <ServiceCard key={s.slug} service={s} />
             ))}
           </div>
         </div>

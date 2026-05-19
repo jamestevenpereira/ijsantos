@@ -6,8 +6,6 @@ import { CompanyMap } from "@/components/sections/CompanyMap";
 import { company } from "@/data/company";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
-import { PageHero } from "@/components/layout/PageHero";
-import contactHero from "@/assets/hero-construction.jpg";
 
 export const Route = createFileRoute("/contacto")({
   validateSearch: (search: Record<string, unknown>): { servico?: string } => {
@@ -48,12 +46,17 @@ function ContactoPage() {
 
   return (
     <>
-      <PageHero
-        image={contactHero}
-        label={t("contact.label")}
-        title={t("contact.title")}
-        height="default"
-      />
+      <section className="bg-primary text-primary-foreground">
+        <div className="mx-auto max-w-7xl container-px py-20 md:py-28 text-center md:text-left">
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">{t("contact.label")}</span>
+          <h1 className="mt-3 font-display text-4xl md:text-6xl font-bold tracking-tight max-w-3xl mx-auto md:mx-0 text-balance">
+            {t("contact.title")}
+          </h1>
+          <p className="mt-6 text-lg text-primary-foreground/75 max-w-2xl mx-auto md:mx-0">
+            {t("contact.body")}
+          </p>
+        </div>
+      </section>
 
       <section className="py-20 md:py-24">
         <div className="mx-auto max-w-7xl container-px grid gap-12 lg:grid-cols-5">

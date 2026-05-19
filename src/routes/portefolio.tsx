@@ -11,8 +11,6 @@ import {
 import { slugToCategoryName } from "@/data/portfolio-categories";
 import { listPortfolioItems } from "@/lib/portfolio-db";
 import { CTABand } from "@/components/sections/CTABand";
-import { PageHero } from "@/components/layout/PageHero";
-import portfolioHero from "@/assets/services-hero.jpg";
 
 export const Route = createFileRoute("/portefolio")({
   head: () => ({
@@ -114,13 +112,19 @@ function PortfolioPage() {
 
   return (
     <>
-      <PageHero
-        image={portfolioHero}
-        label={t("portfolio.label")}
-        title={t("portfolio.title")}
-        subtitle={t("portfolio.body")}
-        height="tall"
-      />
+      <section className="bg-primary text-primary-foreground">
+        <div className="mx-auto max-w-7xl container-px py-20 md:py-28 text-center md:text-left">
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+            {t("portfolio.label")}
+          </span>
+          <h1 className="mt-3 font-display text-4xl md:text-6xl font-bold tracking-tight text-balance max-w-3xl mx-auto md:mx-0">
+            {t("portfolio.title")}
+          </h1>
+          <p className="mt-6 text-lg text-primary-foreground/75 max-w-2xl mx-auto md:mx-0">
+            {t("portfolio.body")}
+          </p>
+        </div>
+      </section>
 
       <section className="py-16 md:py-20">
         <div className="mx-auto max-w-7xl container-px">
