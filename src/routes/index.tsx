@@ -126,7 +126,7 @@ function Index() {
                 aria-label={t(s.title)}
                 className={[
                   "group relative rounded-xl overflow-hidden",
-                  "h-48 sm:h-auto",
+                  "h-48 sm:h-auto sm:min-h-[280px] lg:min-h-0",
                   i === 0 ? "sm:col-span-2 lg:col-span-1 lg:row-span-2" : "",
                 ].join(" ")}
               >
@@ -152,7 +152,7 @@ function Index() {
                   className={[
                     "absolute top-3 right-3 h-7 w-7 rounded-full flex items-center justify-center",
                     "transition-colors",
-                    i === 3 ? "bg-black/[0.07] text-foreground" : "bg-white/10 text-white",
+                    i === 3 ? "bg-black/[0.07] dark:bg-white/10 text-foreground dark:text-white" : "bg-white/10 text-white",
                   ].join(" ")}
                 >
                   <ArrowRight className="h-3.5 w-3.5" />
@@ -160,7 +160,7 @@ function Index() {
 
                 {/* Title */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
-                  <div
+                  <h3
                     className={[
                       "font-display font-bold leading-tight",
                       i === 0 ? "text-xl md:text-[1.4rem]" : "text-base",
@@ -168,7 +168,7 @@ function Index() {
                     ].join(" ")}
                   >
                     {t(s.title)}
-                  </div>
+                  </h3>
                 </div>
               </Link>
             ))}
