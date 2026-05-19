@@ -6,11 +6,15 @@ import { useInView, fadeUp } from "@/hooks/useInView";
 export function Testimonials() {
   const { t } = useTranslation();
   const { ref: headingRef, inView: headingInView } = useInView();
-  const { ref: gridRef, inView: gridInView } = useInView();
+  const { ref: bodyRef, inView: bodyInView } = useInView();
+
+  const featured = testimonials[0];
+  const supporting = testimonials.slice(1, 3);
 
   return (
-    <section className="py-20 md:py-28 bg-surface">
+    <section className="py-20 md:py-28">
       <div className="mx-auto max-w-7xl container-px">
+        {/* Header */}
         <div
           ref={headingRef}
           className={`max-w-2xl mx-auto md:mx-0 text-center md:text-left ${fadeUp(headingInView)}`}
@@ -23,27 +27,71 @@ export function Testimonials() {
           </h2>
         </div>
 
-        <div ref={gridRef} className="mt-14 grid gap-6 md:grid-cols-3">
-          {testimonials.slice(0, 3).map((te, i) => (
-            <figure
-              key={te.name}
-              className={`rounded-2xl bg-card border border-border p-7 flex flex-col text-center md:text-left ${fadeUp(gridInView)}`}
-              style={{ transitionDelay: `${i * 100}ms` }}
+        <div ref={bodyRef} className={`mt-12 space-y-4 ${fadeUp(bodyInView)}`}>
+          {/* Featured testimonial */}
+          <figure className="relative rounded-2xl bg-primary p-8 md:p-10 overflow-hidden">
+            {/* Decorative quote mark */}
+            <div
+              className="absolute top-0 left-6 leading-none font-black select-none pointer-events-none"
+              style={{
+                fontSize: "clamp(5rem, 12vw, 8rem)",
+                color: "rgba(197, 48, 48, 0.12)",
+                fontFamily: "Georgia, serif",
+              }}
+              aria-hidden="true"
             >
-              <div className="flex gap-0.5 text-brand mb-4 justify-center md:justify-start">
-                {Array.from({ length: te.rating }).map((_, j) => (
+              &ldquo;
+            </div>
+
+            <div className="relative z-10">
+              <div className="flex gap-0.5 text-brand mb-5" aria-label={`${featured.rating} estrelas`}>
+                {Array.from({ length: featured.rating }).map((_, j) => (
                   <Star key={j} className="h-4 w-4 fill-current" />
                 ))}
               </div>
-              <blockquote className="text-foreground leading-relaxed flex-1">
-                “{te.quote}”
+
+              <blockquote
+                className="text-lg md:text-xl font-bold text-primary-foreground leading-relaxed max-w-2xl"
+                style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+              >
+                &ldquo;{featured.quote}&rdquo;
               </blockquote>
-              <figcaption className="mt-6 pt-5 border-t border-border">
-                <div className="font-semibold text-foreground">{te.name}</div>
-                <div className="text-sm text-muted-foreground">{te.role}</div>
+
+              <figcaption className="mt-7 flex items-center gap-3">
+                <div className="h-9 w-9 rounded-full bg-brand grid place-items-center text-xs font-bold text-brand-foreground shrink-0">
+                  {featured.name.split(" ").slice(0, 2).map((n) => n[0]).join("")}
+                </div>
+                <div>
+                  <div className="text-sm font-semibold text-primary-foreground">{featured.name}</div>
+                  <div className="text-xs text-primary-foreground/40">{featured.role}</div>
+                </div>
               </figcaption>
-            </figure>
-          ))}
+            </div>
+          </figure>
+
+          {/* Supporting testimonials */}
+          <div className="grid gap-4 md:grid-cols-2">
+            {supporting.map((te, i) => (
+              <figure
+                key={te.name}
+                className={`rounded-2xl bg-card border border-border p-6 md:p-7 flex flex-col ${fadeUp(bodyInView)}`}
+                style={{ transitionDelay: `${(i + 1) * 100}ms` }}
+              >
+                <div className="flex gap-0.5 text-brand mb-3" aria-label={`${te.rating} estrelas`}>
+                  {Array.from({ length: te.rating }).map((_, j) => (
+                    <Star key={j} className="h-3.5 w-3.5 fill-current" />
+                  ))}
+                </div>
+                <blockquote className="text-sm text-foreground leading-relaxed italic flex-1">
+                  &ldquo;{te.quote}&rdquo;
+                </blockquote>
+                <figcaption className="mt-5 pt-4 border-t border-border">
+                  <div className="text-sm font-semibold text-foreground">{te.name}</div>
+                  <div className="text-xs text-muted-foreground">{te.role}</div>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
         </div>
       </div>
     </section>
