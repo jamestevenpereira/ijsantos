@@ -11,7 +11,7 @@ export function BlogPreview() {
   const isPt = i18n.language === "pt";
 
   return (
-    <section className="py-20 md:py-28">
+    <section className="py-20 md:py-28 bg-surface">
       <div className="mx-auto max-w-7xl container-px">
         <div
           ref={headingRef}

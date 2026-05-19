@@ -1,6 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { CTABand } from "@/components/sections/CTABand";
-import { Stats } from "@/components/sections/Stats";
 import { TrustBand } from "@/components/sections/TrustBand";
 import { ServiceCard } from "@/components/service/ServiceCard";
 import { services } from "@/data/services";
@@ -146,8 +145,6 @@ function AreaPage() {
           </div>
         </div>
       </section>
-
-      <Stats />
 
       {/* Body */}
       <section className="py-20 md:py-28">

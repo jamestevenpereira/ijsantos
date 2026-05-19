@@ -40,7 +40,7 @@ export function BeforeAfter() {
   }, [updateFromClientX]);
 
   return (
-    <section className="py-20 md:py-28">
+    <section className="py-20 md:py-28 bg-surface">
       <div className="mx-auto max-w-7xl container-px">
         <div ref={headingRef} className={`max-w-2xl mx-auto md:mx-0 text-center md:text-left ${fadeUp(headingInView)}`}>
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">{t("beforeafter.label")}</span>
