@@ -5,6 +5,7 @@ import { getService, services, type Service } from "@/data/services";
 import { localAreas } from "@/data/local-areas";
 import { company } from "@/data/company";
 import { CTABand } from "@/components/sections/CTABand";
+import { PageHero } from "@/components/layout/PageHero";
 import { ArrowRight, Check, ChevronRight, MapPin } from "lucide-react";
 import { useState } from "react";
 
@@ -121,37 +122,12 @@ function ServiceDetail() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="relative isolate overflow-hidden">
-        <div className="absolute inset-0 -z-10">
-          <img src={service.hero} alt={t(service.title)} fetchPriority="high" className="h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/30" />
-        </div>
-        <div className="mx-auto max-w-7xl container-px py-20 md:py-28 text-primary-foreground text-center md:text-left">
-          <nav className="flex items-center gap-1 text-sm text-primary-foreground/70 justify-center md:justify-start">
-            <Link to="/" className="hover:text-primary-foreground">{t("service_detail.breadcrumb_home")}</Link>
-            <ChevronRight className="h-4 w-4" />
-            <Link to="/servicos" className="hover:text-primary-foreground">{t("service_detail.breadcrumb_services")}</Link>
-            <ChevronRight className="h-4 w-4" />
-            <span className="text-primary-foreground">{t(service.title)}</span>
-          </nav>
-          <h1 className="mt-6 font-display text-4xl md:text-6xl font-bold tracking-tight max-w-3xl mx-auto md:mx-0 text-balance">
-            {t(service.title)} {t("service_detail.area_suffix")}
-          </h1>
-          <p className="mt-5 text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto md:mx-0">
-            {t(service.short)}
-          </p>
-          <div className="mt-8">
-            <Link
-              to="/contacto"
-              search={{ servico: service.slug }}
-              className="inline-flex items-center gap-2 rounded-md bg-brand text-brand-foreground px-6 py-3.5 text-sm font-semibold"
-            >
-              {t("service_detail.quote_cta_service", { title: t(service.title) })} <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        image={service.hero}
+        label={t("servicos.label")}
+        title={t(service.title)}
+        subtitle={t(service.short)}
+      />
 
       {/* Overview */}
       <section className="py-20 md:py-28">
