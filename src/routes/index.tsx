@@ -57,7 +57,35 @@ function Index() {
 
       <section className="py-20 md:py-28">
         <div className="mx-auto max-w-7xl container-px grid gap-12 lg:grid-cols-2 lg:items-center">
+          {/* Photo grid — asymmetric */}
+          <div
+            className="grid gap-3 grid-cols-[1.2fr_0.8fr]"
+            style={{ gridTemplateRows: "280px 140px" }}
+          >
+            <img
+              src={aboutTeam}
+              alt="Equipa IJ Santos em obra"
+              className="rounded-xl object-cover w-full h-full [grid-row:1/3]"
+              loading="lazy"
+            />
+            <img
+              src={servicesHero}
+              alt="Obra de construção civil em Nelas"
+              className="rounded-xl object-cover w-full h-full"
+              loading="lazy"
+            />
+            <div className="rounded-xl bg-brand" aria-hidden="true" />
+          </div>
+
+          {/* Text */}
           <div className="text-center md:text-left">
+            <div
+              className="font-display font-black leading-none tracking-tight select-none -mb-5 md:-mb-7"
+              style={{ fontSize: "clamp(4rem, 8vw, 6rem)", color: "var(--color-border)" }}
+              aria-hidden="true"
+            >
+              15
+            </div>
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
               {t("index.about_label")}
             </span>
@@ -73,24 +101,6 @@ function Index() {
             >
               {t("index.about_link")} <ArrowRight className="h-4 w-4" />
             </Link>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <img
-              src={aboutTeam}
-              alt="Limpeza de fachada"
-              width={480}
-              height={640}
-              className="rounded-xl aspect-[3/4] object-cover"
-              loading="lazy"
-            />
-            <img
-              src={servicesHero}
-              alt="Construção"
-              width={480}
-              height={640}
-              className="rounded-xl aspect-[3/4] object-cover mt-8"
-              loading="lazy"
-            />
           </div>
         </div>
       </section>
