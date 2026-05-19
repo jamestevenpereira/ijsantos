@@ -11,12 +11,10 @@ import { Testimonials } from "@/components/sections/Testimonials";
 import { BlogPreview } from "@/components/sections/BlogPreview";
 import { CTABand } from "@/components/sections/CTABand";
 import { CompanyMap } from "@/components/sections/CompanyMap";
-import { Stats } from "@/components/sections/Stats";
 import { TrustBand } from "@/components/sections/TrustBand";
 import { services } from "@/data/services";
 import { company } from "@/data/company";
 import aboutTeam from "@/assets/about-team.jpg";
-import heroImage from "@/assets/hero-construction.jpg";
 import servicesHero from "@/assets/services-hero.jpg";
 
 export const Route = createFileRoute("/")({
@@ -57,7 +55,6 @@ function Index() {
   return (
     <>
       <Hero />
-      <Stats />
 
       <section className="py-20 md:py-28">
         <div className="mx-auto max-w-7xl container-px grid gap-12 lg:grid-cols-2 lg:items-center">
