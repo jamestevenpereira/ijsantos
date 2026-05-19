@@ -45,7 +45,7 @@ export function ProcessSteps() {
           <div className="grid gap-10 md:gap-0 md:grid-cols-4 relative z-10">
             {steps.map((s, i) => (
               <div
-                key={s.title}
+                key={stepKeys[i]}
                 className={`flex flex-col items-center text-center md:items-start md:text-left md:px-6 first:md:pl-0 last:md:pr-0 ${fadeUp(stepsInView)}`}
                 style={{ transitionDelay: `${i * 100}ms` }}
               >
