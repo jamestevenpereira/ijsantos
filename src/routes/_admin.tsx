@@ -5,8 +5,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
+const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === "true";
+
 export const Route = createFileRoute("/_admin")({
   beforeLoad: async ({ location }) => {
+    if (DEMO_MODE) return;
     if (typeof window === "undefined") return; // skip during SSR/prerender
     const { data } = await supabase.auth.getSession();
     if (!data.session) {

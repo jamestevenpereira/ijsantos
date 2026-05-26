@@ -51,7 +51,7 @@ export const company = {
   ],
 
   // Canonical site URL (override after first publish if custom domain set)
-  siteUrl: "https://ijsantos.pt",
+  siteUrl: "https://ijsantos.com",
 
   // Geographic coordinates (Nelas, sede)
   geo: { lat: 40.5311, lng: -7.853 },

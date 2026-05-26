@@ -32,6 +32,10 @@ dist-ssr
 *.sw?
 .vercel
 
+# Client-specific documentation (private — not for public repo)
+docs/client-onboarding/clients/
+docs/reuniao-cliente-*.md
+
 # Claude Code / AI agent files
 .agents/
 .claude/skills/
