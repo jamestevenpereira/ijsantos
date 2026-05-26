@@ -11,8 +11,17 @@ export const Route = createFileRoute("/_admin")({
   beforeLoad: async ({ location }) => {
     if (DEMO_MODE) return;
     if (typeof window === "undefined") return; // skip during SSR/prerender
-    const { data } = await supabase.auth.getSession();
-    if (!data.session) {
+    try {
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) {
+        throw redirect({
+          to: "/admin/login",
+          search: { redirect: location.pathname },
+        });
+      }
+    } catch (e) {
+      // Re-throw redirect intents; redirect to login on any other error (e.g. Supabase misconfigured)
+      if (e != null && typeof e === "object" && "to" in e) throw e;
       throw redirect({
         to: "/admin/login",
         search: { redirect: location.pathname },
