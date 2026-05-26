@@ -28,6 +28,7 @@ function AdminLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
+    if (DEMO_MODE) return;
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!session) {
         navigate({ to: "/admin/login" });
