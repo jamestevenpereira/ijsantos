@@ -16,6 +16,12 @@ dist-ssr
 .nitro
 *.local
 
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+!.env.sample
+
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars
@@ -38,6 +44,7 @@ docs/reuniao-cliente-*.md
 
 # Claude Code / AI agent files
 .agents/
+.claude/settings.local.json
 .claude/skills/
 .claude/worktrees/
 skills-lock.json
