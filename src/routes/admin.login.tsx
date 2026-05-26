@@ -5,6 +5,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === "true";
+
 type Search = { redirect?: string };
 
 export const Route = createFileRoute("/admin/login")({
@@ -12,6 +14,7 @@ export const Route = createFileRoute("/admin/login")({
     redirect: typeof search.redirect === "string" ? search.redirect : undefined,
   }),
   beforeLoad: async ({ search }) => {
+    if (DEMO_MODE) throw redirect({ to: search.redirect ?? "/admin/portfolio" });
     if (typeof window === "undefined") return;
     const { data } = await supabase.auth.getSession();
     if (data.session) {
