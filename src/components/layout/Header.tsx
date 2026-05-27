@@ -17,20 +17,20 @@ function LanguageSwitcher({ className = "" }: { className?: string }) {
   };
 
   return (
-    <div className={`flex items-center rounded-md bg-white/10 p-0.5 gap-0.5 ${className}`}>
+    <div className={`flex items-center rounded-md bg-foreground/10 p-0.5 gap-0.5 ${className}`}>
       {(["en", "pt"] as const).map((lang) => (
         <button
           key={lang}
           onClick={() => switchTo(lang)}
           aria-pressed={current === lang}
           aria-label={lang === "en" ? "Switch to English" : "Mudar para Português"}
-          className={`rounded-sm px-2.5 py-1 text-xs font-semibold uppercase transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:rounded-sm ${
+          className={`rounded-sm px-2.5 py-1 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${
             current === lang
-              ? "bg-white text-[#0F0F0F]"
-              : "text-white/50 hover:text-white/80"
+              ? "bg-foreground text-background"
+              : "text-foreground/40 hover:text-foreground/70"
           }`}
         >
-          {lang}
+          {lang.toUpperCase()}
         </button>
       ))}
     </div>
