@@ -22,14 +22,14 @@ export const localAreas: LocalArea[] = [
       "Trabalhamos em estreita colaboração com particulares, empresas locais, condomínios e instituições, em projetos que vão desde pequenas reparações a construções de raiz e infraestruturas de maior dimensão.",
     ],
     highlights: [
-      { title: "Empresa local desde sempre", desc: "Sede na Zona Industrial de Nelas." },
+      { title: "Empresa local desde sempre", desc: "Sede na Zona industrial de Nelas, Lote 13." },
       { title: "Resposta no próprio dia", desc: "Para urgências em Nelas, deslocamos equipa no mesmo dia útil." },
       { title: "Parcerias com câmara e juntas", desc: "Experiência consolidada em obra pública na região." },
     ],
     faq: [
       { q: "Trabalham em obras particulares em Nelas?", a: "Sim — moradias, remodelações de cozinhas e casas de banho, anexos e manutenção exterior em toda a vila e freguesias." },
       { q: "Quanto tempo demora a marcação de uma visita técnica em Nelas?", a: "Para clientes em Nelas, conseguimos visita técnica gratuita em 24 a 48 horas." },
-      { q: "Onde fica a sede?", a: "Na Zona Industrial de Nelas." },
+      { q: "Onde fica a sede?", a: "Na Zona industrial de Nelas, Lote 13." },
     ],
     distanceNote: "Sede e armazém em Nelas — equipa permanente disponível.",
     heroAlt: "Sede da IJ Santos em Nelas",

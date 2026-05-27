@@ -28,12 +28,12 @@ export const company = {
   whatsapp: "https://wa.me/351926051178",
 
   // Primary address
-  address: "Zona Industrial de Nelas, Nelas",
-  mapUrl: "https://www.google.com/maps/search/?api=1&query=Zona+Industrial+de+Nelas,+Nelas",
-  mapEmbedUrl: "https://www.google.com/maps?q=Zona+Industrial+de+Nelas,+Nelas&output=embed",
+  address: "Zona industrial de Nelas Lote 13, 3520-095 Nelas, Portugal",
+  mapUrl: "https://www.google.com/maps/search/?api=1&query=Zona+industrial+de+Nelas+Lote+13,+3520-095+Nelas,+Portugal",
+  mapEmbedUrl: "https://www.google.com/maps?q=Zona+industrial+de+Nelas+Lote+13,+3520-095+Nelas,+Portugal&output=embed",
 
   addresses: [
-    { label: "Sede", value: "Zona Industrial de Nelas, Nelas" },
+    { label: "Sede", value: "Zona industrial de Nelas Lote 13, 3520-095 Nelas" },
   ],
 
   hours: "Seg–Sex · 08h00 — 17h00",

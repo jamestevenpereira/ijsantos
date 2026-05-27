@@ -41,7 +41,7 @@ const ORGANIZATION_LD = {
   vatID: `PT${company.nipc.replace(/\s/g, "")}`,
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Zona Industrial de Nelas",
+    streetAddress: "Zona industrial de Nelas Lote 13",
     postalCode: "3520-095",
     addressLocality: "Nelas",
     addressRegion: "Viseu",

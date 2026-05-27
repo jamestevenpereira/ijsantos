@@ -35,7 +35,7 @@ export const Route = createFileRoute("/areas/$slug")({
       image: `${SITE_URL}/logo.png`,
       address: {
         "@type": "PostalAddress",
-        streetAddress: "Zona Industrial de Nelas",
+        streetAddress: "Zona industrial de Nelas Lote 13",
         postalCode: "3520-095",
         addressLocality: "Nelas",
         addressRegion: "Viseu",
