@@ -17,22 +17,22 @@ function LanguageSwitcher({ className = "" }: { className?: string }) {
   };
 
   return (
-    <div className={`flex items-center gap-1 text-sm font-medium ${className}`}>
-      <button
-        onClick={() => switchTo("en")}
-        className={`focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:rounded-sm ${current === "en" ? "text-foreground" : "text-muted-foreground hover:text-foreground transition-colors"}`}
-        aria-label="Switch to English"
-      >
-        EN
-      </button>
-      <span className="text-border select-none">/</span>
-      <button
-        onClick={() => switchTo("pt")}
-        className={`focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:rounded-sm ${current === "pt" ? "text-foreground" : "text-muted-foreground hover:text-foreground transition-colors"}`}
-        aria-label="Mudar para Português"
-      >
-        PT
-      </button>
+    <div className={`flex items-center rounded-md bg-white/10 p-0.5 gap-0.5 ${className}`}>
+      {(["en", "pt"] as const).map((lang) => (
+        <button
+          key={lang}
+          onClick={() => switchTo(lang)}
+          aria-pressed={current === lang}
+          aria-label={lang === "en" ? "Switch to English" : "Mudar para Português"}
+          className={`rounded-sm px-2.5 py-1 text-xs font-semibold uppercase transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:rounded-sm ${
+            current === lang
+              ? "bg-white text-[#0F0F0F]"
+              : "text-white/50 hover:text-white/80"
+          }`}
+        >
+          {lang}
+        </button>
+      ))}
     </div>
   );
 }
@@ -179,7 +179,7 @@ export function Header() {
             >
               {t("header.cta")}
             </Link>
-            <LanguageSwitcher className="mt-2 px-3 py-2 justify-center" />
+            <LanguageSwitcher className="mt-2" />
           </div>
         </div>
       )}
