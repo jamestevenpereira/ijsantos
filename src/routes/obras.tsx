@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Calendar, Images, MapPin } from "lucide-react";
+import { Calendar, ChevronLeft, ChevronRight, Images, MapPin } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { categoryOrder, type PortfolioCategory } from "@/data/portfolio";
 import { slugToCategoryName, type PortfolioCategoryName } from "@/data/portfolio-categories";
@@ -27,9 +27,12 @@ export const Route = createFileRoute("/obras")({
 
 type Filter = "todos" | PortfolioCategory;
 
+const PAGE_SIZE = 12;
+
 function ObrasPage() {
   const { t } = useTranslation();
   const [filter, setFilter] = useState<Filter>("todos");
+  const [page, setPage] = useState(1);
 
   const { data: obras = [], isLoading: obrasLoading } = useQuery({
     queryKey: ["obras"],
@@ -78,6 +81,14 @@ function ObrasPage() {
     }
     return counts;
   }, [obras, nameToSlug]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredObras.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const pageObras = filteredObras.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
+  useEffect(() => {
+    setPage(1);
+  }, [filter]);
 
   const filters: { key: Filter; label: string; count: number }[] = [
     { key: "todos", label: t("portfolio.filter_all"), count: obras.length },
@@ -142,18 +153,56 @@ function ObrasPage() {
               {t("portfolio.empty")}
             </p>
           ) : (
-            <div className="flex flex-col gap-3">
-              {filteredObras.map((obra) => {
-                const album = albumByObraId.get(obra.id) ?? null;
-                return (
+            <>
+              <div className="flex flex-col gap-3">
+                {pageObras.map((obra) => (
                   <ObraRow
                     key={obra.id}
                     obra={obra}
-                    album={album}
+                    album={albumByObraId.get(obra.id) ?? null}
                   />
-                );
-              })}
-            </div>
+                ))}
+              </div>
+
+              {totalPages > 1 && (
+                <nav
+                  className="mt-10 flex items-center justify-center gap-2"
+                  aria-label="Paginação"
+                >
+                  <button
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="h-10 px-4 rounded-md border border-border bg-card text-sm font-medium hover:border-brand/40 disabled:opacity-40 disabled:pointer-events-none inline-flex items-center gap-1"
+                  >
+                    <ChevronLeft className="h-4 w-4" /> Anterior
+                  </button>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => {
+                    const active = n === currentPage;
+                    return (
+                      <button
+                        key={n}
+                        onClick={() => setPage(n)}
+                        aria-current={active ? "page" : undefined}
+                        className={`h-10 w-10 rounded-md text-sm font-medium border transition-colors ${
+                          active
+                            ? "bg-brand text-brand-foreground border-brand"
+                            : "bg-card text-foreground border-border hover:border-brand/40"
+                        }`}
+                      >
+                        {n}
+                      </button>
+                    );
+                  })}
+                  <button
+                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={currentPage === totalPages}
+                    className="h-10 px-4 rounded-md border border-border bg-card text-sm font-medium hover:border-brand/40 disabled:opacity-40 disabled:pointer-events-none inline-flex items-center gap-1"
+                  >
+                    Seguinte <ChevronRight className="h-4 w-4" />
+                  </button>
+                </nav>
+              )}
+            </>
           )}
         </div>
       </section>

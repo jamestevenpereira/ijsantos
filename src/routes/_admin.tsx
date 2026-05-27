@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet, redirect, Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { LogOut, Images, Menu, X, Building2 } from "lucide-react";
+import { LogOut, Images, Menu, X, Building2, BookOpen } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -101,6 +101,7 @@ function SidebarContent({
 }) {
   const isPortfolio = pathname.startsWith("/admin/portfolio");
   const isObras = pathname.startsWith("/admin/obras");
+  const isManual = pathname.startsWith("/admin/como-usar");
   return (
     <div className="flex h-full flex-col">
       <div className="hidden md:flex h-16 items-center px-6 border-b border-white/5">
@@ -130,7 +131,18 @@ function SidebarContent({
           Portefólio
         </Link>
       </nav>
-      <div className="p-4 border-t border-white/5">
+      <div className="p-4 border-t border-white/5 space-y-1">
+        <Link
+          to="/admin/como-usar"
+          className={`flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors ${
+            isManual
+              ? "bg-[#DC2626] text-white"
+              : "text-white/80 hover:bg-white/5 hover:text-white"
+          }`}
+        >
+          <BookOpen className="h-4 w-4" />
+          Como usar
+        </Link>
         <Button
           variant="ghost"
           onClick={onLogout}
