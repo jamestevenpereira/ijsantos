@@ -196,7 +196,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   if (!env.RESEND_API_KEY)
     return json({ error: "Servidor não configurado." }, 500);
 
-  const serviceLabel = SERVICE_LABELS[service] ?? service;
+  const serviceLabel = SERVICE_LABELS[service];
+  if (!serviceLabel) return json({ error: "Serviço inválido." }, 400);
   const to   = env.CONTACT_TO_EMAIL   ?? "jamestevenpereira@gmail.com";
   const from = env.CONTACT_FROM_EMAIL ?? "IJ Santos <onboarding@resend.dev>";
   const submittedAt = new Date().toLocaleString("pt-PT", {
@@ -205,37 +206,36 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     timeStyle: "short",
   });
 
-  // Admin notification
-  const adminRes = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${env.RESEND_API_KEY}` },
-    body: JSON.stringify({
-      from,
-      to: [to],
-      reply_to: email,
-      subject: `Pedido de orçamento — ${serviceLabel} — ${name}`,
-      html: adminEmailHtml({ serviceLabel, name, email, phone, message, submittedAt }),
+  const [adminRes, clientRes] = await Promise.all([
+    fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${env.RESEND_API_KEY}` },
+      body: JSON.stringify({
+        from,
+        to: [to],
+        reply_to: email,
+        subject: `Pedido de orçamento — ${serviceLabel} — ${name}`,
+        html: adminEmailHtml({ serviceLabel, name, email, phone, message, submittedAt }),
+      }),
     }),
-  });
+    fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${env.RESEND_API_KEY}` },
+      body: JSON.stringify({
+        from,
+        to: [email],
+        reply_to: to,
+        subject: "Recebemos o seu pedido — IJ Santos",
+        html: clientEmailHtml({ serviceLabel, name, phone }),
+      }),
+    }),
+  ]);
 
   if (!adminRes.ok) {
     const text = await adminRes.text();
     console.error("Resend admin error", adminRes.status, text);
     return json({ error: "Falha no envio. Tente por telefone ou WhatsApp." }, 502);
   }
-
-  // Client confirmation (non-critical)
-  const clientRes = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${env.RESEND_API_KEY}` },
-    body: JSON.stringify({
-      from,
-      to: [email],
-      reply_to: to,
-      subject: "Recebemos o seu pedido — IJ Santos",
-      html: clientEmailHtml({ serviceLabel, name, phone }),
-    }),
-  });
 
   if (!clientRes.ok) {
     const text = await clientRes.text();
