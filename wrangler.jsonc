@@ -3,8 +3,6 @@
   "name": "tanstack-start-app",
   "compatibility_date": "2025-09-24",
   "compatibility_flags": ["nodejs_compat"],
-  "main": "src/server.ts",
-  "account_id": "d3ede4ee3636453753c579a09f4a66ce",
   "vars": {
     "VITE_SUPABASE_URL": "https://bltfbxuivvretztavuqe.supabase.co",
     "VITE_SUPABASE_PUBLISHABLE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJsdGZieHVpdnZyZXR6dGF2dXFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4NjAzMjEsImV4cCI6MjA5NTQzNjMyMX0.mYV92N_nEesIux-m3s0If9ziJPhlLo5epxBYJ68c248",
