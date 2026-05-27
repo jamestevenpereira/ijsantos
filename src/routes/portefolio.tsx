@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { z } from "zod";
 import { useQuery } from "@tanstack/react-query";
 import { X, ChevronLeft, ChevronRight, MapPin, Calendar, Images } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -8,7 +9,12 @@ import { slugToCategoryName, type PortfolioCategoryName } from "@/data/portfolio
 import { listPortfolioAlbums, type PortfolioAlbum } from "@/lib/portfolio-db";
 import { CTABand } from "@/components/sections/CTABand";
 
+const searchSchema = z.object({
+  album: z.string().optional(),
+});
+
 export const Route = createFileRoute("/portefolio")({
+  validateSearch: searchSchema,
   head: () => ({
     meta: [
       { title: "Portefólio · IJ Santos" },
@@ -33,9 +39,11 @@ type Filter = "todos" | PortfolioCategory;
 
 function PortfolioPage() {
   const { t } = useTranslation();
+  const { album: albumParam } = Route.useSearch();
   const [filter, setFilter] = useState<Filter>("todos");
   const [openAlbum, setOpenAlbum] = useState<PortfolioAlbum | null>(null);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const albumParamHandled = useRef(false);
 
   const { data: albums = [] } = useQuery({
     queryKey: ["portfolio_albums"],
@@ -68,6 +76,18 @@ function PortfolioPage() {
     }
     return counts;
   }, [albums, nameToSlug]);
+
+  // Auto-open album from URL param (only on first load).
+  useEffect(() => {
+    if (!albumParam || albums.length === 0 || albumParamHandled.current) return;
+    const target = albums.find((a) => a.obra.id === albumParam);
+    if (target) {
+      albumParamHandled.current = true;
+      setOpenAlbum(target);
+      const slug = nameToSlug[target.obra.categoria as PortfolioCategoryName];
+      if (slug) setFilter(slug);
+    }
+  }, [albumParam, albums]);
 
   // Close lightbox when album changes.
   useEffect(() => {

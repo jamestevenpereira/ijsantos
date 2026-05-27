@@ -47,6 +47,7 @@ export function Header() {
     { to: "/", label: t("header.home") },
     { to: "/servicos", label: t("header.services") },
     { to: "/portefolio", label: t("header.portfolio") },
+    { to: "/obras", label: t("header.obras") },
     { to: "/sobre", label: t("header.about") },
     { to: "/contacto", label: t("header.contact") },
   ] as const;
