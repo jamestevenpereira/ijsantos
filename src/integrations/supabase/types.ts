@@ -14,11 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      obras: {
+        Row: {
+          id: string
+          nome: string
+          cliente: string | null
+          local: string
+          ano: number
+          categoria: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          nome: string
+          cliente?: string | null
+          local: string
+          ano: number
+          categoria: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          nome?: string
+          cliente?: string | null
+          local?: string
+          ano?: number
+          categoria?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
       portfolio_items: {
         Row: {
           category: string
           created_at: string
           id: string
+          obra_id: string | null
           public_url: string
           sort_order: number
           storage_path: string
@@ -30,6 +61,7 @@ export type Database = {
           category: string
           created_at?: string
           id?: string
+          obra_id?: string | null
           public_url: string
           sort_order?: number
           storage_path: string
@@ -41,6 +73,7 @@ export type Database = {
           category?: string
           created_at?: string
           id?: string
+          obra_id?: string | null
           public_url?: string
           sort_order?: number
           storage_path?: string
@@ -48,7 +81,15 @@ export type Database = {
           thumb_url?: string | null
           title?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "portfolio_items_obra_id_fkey"
+            columns: ["obra_id"]
+            isOneToOne: false
+            referencedRelation: "obras"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {

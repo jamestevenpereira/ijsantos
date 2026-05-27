@@ -1,11 +1,8 @@
 import { useRef, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2, Upload, X, ImagePlus } from "lucide-react";
 import { toast } from "sonner";
-import {
-  PORTFOLIO_CATEGORIES,
-  type PortfolioCategoryName,
-} from "@/data/portfolio-categories";
+import { listObras, type ObraDbItem } from "@/lib/obras-db";
 import { uploadPortfolioItem } from "@/lib/portfolio-db";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -33,21 +30,34 @@ export function BatchUploader() {
   const qc = useQueryClient();
   const inputRef = useRef<HTMLInputElement>(null);
   const [items, setItems] = useState<Item[]>([]);
-  const [category, setCategory] = useState<PortfolioCategoryName>(PORTFOLIO_CATEGORIES[0]);
+  const [selectedObraId, setSelectedObraId] = useState<string>("");
   const [title, setTitle] = useState("");
+
+  const { data: obras = [], isLoading: obrasLoading } = useQuery({
+    queryKey: ["obras"],
+    queryFn: listObras,
+    staleTime: 300_000,
+  });
+
+  const selectedObra: ObraDbItem | undefined = obras.find((o) => o.id === selectedObraId);
 
   const uploadMut = useMutation({
     mutationFn: async () => {
+      if (!selectedObra) throw new Error("Selecione uma obra.");
       let success = 0;
       let failed = 0;
-      // Sequencial — feedback fiável e evita saturar a ligação.
       for (const item of items) {
         if (item.status === "done") continue;
         setItems((prev) =>
           prev.map((p) => (p.id === item.id ? { ...p, status: "uploading", error: undefined } : p)),
         );
         try {
-          await uploadPortfolioItem({ file: item.file, category, title: title || null });
+          await uploadPortfolioItem({
+            file: item.file,
+            category: selectedObra.categoria,
+            obra_id: selectedObra.id,
+            title: title || null,
+          });
           setItems((prev) =>
             prev.map((p) => (p.id === item.id ? { ...p, status: "done" } : p)),
           );
@@ -60,6 +70,7 @@ export function BatchUploader() {
           failed++;
         }
         qc.invalidateQueries({ queryKey: ["portfolio_items"] });
+        qc.invalidateQueries({ queryKey: ["portfolio_albums"] });
       }
       return { success, failed };
     },
@@ -104,11 +115,14 @@ export function BatchUploader() {
     setItems((prev) => [...prev, ...next]);
   };
 
-  const removeItem = (id: string) =>
-    setItems((prev) => prev.filter((p) => p.id !== id));
+  const removeItem = (id: string) => setItems((prev) => prev.filter((p) => p.id !== id));
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!selectedObraId) {
+      toast.error("Selecione uma obra.");
+      return;
+    }
     if (items.length === 0) {
       toast.error("Selecione pelo menos uma foto.");
       return;
@@ -157,10 +171,7 @@ export function BatchUploader() {
         {items.length > 0 && (
           <ul className="rounded-lg border border-white/10 divide-y divide-white/5 bg-[#0F0F0F] max-h-64 overflow-auto">
             {items.map((it) => (
-              <li
-                key={it.id}
-                className="flex items-center gap-3 px-3 py-2 text-sm"
-              >
+              <li key={it.id} className="flex items-center gap-3 px-3 py-2 text-sm">
                 <span
                   className={`h-2 w-2 rounded-full shrink-0 ${
                     it.status === "done"
@@ -198,21 +209,42 @@ export function BatchUploader() {
 
         <div className="grid gap-4 md:grid-cols-2">
           <div className="space-y-2">
-            <Label className="text-white/80">Categoria (aplicada a todas)</Label>
-            <Select
-              value={category}
-              onValueChange={(v) => setCategory(v as PortfolioCategoryName)}
-              disabled={isUploading}
-            >
-              <SelectTrigger className="bg-[#0F0F0F] border-white/10 text-white">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {PORTFOLIO_CATEGORIES.map((c) => (
-                  <SelectItem key={c} value={c}>{c}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Label className="text-white/80">Obra (aplicada a todas) *</Label>
+            {obrasLoading ? (
+              <div className="flex items-center gap-2 text-sm text-white/40 h-10">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                A carregar obras…
+              </div>
+            ) : obras.length === 0 ? (
+              <p className="text-sm text-white/50 h-10 flex items-center">
+                Crie primeiro uma obra no separador <strong className="ml-1 text-white/70">Obras</strong>.
+              </p>
+            ) : (
+              <Select
+                value={selectedObraId}
+                onValueChange={setSelectedObraId}
+                disabled={isUploading}
+              >
+                <SelectTrigger className="bg-[#0F0F0F] border-white/10 text-white">
+                  <SelectValue placeholder="Selecionar obra…" />
+                </SelectTrigger>
+                <SelectContent>
+                  {obras.map((o) => (
+                    <SelectItem key={o.id} value={o.id}>
+                      {o.nome}
+                      <span className="ml-2 text-muted-foreground text-xs">
+                        {o.local} · {o.ano}
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+            {selectedObra && (
+              <p className="text-xs text-white/50">
+                Categoria: <span className="text-white/70">{selectedObra.categoria}</span>
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -235,7 +267,9 @@ export function BatchUploader() {
         {isUploading && (
           <div className="space-y-2">
             <div className="flex items-center justify-between text-xs text-white/60">
-              <span>A carregar {done + 1} de {total}…</span>
+              <span>
+                A carregar {done + 1} de {total}…
+              </span>
               <span>{Math.round((done / total) * 100)}%</span>
             </div>
             <Progress value={(done / total) * 100} />
@@ -250,7 +284,7 @@ export function BatchUploader() {
           </p>
           <button
             type="submit"
-            disabled={isUploading || items.length === 0}
+            disabled={isUploading || items.length === 0 || !selectedObraId}
             className="inline-flex items-center justify-center gap-2 rounded-md bg-[#DC2626] hover:bg-[#B91C1C] text-white font-semibold h-11 px-6 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {isUploading ? (

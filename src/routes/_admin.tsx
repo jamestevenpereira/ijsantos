@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet, redirect, Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { LogOut, Images, Menu, X } from "lucide-react";
+import { LogOut, Images, Menu, X, Building2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -100,12 +100,24 @@ function SidebarContent({
   pathname: string;
 }) {
   const isPortfolio = pathname.startsWith("/admin/portfolio");
+  const isObras = pathname.startsWith("/admin/obras");
   return (
     <div className="flex h-full flex-col">
       <div className="hidden md:flex h-16 items-center px-6 border-b border-white/5">
         <span className="font-semibold tracking-tight">IJ Santos · Admin</span>
       </div>
       <nav className="flex-1 p-4 space-y-1">
+        <Link
+          to="/admin/obras"
+          className={`flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors ${
+            isObras
+              ? "bg-[#DC2626] text-white"
+              : "text-white/80 hover:bg-white/5 hover:text-white"
+          }`}
+        >
+          <Building2 className="h-4 w-4" />
+          Obras
+        </Link>
         <Link
           to="/admin/portfolio"
           className={`flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors ${
