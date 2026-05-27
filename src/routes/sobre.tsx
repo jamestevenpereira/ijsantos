@@ -14,7 +14,7 @@ export const Route = createFileRoute("/sobre")({
       {
         name: "description",
         content:
-          "Conheça a IJ Santos: empresa local com mais de 15 anos de experiência em construção civil e limpezas exteriores na região de Viseu.",
+          "Conheça a IJ Santos: empresa local com mais de 30 anos de experiência em construção civil e limpezas exteriores na região de Viseu.",
       },
       { property: "og:title", content: "Sobre a IJ Santos" },
       {
@@ -185,7 +185,7 @@ const teamMembers = [
   {
     name: "José Santos",
     role: "Co-fundador & Diretor de Obra",
-    bio: "Responsável pela coordenação técnica e qualidade de execução em todas as obras. 15+ anos de experiência em construção civil.",
+    bio: "Responsável pela coordenação técnica e qualidade de execução em todas as obras. 30+ anos de experiência em construção civil.",
     photo: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80&auto=format&fit=crop",
   },
   {

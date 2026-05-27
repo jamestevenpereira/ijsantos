@@ -22,14 +22,14 @@ export const localAreas: LocalArea[] = [
       "Trabalhamos em estreita colaboração com particulares, empresas locais, condomínios e instituições, em projetos que vão desde pequenas reparações a construções de raiz e infraestruturas de maior dimensão.",
     ],
     highlights: [
-      { title: "Empresa local desde sempre", desc: "Sede na Rua da Shell, nº 13 — 3520-074 Nelas." },
+      { title: "Empresa local desde sempre", desc: "Sede na Zona Industrial de Nelas." },
       { title: "Resposta no próprio dia", desc: "Para urgências em Nelas, deslocamos equipa no mesmo dia útil." },
       { title: "Parcerias com câmara e juntas", desc: "Experiência consolidada em obra pública na região." },
     ],
     faq: [
       { q: "Trabalham em obras particulares em Nelas?", a: "Sim — moradias, remodelações de cozinhas e casas de banho, anexos e manutenção exterior em toda a vila e freguesias." },
       { q: "Quanto tempo demora a marcação de uma visita técnica em Nelas?", a: "Para clientes em Nelas, conseguimos visita técnica gratuita em 24 a 48 horas." },
-      { q: "Onde fica a sede?", a: "Na Rua da Shell, nº 13, 3520-074 Nelas, com armazém na Zona Industrial de Nelas." },
+      { q: "Onde fica a sede?", a: "Na Zona Industrial de Nelas." },
     ],
     distanceNote: "Sede e armazém em Nelas — equipa permanente disponível.",
     heroAlt: "Sede da IJ Santos em Nelas",
@@ -39,7 +39,7 @@ export const localAreas: LocalArea[] = [
     name: "Viseu",
     district: "Distrito de Viseu",
     intro:
-      "Construção civil, remodelações e limpezas exteriores em Viseu — equipa local da IJ Santos, com mais de 15 anos a servir clientes na cidade e arredores.",
+      "Construção civil, remodelações e limpezas exteriores em Viseu — equipa local da IJ Santos, com mais de 30 anos a servir clientes na cidade e arredores.",
     body: [
       "Viseu é um dos principais centros urbanos da região centro e uma das áreas onde executamos mais obra. Trabalhamos regularmente em moradias unifamiliares, apartamentos no centro histórico e espaços comerciais nas zonas comerciais da cidade.",
       "A nossa proximidade à cidade permite uma resposta rápida a pedidos de orçamento, visitas técnicas em 48 horas e gestão de obra sem deslocações dispendiosas. Para clientes em Viseu, mantemos equipa móvel preparada para limpezas de fachadas, telhados e pavimentos durante todo o ano.",
@@ -85,7 +85,7 @@ export const localAreas: LocalArea[] = [
     name: "Tondela",
     district: "Distrito de Viseu",
     intro:
-      "Serviços de construção civil, remodelações e limpezas exteriores em Tondela. Equipa local da IJ Santos, com mais de 15 anos de obra na região centro.",
+      "Serviços de construção civil, remodelações e limpezas exteriores em Tondela. Equipa local da IJ Santos, com mais de 30 anos de obra na região centro.",
     body: [
       "Tondela é uma área onde acompanhamos com regularidade clientes particulares e empresas. A proximidade à nossa sede em Nelas permite preços competitivos e resposta rápida a pedidos urgentes, sem custos extra de deslocação.",
       "Em Tondela executamos remodelações de habitação, manutenção de fachadas e telhados em edifícios antigos da vila e ainda obra nova em zonas residenciais novas do concelho.",

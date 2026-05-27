@@ -28,16 +28,15 @@ export const company = {
   whatsapp: "https://wa.me/351926051178",
 
   // Primary address
-  address: "Rua da Shell, nº 13, 3520-074 Nelas",
-  mapUrl: "https://www.google.com/maps/search/?api=1&query=Rua+da+Shell,+n%C2%BA+13,+3520-074+Nelas",
-  mapEmbedUrl: "https://www.google.com/maps?q=Rua+da+Shell,+n%C2%BA+13,+3520-074+Nelas&output=embed",
+  address: "Zona Industrial de Nelas, Nelas",
+  mapUrl: "https://www.google.com/maps/search/?api=1&query=Zona+Industrial+de+Nelas,+Nelas",
+  mapEmbedUrl: "https://www.google.com/maps?q=Zona+Industrial+de+Nelas,+Nelas&output=embed",
 
   addresses: [
-    { label: "Sede", value: "Rua da Shell, nº 13, 3520-074 Nelas" },
-    { label: "Armazém", value: "Zona Industrial de Nelas, lote 13, 3520-095 Nelas" },
+    { label: "Sede", value: "Zona Industrial de Nelas, Nelas" },
   ],
 
-  hours: "Seg–Sáb · 08h00 — 19h00",
+  hours: "Seg–Sex · 08h00 — 17h00",
 
   areas: [
     "Nelas",
@@ -60,7 +59,7 @@ export const company = {
   odrEU: "https://webgate.ec.europa.eu/odr/main/?event=main.home.show",
 
   stats: [
-    { value: "15+", label: "stats.yearsExperience" },
+    { value: "30+", label: "stats.yearsExperience" },
     { value: "500+", label: "stats.completedWorks" },
     { value: "<24h", label: "stats.responseTime" },
     { value: "4.9/5", label: "stats.clientRating" },

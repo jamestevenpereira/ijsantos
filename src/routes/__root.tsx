@@ -41,8 +41,8 @@ const ORGANIZATION_LD = {
   vatID: `PT${company.nipc.replace(/\s/g, "")}`,
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Rua da Shell, nº 13",
-    postalCode: "3520-074",
+    streetAddress: "Zona Industrial de Nelas",
+    postalCode: "3520-095",
     addressLocality: "Nelas",
     addressRegion: "Viseu",
     addressCountry: "PT",
@@ -55,9 +55,9 @@ const ORGANIZATION_LD = {
   openingHoursSpecification: [
     {
       "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
       opens: "08:00",
-      closes: "19:00",
+      closes: "17:00",
     },
   ],
   areaServed: company.areas.map((name) => ({ "@type": "City", name })),
