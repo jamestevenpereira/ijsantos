@@ -1,8 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Loader2 } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import { toast } from "sonner";
+import { z } from "zod";
 import {
   DndContext,
   PointerSensor,
@@ -28,6 +29,7 @@ import {
   reorderPortfolioItems,
   type PortfolioDbItem,
 } from "@/lib/portfolio-db";
+import { listObras } from "@/lib/obras-db";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -42,7 +44,12 @@ import { BatchUploader } from "@/components/admin/BatchUploader";
 import { SortablePhotoCard } from "@/components/admin/SortablePhotoCard";
 import { PhotoLightbox } from "@/components/admin/PhotoLightbox";
 
+const searchSchema = z.object({
+  obra_id: z.string().optional(),
+});
+
 export const Route = createFileRoute("/_admin/admin/portfolio")({
+  validateSearch: searchSchema,
   head: () => ({
     meta: [
       { title: "Portefólio · Admin · IJ Santos" },
@@ -54,6 +61,9 @@ export const Route = createFileRoute("/_admin/admin/portfolio")({
 
 function AdminPortfolioPage() {
   const qc = useQueryClient();
+  const navigate = useNavigate({ from: Route.fullPath });
+  const { obra_id } = Route.useSearch();
+
   const [filter, setFilter] = useState<"todos" | PortfolioCategoryName>("todos");
   const [pendingDelete, setPendingDelete] = useState<PortfolioDbItem | null>(null);
   const [preview, setPreview] = useState<PortfolioDbItem | null>(null);
@@ -63,16 +73,36 @@ function AdminPortfolioPage() {
     queryFn: listPortfolioItems,
   });
 
+  const { data: obras = [] } = useQuery({
+    queryKey: ["obras"],
+    queryFn: listObras,
+    staleTime: 300_000,
+  });
+
+  const activeObra = obra_id ? (obras.find((o) => o.id === obra_id) ?? null) : null;
+
   // Lista local mutável para reordenação otimista.
   const [order, setOrder] = useState<PortfolioDbItem[]>([]);
   useEffect(() => {
     setOrder(items);
   }, [items]);
 
-  const filtered = useMemo(
-    () => (filter === "todos" ? order : order.filter((i) => i.category === filter)),
-    [order, filter],
-  );
+  // Auto-seleccionar a categoria da obra quando chega via URL.
+  useEffect(() => {
+    if (activeObra) {
+      setFilter(activeObra.categoria as PortfolioCategoryName);
+    }
+  }, [activeObra?.id]);
+
+  const filtered = useMemo(() => {
+    let list = filter === "todos" ? order : order.filter((i) => i.category === filter);
+    if (obra_id) {
+      list = list.filter((i) => i.obra_id === obra_id);
+    }
+    return list;
+  }, [order, filter, obra_id]);
+
+  const clearObraFilter = () => navigate({ search: {} });
 
   const deleteMut = useMutation({
     mutationFn: deletePortfolioItem,
@@ -93,7 +123,6 @@ function AdminPortfolioPage() {
     },
     onError: (e: Error) => {
       toast.error(`Erro a guardar ordem: ${e.message}`);
-      // Rollback para o estado do servidor.
       setOrder(items);
     },
   });
@@ -114,7 +143,6 @@ function AdminPortfolioPage() {
 
     const newVisible = arrayMove(filtered, oldIndex, newIndex);
 
-    // Reconstruir a lista global preservando posições dos itens não visíveis.
     const visibleSet = new Set(visibleIds);
     const newGlobal: PortfolioDbItem[] = [];
     let visibleCursor = 0;
@@ -128,7 +156,6 @@ function AdminPortfolioPage() {
 
     setOrder(newGlobal);
 
-    // Recalcular sort_order por categoria (1..N) para manter estável.
     const perCategoryCounter = new Map<PortfolioCategoryName, number>();
     const updates: { id: string; sort_order: number }[] = [];
     for (const it of newGlobal) {
@@ -151,6 +178,26 @@ function AdminPortfolioPage() {
       </div>
 
       <BatchUploader />
+
+      {/* Banda de filtro por obra */}
+      {activeObra && (
+        <div className="mb-6 flex items-center gap-3 rounded-lg bg-[#DC2626]/10 border border-[#DC2626]/25 px-4 py-3">
+          <div className="flex-1 min-w-0">
+            <span className="text-sm text-white/70">A mostrar fotos de: </span>
+            <strong className="text-white">{activeObra.nome}</strong>
+            <span className="ml-2 text-xs text-white/50">
+              {activeObra.local} · {activeObra.ano}
+            </span>
+          </div>
+          <button
+            onClick={clearObraFilter}
+            className="shrink-0 h-7 w-7 grid place-items-center rounded-md text-white/50 hover:text-white hover:bg-white/10 transition-colors"
+            aria-label="Limpar filtro de obra"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      )}
 
       <section>
         <div className="flex flex-wrap items-center gap-2 mb-6">
@@ -183,7 +230,7 @@ function AdminPortfolioPage() {
           })}
         </div>
 
-        {filter === "todos" && (
+        {!obra_id && filter === "todos" && (
           <p className="mb-4 text-xs text-white/40">
             A ordem é guardada por categoria. Filtre por uma categoria para reordenar dentro dela.
           </p>
@@ -195,11 +242,21 @@ function AdminPortfolioPage() {
           </div>
         ) : filtered.length === 0 ? (
           <div className="rounded-xl border border-dashed border-white/10 bg-[#1A1A1A]/50 py-16 text-center text-white/60">
-            Sem fotos {filter === "todos" ? "" : `na categoria "${filter}"`}.
+            {obra_id
+              ? `Sem fotos neste álbum${filter !== "todos" ? ` para "${filter}"` : ""}.`
+              : `Sem fotos ${filter === "todos" ? "" : `na categoria "${filter}"`}.`}
           </div>
         ) : (
-          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
-            <SortableContext items={filtered.map((i) => i.id)} strategy={rectSortingStrategy}>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={obra_id ? undefined : onDragEnd}
+          >
+            <SortableContext
+              items={filtered.map((i) => i.id)}
+              strategy={rectSortingStrategy}
+              disabled={!!obra_id}
+            >
               <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {filtered.map((item) => (
                   <SortablePhotoCard

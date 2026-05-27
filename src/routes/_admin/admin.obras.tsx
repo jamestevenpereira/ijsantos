@@ -1,7 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Loader2, Pencil, Plus, Trash2 } from "lucide-react";
+import { Images, Loader2, Pencil, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { PORTFOLIO_CATEGORIES, type PortfolioCategoryName } from "@/data/portfolio-categories";
 import { listObras, createObra, updateObra, deleteObra, type ObraDbItem } from "@/lib/obras-db";
@@ -225,6 +225,17 @@ function AdminObrasPage() {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center justify-end gap-1">
+                        {count > 0 && (
+                          <Link
+                            to="/admin/portfolio"
+                            search={{ obra_id: obra.id }}
+                            className="h-8 w-8 rounded-md grid place-items-center text-white/50 hover:text-white hover:bg-white/5 transition-colors"
+                            aria-label="Ver fotos"
+                            title="Ver fotos no Portefólio"
+                          >
+                            <Images className="h-3.5 w-3.5" />
+                          </Link>
+                        )}
                         <button
                           onClick={() => openEdit(obra)}
                           className="h-8 w-8 rounded-md grid place-items-center text-white/50 hover:text-white hover:bg-white/5 transition-colors"
