@@ -29,8 +29,8 @@ export const company = {
 
   // Primary address
   address: "Zona industrial de Nelas Lote 13, 3520-095 Nelas, Portugal",
-  mapUrl: "https://www.google.com/maps/search/?api=1&query=Zona+industrial+de+Nelas+Lote+13,+3520-095+Nelas,+Portugal",
-  mapEmbedUrl: "https://www.google.com/maps?q=Zona+industrial+de+Nelas+Lote+13,+3520-095+Nelas,+Portugal&output=embed",
+  mapUrl: "https://www.google.com/maps/search/?api=1&query=Irm%C3%A3os+J.+Santos+Lda%2C+Nelas",
+  mapEmbedUrl: "https://maps.google.com/maps?q=Irm%C3%A3os+J.+Santos+Lda%2C+Nelas%2C+Portugal&output=embed&hl=pt&z=16",
 
   addresses: [
     { label: "Sede", value: "Zona industrial de Nelas Lote 13, 3520-095 Nelas" },
