@@ -3,6 +3,8 @@ import "./lib/error-capture";
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 import { handleContacto } from "./lib/contacto-handler";
+import { handleUpload } from "./lib/upload-handler";
+import { handleDeleteFiles } from "./lib/delete-files-handler";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -73,6 +75,14 @@ export default {
 
     if (url.pathname === "/api/contacto") {
       return handleContacto(request);
+    }
+
+    if (url.pathname === "/api/upload") {
+      return handleUpload(request, env as Parameters<typeof handleUpload>[1]);
+    }
+
+    if (url.pathname === "/api/delete-files") {
+      return handleDeleteFiles(request, env as Parameters<typeof handleDeleteFiles>[1]);
     }
 
     try {
