@@ -49,6 +49,7 @@ export type Database = {
           category: string
           created_at: string
           id: string
+          media_type: string
           obra_id: string | null
           public_url: string
           sort_order: number
@@ -61,6 +62,7 @@ export type Database = {
           category: string
           created_at?: string
           id?: string
+          media_type?: string
           obra_id?: string | null
           public_url: string
           sort_order?: number
@@ -73,6 +75,7 @@ export type Database = {
           category?: string
           created_at?: string
           id?: string
+          media_type?: string
           obra_id?: string | null
           public_url?: string
           sort_order?: number
