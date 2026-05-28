@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { z } from "zod";
 import { useQuery } from "@tanstack/react-query";
-import { X, ChevronLeft, ChevronRight, MapPin, Calendar, Images } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, MapPin, Calendar, Images, Play } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { categoryOrder, type PortfolioCategory } from "@/data/portfolio";
 import { slugToCategoryName, type PortfolioCategoryName } from "@/data/portfolio-categories";
@@ -233,14 +233,20 @@ function PortfolioPage() {
                   key={photo.id}
                   onClick={() => setLightboxIndex(i)}
                   className="group relative overflow-hidden rounded-lg border border-white/10 aspect-square"
-                  aria-label={`Ver foto ${i + 1}`}
+                  aria-label={`Ver ${photo.media_type === "video" ? "vídeo" : "foto"} ${i + 1}`}
                 >
-                  <img
-                    src={photo.thumb_url ?? photo.public_url}
-                    alt={photo.title ?? openAlbum.obra.nome}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
+                  {photo.media_type === "video" ? (
+                    <div className="h-full w-full bg-[#111] grid place-items-center">
+                      <Play className="h-8 w-8 text-white/50 group-hover:text-white transition-colors" />
+                    </div>
+                  ) : (
+                    <img
+                      src={photo.thumb_url ?? photo.public_url}
+                      alt={photo.title ?? openAlbum.obra.nome}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
                 </button>
               ))}
@@ -293,11 +299,21 @@ function PortfolioPage() {
             className="max-h-[88vh] max-w-[96vw]"
             onClick={(e) => e.stopPropagation()}
           >
-            <img
-              src={openAlbum.photos[lightboxIndex].public_url}
-              alt={openAlbum.photos[lightboxIndex].title ?? openAlbum.obra.nome}
-              className="max-h-[80vh] max-w-[96vw] object-contain rounded-lg shadow-2xl"
-            />
+            {openAlbum.photos[lightboxIndex].media_type === "video" ? (
+              <video
+                key={openAlbum.photos[lightboxIndex].id}
+                src={openAlbum.photos[lightboxIndex].public_url}
+                controls
+                autoPlay
+                className="max-h-[80vh] max-w-[96vw] rounded-lg shadow-2xl"
+              />
+            ) : (
+              <img
+                src={openAlbum.photos[lightboxIndex].public_url}
+                alt={openAlbum.photos[lightboxIndex].title ?? openAlbum.obra.nome}
+                className="max-h-[80vh] max-w-[96vw] object-contain rounded-lg shadow-2xl"
+              />
+            )}
             <figcaption className="mt-3 text-center text-white/80 text-sm">
               {openAlbum.obra.nome} — {lightboxIndex + 1} / {openAlbum.photos.length}
             </figcaption>
@@ -321,12 +337,18 @@ function AlbumCard({
       className="group relative overflow-hidden rounded-xl border border-border bg-muted aspect-[4/3] text-left w-full"
       aria-label={`Ver álbum: ${album.obra.nome}`}
     >
-      <img
-        src={album.cover_thumb_url}
-        alt={album.obra.nome}
-        loading="lazy"
-        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-      />
+      {album.cover_media_type === "video" ? (
+        <div className="h-full w-full bg-[#111] grid place-items-center">
+          <Play className="h-12 w-12 text-white/40 group-hover:text-white/70 transition-colors" />
+        </div>
+      ) : (
+        <img
+          src={album.cover_thumb_url}
+          alt={album.obra.nome}
+          loading="lazy"
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+      )}
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
