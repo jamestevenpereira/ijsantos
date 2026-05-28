@@ -21,6 +21,11 @@ function json(body: unknown, status = 200): Response {
 export async function handleUpload(request: Request, env: R2UploadEnv): Promise<Response> {
   if (request.method !== "POST") return json({ error: "Method not allowed" }, 405);
 
+  if (!env.PORTFOLIO_BUCKET) {
+    console.error("[upload] PORTFOLIO_BUCKET binding missing");
+    return json({ error: "Storage not configured" }, 500);
+  }
+
   const token = request.headers.get("Authorization")?.replace("Bearer ", "");
   if (!token) return json({ error: "Unauthorized" }, 401);
 
@@ -48,9 +53,14 @@ export async function handleUpload(request: Request, env: R2UploadEnv): Promise<
   const ext = file.name.split(".").pop()?.toLowerCase() ?? "bin";
   const key = `${prefix}${crypto.randomUUID()}.${ext}`;
 
-  await env.PORTFOLIO_BUCKET.put(key, file.stream(), {
-    httpMetadata: { contentType: file.type },
-  });
+  try {
+    await env.PORTFOLIO_BUCKET.put(key, file.stream(), {
+      httpMetadata: { contentType: file.type },
+    });
+  } catch (err) {
+    console.error("[upload] R2 put failed:", err);
+    return json({ error: "Upload to storage failed" }, 500);
+  }
 
   const url = `${env.VITE_R2_PUBLIC_URL}/${key}`;
   return json({ path: key, url });

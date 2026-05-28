@@ -81,6 +81,21 @@ export default {
       return handleUpload(request, env as Parameters<typeof handleUpload>[1]);
     }
 
+    if (url.pathname === "/api/debug-env" && request.method === "GET") {
+      const e = env as Record<string, unknown>;
+      return new Response(
+        JSON.stringify({
+          hasBucket: !!e["PORTFOLIO_BUCKET"],
+          hasSupabaseUrl: !!e["SUPABASE_URL"],
+          hasServiceKey: !!e["SUPABASE_SERVICE_ROLE_KEY"],
+          hasR2Url: !!e["VITE_R2_PUBLIC_URL"],
+          supabaseUrl: e["SUPABASE_URL"],
+          r2Url: e["VITE_R2_PUBLIC_URL"],
+        }),
+        { headers: { "Content-Type": "application/json" } },
+      );
+    }
+
     if (url.pathname === "/api/delete-files") {
       return handleDeleteFiles(request, env as Parameters<typeof handleDeleteFiles>[1]);
     }
