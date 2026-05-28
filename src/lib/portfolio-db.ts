@@ -6,12 +6,12 @@ import { listObras, type ObraDbItem } from "@/lib/obras-db";
 const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === "true";
 
 const DEMO_ITEMS: PortfolioDbItem[] = [
-  { id: "demo-1", storage_path: "demo/1.jpg", public_url: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80", thumb_url: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&q=60", thumb_storage_path: "demo/thumbs/1.jpg", category: "Construção Habitacional", obra_id: "obra-1", title: "Moradia Unifamiliar — Nelas", created_at: "2026-01-10T10:00:00Z", sort_order: 1 },
-  { id: "demo-2", storage_path: "demo/2.jpg", public_url: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80", thumb_url: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&q=60", thumb_storage_path: "demo/thumbs/2.jpg", category: "Construção Habitacional", obra_id: "obra-2", title: "Ampliação de Habitação — Viseu", created_at: "2026-01-15T10:00:00Z", sort_order: 2 },
-  { id: "demo-3", storage_path: "demo/3.jpg", public_url: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80", thumb_url: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=60", thumb_storage_path: "demo/thumbs/3.jpg", category: "Pavilhões Industriais", obra_id: "obra-3", title: "Pavilhão Industrial — Mangualde", created_at: "2026-02-01T10:00:00Z", sort_order: 1 },
-  { id: "demo-4", storage_path: "demo/4.jpg", public_url: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80", thumb_url: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=400&q=60", thumb_storage_path: "demo/thumbs/4.jpg", category: "Pavilhões Industriais", obra_id: "obra-3", title: "Armazém Logístico — Tondela", created_at: "2026-02-10T10:00:00Z", sort_order: 2 },
-  { id: "demo-5", storage_path: "demo/5.jpg", public_url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80", thumb_url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&q=60", thumb_storage_path: "demo/thumbs/5.jpg", category: "Lojas Comerciais", obra_id: "obra-5", title: "Remodelação Loja — Viseu", created_at: "2026-02-20T10:00:00Z", sort_order: 1 },
-  { id: "demo-6", storage_path: "demo/6.jpg", public_url: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80", thumb_url: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=60", thumb_storage_path: "demo/thumbs/6.jpg", category: "Obras Públicas", obra_id: "obra-6", title: "Arranjo Exterior — Nelas", created_at: "2026-03-01T10:00:00Z", sort_order: 1 },
+  { id: "demo-1", storage_path: "demo/1.jpg", public_url: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80", thumb_url: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&q=60", thumb_storage_path: "demo/thumbs/1.jpg", category: "Construção Habitacional", obra_id: "obra-1", title: "Moradia Unifamiliar — Nelas", created_at: "2026-01-10T10:00:00Z", sort_order: 1, media_type: "image" },
+  { id: "demo-2", storage_path: "demo/2.jpg", public_url: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80", thumb_url: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&q=60", thumb_storage_path: "demo/thumbs/2.jpg", category: "Construção Habitacional", obra_id: "obra-2", title: "Ampliação de Habitação — Viseu", created_at: "2026-01-15T10:00:00Z", sort_order: 2, media_type: "image" },
+  { id: "demo-3", storage_path: "demo/3.jpg", public_url: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&q=80", thumb_url: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400&q=60", thumb_storage_path: "demo/thumbs/3.jpg", category: "Pavilhões Industriais", obra_id: "obra-3", title: "Pavilhão Industrial — Mangualde", created_at: "2026-02-01T10:00:00Z", sort_order: 1, media_type: "image" },
+  { id: "demo-4", storage_path: "demo/4.jpg", public_url: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80", thumb_url: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=400&q=60", thumb_storage_path: "demo/thumbs/4.jpg", category: "Pavilhões Industriais", obra_id: "obra-3", title: "Armazém Logístico — Tondela", created_at: "2026-02-10T10:00:00Z", sort_order: 2, media_type: "image" },
+  { id: "demo-5", storage_path: "demo/5.jpg", public_url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80", thumb_url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&q=60", thumb_storage_path: "demo/thumbs/5.jpg", category: "Lojas Comerciais", obra_id: "obra-5", title: "Remodelação Loja — Viseu", created_at: "2026-02-20T10:00:00Z", sort_order: 1, media_type: "image" },
+  { id: "demo-6", storage_path: "demo/6.jpg", public_url: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80", thumb_url: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=60", thumb_storage_path: "demo/thumbs/6.jpg", category: "Obras Públicas", obra_id: "obra-6", title: "Arranjo Exterior — Nelas", created_at: "2026-03-01T10:00:00Z", sort_order: 1, media_type: "image" },
 ];
 
 export type PortfolioDbItem = {
@@ -25,6 +25,7 @@ export type PortfolioDbItem = {
   title: string | null;
   created_at: string;
   sort_order: number;
+  media_type: "image" | "video";
 };
 
 export type PortfolioAlbum = {
@@ -32,9 +33,8 @@ export type PortfolioAlbum = {
   photos: PortfolioDbItem[];
   cover_url: string;
   cover_thumb_url: string;
+  cover_media_type: "image" | "video";
 };
-
-const BUCKET = "portfolio";
 
 export async function listPortfolioItems(): Promise<PortfolioDbItem[]> {
   if (DEMO_MODE) return DEMO_ITEMS;
@@ -60,17 +60,45 @@ async function nextSortOrder(category: PortfolioCategoryName): Promise<number> {
   return (data?.sort_order ?? 0) + 1;
 }
 
-async function uploadToBucket(file: File, prefix: string): Promise<{ path: string; url: string }> {
-  const ext = file.name.split(".").pop()?.toLowerCase() || "webp";
-  const path = `${prefix}${crypto.randomUUID()}.${ext}`;
-  const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
-    cacheControl: "31536000",
-    contentType: file.type || "image/webp",
-    upsert: false,
+async function uploadToR2(file: File, prefix: string): Promise<{ path: string; url: string }> {
+  const { data: { session } } = await supabase.auth.getSession();
+  const token = session?.access_token;
+  if (!token) throw new Error("Não autenticado.");
+
+  const fd = new FormData();
+  fd.append("file", file);
+  fd.append("prefix", prefix);
+
+  const res = await fetch("/api/upload", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+    body: fd,
   });
-  if (error) throw error;
-  const { data: pub } = supabase.storage.from(BUCKET).getPublicUrl(path);
-  return { path, url: pub.publicUrl };
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Upload falhou (${res.status}): ${text}`);
+  }
+  return res.json();
+}
+
+async function deleteFromR2(paths: string[]): Promise<void> {
+  if (paths.length === 0) return;
+  const { data: { session } } = await supabase.auth.getSession();
+  const token = session?.access_token;
+  if (!token) throw new Error("Não autenticado.");
+
+  const res = await fetch("/api/delete-files", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ paths }),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Delete R2 falhou (${res.status}): ${text}`);
+  }
 }
 
 export async function listPortfolioAlbums(): Promise<PortfolioAlbum[]> {
@@ -88,12 +116,13 @@ export async function listPortfolioAlbums(): Promise<PortfolioAlbum[]> {
   for (const obra of obras) {
     const photos = byObra.get(obra.id);
     if (!photos || photos.length === 0) continue;
-    const cover = photos[0];
+    const cover = photos.find((p) => p.media_type === "image") ?? photos[0];
     albums.push({
       obra,
       photos,
       cover_url: cover.public_url,
       cover_thumb_url: cover.thumb_url ?? cover.public_url,
+      cover_media_type: cover.media_type,
     });
   }
   return albums;
@@ -106,17 +135,21 @@ export async function uploadPortfolioItem(params: {
   title?: string | null;
 }): Promise<PortfolioDbItem> {
   const { file, category, obra_id, title } = params;
+  const isVideo = file.type.startsWith("video/");
 
-  // Gera versões otimizadas no browser antes de enviar.
-  const { full, thumb } = await processImage(file);
-
-  const fullRes = await uploadToBucket(full, "");
+  let fullRes: { path: string; url: string };
   let thumbRes: { path: string; url: string } | null = null;
-  try {
-    thumbRes = await uploadToBucket(thumb, "thumbs/");
-  } catch (e) {
-    // Se o thumb falhar, continuamos só com o full.
-    console.warn("Thumb upload falhou:", e);
+
+  if (isVideo) {
+    fullRes = await uploadToR2(file, "videos/");
+  } else {
+    const { full, thumb } = await processImage(file);
+    fullRes = await uploadToR2(full, "");
+    try {
+      thumbRes = await uploadToR2(thumb, "thumbs/");
+    } catch (e) {
+      console.warn("Thumb upload falhou:", e);
+    }
   }
 
   const sort_order = await nextSortOrder(category);
@@ -132,13 +165,14 @@ export async function uploadPortfolioItem(params: {
       obra_id: obra_id ?? null,
       title: title?.trim() || null,
       sort_order,
+      media_type: isVideo ? "video" : "image",
     })
     .select("*")
     .single();
+
   if (error) {
-    await supabase.storage.from(BUCKET).remove(
-      thumbRes ? [fullRes.path, thumbRes.path] : [fullRes.path],
-    );
+    const pathsToDelete = [fullRes.path, thumbRes?.path].filter(Boolean) as string[];
+    await deleteFromR2(pathsToDelete).catch(console.warn);
     throw error;
   }
   return data as PortfolioDbItem;
@@ -146,14 +180,15 @@ export async function uploadPortfolioItem(params: {
 
 export async function deletePortfolioItem(item: PortfolioDbItem): Promise<void> {
   if (DEMO_MODE) return;
+
   const { error: delErr } = await supabase
     .from("portfolio_items")
     .delete()
     .eq("id", item.id);
   if (delErr) throw delErr;
-  const paths = [item.storage_path];
-  if (item.thumb_storage_path) paths.push(item.thumb_storage_path);
-  await supabase.storage.from(BUCKET).remove(paths);
+
+  const paths = [item.storage_path, item.thumb_storage_path].filter(Boolean) as string[];
+  await deleteFromR2(paths).catch((e) => console.warn("R2 cleanup falhou:", e));
 }
 
 export async function updatePortfolioItem(params: {
@@ -167,7 +202,6 @@ export async function updatePortfolioItem(params: {
     title: title?.trim() ? title.trim() : null,
     category,
   };
-  // Mover para o fim da nova categoria, se houver mudança.
   if (category !== currentCategory) {
     patch.sort_order = await nextSortOrder(category);
   }
