@@ -10,16 +10,83 @@ export type ObraDbItem = {
   local: string;
   ano: number;
   categoria: PortfolioCategoryName;
+  cover_item_id: string | null;
   created_at: string;
 };
 
+type ObraCreateInput = {
+  nome: string;
+  cliente: string | null;
+  local: string;
+  ano: number;
+  categoria: PortfolioCategoryName;
+};
+
+type ObraUpdateInput = Partial<ObraCreateInput> & {
+  cover_item_id?: string | null;
+};
+
 const DEMO_OBRAS: ObraDbItem[] = [
-  { id: "obra-1", nome: "Moradia Unifamiliar Santos", cliente: "Família Santos", local: "Nelas", ano: 2024, categoria: "Construção Habitacional", created_at: "2024-01-10T10:00:00Z" },
-  { id: "obra-2", nome: "Ampliação de Habitação", cliente: null, local: "Viseu", ano: 2024, categoria: "Construção Habitacional", created_at: "2024-03-15T10:00:00Z" },
-  { id: "obra-3", nome: "Pavilhão Industrial Mangualde", cliente: "Empresa Logística, Lda.", local: "Mangualde", ano: 2023, categoria: "Pavilhões Industriais", created_at: "2023-06-01T10:00:00Z" },
-  { id: "obra-4", nome: "Armazém Logístico Tondela", cliente: null, local: "Tondela", ano: 2023, categoria: "Pavilhões Industriais", created_at: "2023-09-10T10:00:00Z" },
-  { id: "obra-5", nome: "Remodelação Loja Centro", cliente: "Comércio Local", local: "Viseu", ano: 2025, categoria: "Lojas Comerciais", created_at: "2025-01-20T10:00:00Z" },
-  { id: "obra-6", nome: "Arranjo Exterior Largo Municipal", cliente: "Câmara Municipal de Nelas", local: "Nelas", ano: 2022, categoria: "Obras Públicas", created_at: "2022-11-01T10:00:00Z" },
+  {
+    id: "obra-1",
+    nome: "Moradia Unifamiliar Santos",
+    cliente: "Familia Santos",
+    local: "Nelas",
+    ano: 2024,
+    categoria: "Construção Habitacional",
+    cover_item_id: null,
+    created_at: "2024-01-10T10:00:00Z",
+  },
+  {
+    id: "obra-2",
+    nome: "Ampliacao de Habitacao",
+    cliente: null,
+    local: "Viseu",
+    ano: 2024,
+    categoria: "Construção Habitacional",
+    cover_item_id: null,
+    created_at: "2024-03-15T10:00:00Z",
+  },
+  {
+    id: "obra-3",
+    nome: "Pavilhao Industrial Mangualde",
+    cliente: "Empresa Logistica, Lda.",
+    local: "Mangualde",
+    ano: 2023,
+    categoria: "Pavilhões Industriais",
+    cover_item_id: null,
+    created_at: "2023-06-01T10:00:00Z",
+  },
+  {
+    id: "obra-4",
+    nome: "Armazem Logistico Tondela",
+    cliente: null,
+    local: "Tondela",
+    ano: 2023,
+    categoria: "Pavilhões Industriais",
+    cover_item_id: null,
+    created_at: "2023-09-10T10:00:00Z",
+  },
+  {
+    id: "obra-5",
+    nome: "Remodelacao Loja Centro",
+    cliente: "Comercio Local",
+    local: "Viseu",
+    ano: 2025,
+    categoria: "Lojas Comerciais",
+    cover_item_id: null,
+    created_at: "2025-01-20T10:00:00Z",
+  },
+  {
+    id: "obra-6",
+    nome: "Arranjo Exterior Largo Municipal",
+    cliente: "Camara Municipal de Nelas",
+    local: "Nelas",
+    ano: 2022,
+    categoria: "Obras Públicas",
+    cover_item_id: null,
+    created_at: "2022-11-01T10:00:00Z",
+  },
 ];
 
 export async function listObras(): Promise<ObraDbItem[]> {
@@ -33,22 +100,13 @@ export async function listObras(): Promise<ObraDbItem[]> {
   return (data ?? []) as ObraDbItem[];
 }
 
-export async function createObra(
-  params: Omit<ObraDbItem, "id" | "created_at">,
-): Promise<ObraDbItem> {
-  const { data, error } = await supabase
-    .from("obras")
-    .insert(params)
-    .select("*")
-    .single();
+export async function createObra(params: ObraCreateInput): Promise<ObraDbItem> {
+  const { data, error } = await supabase.from("obras").insert(params).select("*").single();
   if (error) throw error;
   return data as ObraDbItem;
 }
 
-export async function updateObra(
-  id: string,
-  params: Partial<Omit<ObraDbItem, "id" | "created_at">>,
-): Promise<ObraDbItem> {
+export async function updateObra(id: string, params: ObraUpdateInput): Promise<ObraDbItem> {
   const { data, error } = await supabase
     .from("obras")
     .update(params)

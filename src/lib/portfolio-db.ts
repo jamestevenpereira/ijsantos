@@ -116,7 +116,10 @@ export async function listPortfolioAlbums(): Promise<PortfolioAlbum[]> {
   for (const obra of obras) {
     const photos = byObra.get(obra.id);
     if (!photos || photos.length === 0) continue;
-    const cover = photos.find((p) => p.media_type === "image") ?? photos[0];
+    const selectedCover = obra.cover_item_id
+      ? photos.find((p) => p.id === obra.cover_item_id)
+      : null;
+    const cover = selectedCover ?? photos.find((p) => p.media_type === "image") ?? photos[0];
     albums.push({
       obra,
       photos,
@@ -181,6 +184,13 @@ export async function uploadPortfolioItem(params: {
 export async function deletePortfolioItem(item: PortfolioDbItem): Promise<void> {
   if (DEMO_MODE) return;
 
+  // If this item is a selected cover of any album, clear it first.
+  const { error: clearCoverErr } = await supabase
+    .from("obras")
+    .update({ cover_item_id: null })
+    .eq("cover_item_id", item.id);
+  if (clearCoverErr) throw clearCoverErr;
+
   const { error: delErr } = await supabase
     .from("portfolio_items")
     .delete()
@@ -228,4 +238,26 @@ export async function reorderPortfolioItems(
   );
   const firstErr = results.find((r) => r.error)?.error;
   if (firstErr) throw firstErr;
+}
+
+export async function setAlbumCover(params: {
+  obraId: string;
+  itemId: string;
+}): Promise<void> {
+  const { obraId, itemId } = params;
+  const { data: item, error: itemErr } = await supabase
+    .from("portfolio_items")
+    .select("id,obra_id")
+    .eq("id", itemId)
+    .maybeSingle();
+  if (itemErr) throw itemErr;
+  if (!item || item.obra_id !== obraId) {
+    throw new Error("A foto selecionada nao pertence a este album.");
+  }
+
+  const { error } = await supabase
+    .from("obras")
+    .update({ cover_item_id: itemId })
+    .eq("id", obraId);
+  if (error) throw error;
 }

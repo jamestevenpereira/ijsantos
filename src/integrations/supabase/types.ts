@@ -22,6 +22,7 @@ export type Database = {
           local: string
           ano: number
           categoria: string
+          cover_item_id: string | null
           created_at: string
         }
         Insert: {
@@ -31,6 +32,7 @@ export type Database = {
           local: string
           ano: number
           categoria: string
+          cover_item_id?: string | null
           created_at?: string
         }
         Update: {
@@ -40,9 +42,18 @@ export type Database = {
           local?: string
           ano?: number
           categoria?: string
+          cover_item_id?: string | null
           created_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "obras_cover_item_id_fkey"
+            columns: ["cover_item_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_items"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       portfolio_items: {
         Row: {

@@ -1,15 +1,25 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripVertical, Play, Trash2 } from "lucide-react";
+import { GripVertical, Play, Star, Trash2 } from "lucide-react";
 import type { PortfolioDbItem } from "@/lib/portfolio-db";
 
 type Props = {
   item: PortfolioDbItem;
   onPreview: (item: PortfolioDbItem) => void;
   onDelete: (item: PortfolioDbItem) => void;
+  onSetCover?: (item: PortfolioDbItem) => void;
+  isCover?: boolean;
+  disableDrag?: boolean;
 };
 
-export function SortablePhotoCard({ item, onPreview, onDelete }: Props) {
+export function SortablePhotoCard({
+  item,
+  onPreview,
+  onDelete,
+  onSetCover,
+  isCover = false,
+  disableDrag = false,
+}: Props) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id: item.id });
 
@@ -68,12 +78,32 @@ export function SortablePhotoCard({ item, onPreview, onDelete }: Props) {
       <button
         type="button"
         {...attributes}
-        {...listeners}
+        {...(disableDrag ? {} : listeners)}
         aria-label="Arrastar para reordenar"
-        className="absolute top-2 left-2 h-9 w-9 grid place-items-center rounded-full bg-black/60 text-white/80 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white/20 cursor-grab active:cursor-grabbing touch-none"
+        disabled={disableDrag}
+        className="absolute top-2 left-2 h-9 w-9 grid place-items-center rounded-full bg-black/60 text-white/80 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white/20 cursor-grab active:cursor-grabbing touch-none disabled:cursor-default disabled:opacity-40"
       >
         <GripVertical className="h-4 w-4" />
       </button>
+
+      {onSetCover && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onSetCover(item);
+          }}
+          aria-label={isCover ? "Imagem de capa atual" : "Definir como capa"}
+          className={`absolute bottom-2 left-2 h-8 px-2 rounded-md text-xs font-medium inline-flex items-center gap-1.5 transition-colors ${
+            isCover
+              ? "bg-amber-500/85 text-black"
+              : "bg-black/60 text-white/80 hover:bg-white/20"
+          }`}
+        >
+          <Star className={`h-3.5 w-3.5 ${isCover ? "fill-current" : ""}`} />
+          {isCover ? "Capa" : "Definir capa"}
+        </button>
+      )}
 
       <button
         type="button"
