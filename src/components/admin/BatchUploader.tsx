@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Loader2, Upload, X, ImagePlus } from "lucide-react";
+import { Film, ImagePlus, Loader2, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 import { listObras, type ObraDbItem } from "@/lib/obras-db";
 import { uploadPortfolioItem } from "@/lib/portfolio-db";
@@ -15,7 +15,8 @@ import {
 } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 
-const MAX_FILE_MB = 10;
+const MAX_IMAGE_MB = 10;
+const MAX_VIDEO_MB = 500;
 
 type Status = "pending" | "uploading" | "done" | "error";
 
@@ -77,13 +78,15 @@ export function BatchUploader() {
     onSuccess: ({ success, failed }) => {
       if (failed === 0) {
         toast.success(
-          success === 1 ? "Foto carregada com sucesso." : `${success} fotos carregadas com sucesso.`,
+          success === 1
+            ? "Ficheiro carregado com sucesso."
+            : `${success} ficheiros carregados com sucesso.`,
         );
         setItems([]);
         setTitle("");
         if (inputRef.current) inputRef.current.value = "";
       } else {
-        toast.error(`${success} carregadas, ${failed} falharam.`);
+        toast.error(`${success} carregados, ${failed} falharam.`);
       }
     },
   });
@@ -93,14 +96,11 @@ export function BatchUploader() {
     const next: Item[] = [];
     let skipped = 0;
     for (const file of Array.from(files)) {
-      if (!file.type.startsWith("image/")) {
-        skipped++;
-        continue;
-      }
-      if (file.size > MAX_FILE_MB * 1024 * 1024) {
-        skipped++;
-        continue;
-      }
+      const isImage = file.type.startsWith("image/");
+      const isVideo = file.type.startsWith("video/");
+      if (!isImage && !isVideo) { skipped++; continue; }
+      const limitMB = isVideo ? MAX_VIDEO_MB : MAX_IMAGE_MB;
+      if (file.size > limitMB * 1024 * 1024) { skipped++; continue; }
       next.push({
         id: `${file.name}-${file.size}-${file.lastModified}-${crypto.randomUUID()}`,
         file,
@@ -108,9 +108,7 @@ export function BatchUploader() {
       });
     }
     if (skipped > 0) {
-      toast.error(
-        `${skipped} ficheiro(s) ignorado(s) (não é imagem ou excede ${MAX_FILE_MB} MB).`,
-      );
+      toast.error(`${skipped} ficheiro(s) ignorado(s) — formato não suportado ou excede tamanho máximo.`);
     }
     setItems((prev) => [...prev, ...next]);
   };
@@ -119,14 +117,8 @@ export function BatchUploader() {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedObraId) {
-      toast.error("Selecione uma obra.");
-      return;
-    }
-    if (items.length === 0) {
-      toast.error("Selecione pelo menos uma foto.");
-      return;
-    }
+    if (!selectedObraId) { toast.error("Selecione uma obra."); return; }
+    if (items.length === 0) { toast.error("Selecione pelo menos um ficheiro."); return; }
     uploadMut.mutate();
   };
 
@@ -137,12 +129,12 @@ export function BatchUploader() {
 
   return (
     <section className="rounded-xl bg-[#1A1A1A] border border-white/5 p-6 mb-10">
-      <h2 className="text-lg font-semibold mb-4">Carregar fotos</h2>
+      <h2 className="text-lg font-semibold mb-4">Carregar fotos e vídeos</h2>
 
       <form onSubmit={onSubmit} className="space-y-4">
         <div>
           <Label htmlFor="files" className="text-white/80 mb-2 block">
-            Fotos (várias permitidas)
+            Fotos e vídeos (vários permitidos)
           </Label>
           <label
             htmlFor="files"
@@ -153,14 +145,14 @@ export function BatchUploader() {
               Clique para selecionar ou largue ficheiros aqui
             </span>
             <span className="text-xs text-white/40">
-              JPG, PNG, WebP — até {MAX_FILE_MB} MB por ficheiro
+              Imagens (JPG, PNG, WebP) até {MAX_IMAGE_MB} MB · Vídeos (MP4, MOV) até {MAX_VIDEO_MB} MB
             </span>
             <input
               id="files"
               ref={inputRef}
               type="file"
               multiple
-              accept="image/*"
+              accept="image/*,video/*"
               className="hidden"
               onChange={(e) => addFiles(e.target.files)}
               disabled={isUploading}
@@ -174,15 +166,17 @@ export function BatchUploader() {
               <li key={it.id} className="flex items-center gap-3 px-3 py-2 text-sm">
                 <span
                   className={`h-2 w-2 rounded-full shrink-0 ${
-                    it.status === "done"
-                      ? "bg-emerald-400"
-                      : it.status === "uploading"
-                        ? "bg-amber-400 animate-pulse"
-                        : it.status === "error"
-                          ? "bg-red-400"
-                          : "bg-white/30"
+                    it.status === "done" ? "bg-emerald-400"
+                    : it.status === "uploading" ? "bg-amber-400 animate-pulse"
+                    : it.status === "error" ? "bg-red-400"
+                    : "bg-white/30"
                   }`}
                 />
+                {it.file.type.startsWith("video/") ? (
+                  <Film className="h-3.5 w-3.5 text-white/40 shrink-0" />
+                ) : (
+                  <ImagePlus className="h-3.5 w-3.5 text-white/40 shrink-0" />
+                )}
                 <span className="flex-1 truncate text-white/80">{it.file.name}</span>
                 <span className="text-xs text-white/40 shrink-0">
                   {(it.file.size / 1024 / 1024).toFixed(2)} MB
@@ -209,7 +203,7 @@ export function BatchUploader() {
 
         <div className="grid gap-4 md:grid-cols-2">
           <div className="space-y-2">
-            <Label className="text-white/80">Obra (aplicada a todas) *</Label>
+            <Label className="text-white/80">Obra (aplicada a todos) *</Label>
             {obrasLoading ? (
               <div className="flex items-center gap-2 text-sm text-white/40 h-10">
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -220,11 +214,7 @@ export function BatchUploader() {
                 Crie primeiro uma obra no separador <strong className="ml-1 text-white/70">Obras</strong>.
               </p>
             ) : (
-              <Select
-                value={selectedObraId}
-                onValueChange={setSelectedObraId}
-                disabled={isUploading}
-              >
+              <Select value={selectedObraId} onValueChange={setSelectedObraId} disabled={isUploading}>
                 <SelectTrigger className="bg-[#0F0F0F] border-white/10 text-white">
                   <SelectValue placeholder="Selecionar obra…" />
                 </SelectTrigger>
@@ -232,9 +222,7 @@ export function BatchUploader() {
                   {obras.map((o) => (
                     <SelectItem key={o.id} value={o.id}>
                       {o.nome}
-                      <span className="ml-2 text-muted-foreground text-xs">
-                        {o.local} · {o.ano}
-                      </span>
+                      <span className="ml-2 text-muted-foreground text-xs">{o.local} · {o.ano}</span>
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -248,9 +236,7 @@ export function BatchUploader() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="title" className="text-white/80">
-              Título (opcional, partilhado)
-            </Label>
+            <Label htmlFor="title" className="text-white/80">Título (opcional, partilhado)</Label>
             <Input
               id="title"
               type="text"
@@ -267,9 +253,7 @@ export function BatchUploader() {
         {isUploading && (
           <div className="space-y-2">
             <div className="flex items-center justify-between text-xs text-white/60">
-              <span>
-                A carregar {done + 1} de {total}…
-              </span>
+              <span>A carregar {done + 1} de {total}…</span>
               <span>{Math.round((done / total) * 100)}%</span>
             </div>
             <Progress value={(done / total) * 100} />
@@ -279,24 +263,20 @@ export function BatchUploader() {
         <div className="flex items-center justify-between">
           <p className="text-xs text-white/50">
             {items.length === 0
-              ? "Nenhuma foto selecionada."
-              : `${items.length} foto(s) selecionada(s).`}
+              ? "Nenhum ficheiro selecionado."
+              : `${items.length} ficheiro(s) selecionado(s).`}
           </p>
           <button
             type="submit"
             disabled={isUploading || items.length === 0 || !selectedObraId}
             className="inline-flex items-center justify-center gap-2 rounded-md bg-[#DC2626] hover:bg-[#B91C1C] text-white font-semibold h-11 px-6 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {isUploading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Upload className="h-4 w-4" />
-            )}
+            {isUploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
             {isUploading
               ? "A carregar…"
               : items.length > 1
-                ? `Carregar ${items.length} fotos`
-                : "Carregar foto"}
+                ? `Carregar ${items.length} ficheiros`
+                : "Carregar ficheiro"}
           </button>
         </div>
       </form>
