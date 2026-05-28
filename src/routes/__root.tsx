@@ -22,6 +22,14 @@ import { company } from "@/data/company";
 import appCss from "../styles.css?url";
 
 const SITE_URL = company.siteUrl;
+const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID as string | undefined;
+const SEARCH_CONSOLE_VERIFICATION_RAW = import.meta.env
+  .VITE_GOOGLE_SITE_VERIFICATION as string | undefined;
+const SEARCH_CONSOLE_VERIFICATION = SEARCH_CONSOLE_VERIFICATION_RAW?.replace(
+  /^google-site-verification=/,
+  "",
+);
+const COOKIE_CONSENT_KEY = "ijs.cookie-consent.v1";
 const DEFAULT_TITLE = "IJ Santos · Construção Civil e Limpezas Exteriores em Nelas e Viseu";
 const DEFAULT_DESC =
   "Construção civil, remodelações, pinturas e limpezas exteriores (fachadas, telhados, pavimentos) em Nelas, Viseu, Mangualde e região centro. Orçamento gratuito em 24 horas.";
@@ -80,6 +88,96 @@ const WEBSITE_LD = {
   inLanguage: "pt-PT",
   publisher: { "@id": `${SITE_URL}/#organization` },
 };
+
+type CookiePrefs = {
+  analytics?: boolean;
+};
+
+function hasAnalyticsConsent() {
+  if (typeof window === "undefined") return false;
+  try {
+    const raw = localStorage.getItem(COOKIE_CONSENT_KEY);
+    if (!raw) return false;
+    const prefs = JSON.parse(raw) as CookiePrefs;
+    return prefs.analytics === true;
+  } catch {
+    return false;
+  }
+}
+
+function ensureGoogleAnalytics(measurementId: string) {
+  if (typeof window === "undefined") return;
+
+  const w = window as Window & {
+    dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
+    __gaConfiguredId?: string;
+  };
+
+  if (!document.getElementById("ga4-tag-script")) {
+    const script = document.createElement("script");
+    script.id = "ga4-tag-script";
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
+    document.head.appendChild(script);
+  }
+
+  w.dataLayer = w.dataLayer ?? [];
+  w.gtag =
+    w.gtag ??
+    ((...args: unknown[]) => {
+      w.dataLayer = w.dataLayer ?? [];
+      w.dataLayer.push(args);
+    });
+
+  if (w.__gaConfiguredId !== measurementId) {
+    w.gtag("js", new Date());
+    w.gtag("config", measurementId, {
+      anonymize_ip: true,
+      send_page_view: false,
+    });
+    w.__gaConfiguredId = measurementId;
+  }
+}
+
+function GoogleAnalytics() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  useEffect(() => {
+    if (!GA_MEASUREMENT_ID) return;
+    const sync = () => {
+      if (hasAnalyticsConsent()) {
+        ensureGoogleAnalytics(GA_MEASUREMENT_ID);
+      }
+    };
+
+    sync();
+    window.addEventListener("cookie-consent-updated", sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener("cookie-consent-updated", sync);
+      window.removeEventListener("storage", sync);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!GA_MEASUREMENT_ID || pathname.startsWith("/admin")) return;
+    if (!hasAnalyticsConsent()) return;
+
+    const w = window as Window & {
+      gtag?: (...args: unknown[]) => void;
+    };
+    if (!w.gtag) return;
+
+    w.gtag("event", "page_view", {
+      page_path: pathname,
+      page_location: window.location.href,
+      page_title: document.title,
+    });
+  }, [pathname]);
+
+  return null;
+}
 
 function NotFoundComponent() {
   const { t } = useTranslation();
@@ -154,6 +252,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:description", content: DEFAULT_DESC },
       { name: "twitter:image", content: OG_IMAGE },
       { name: "theme-color", content: "#0a0a0a" },
+      ...(SEARCH_CONSOLE_VERIFICATION
+        ? [
+            {
+              name: "google-site-verification",
+              content: SEARCH_CONSOLE_VERIFICATION,
+            },
+          ]
+        : []),
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -218,6 +324,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
         >
           Saltar para o conteúdo
         </a>
+        <GoogleAnalytics />
         {children}
         <Scripts />
       </body>

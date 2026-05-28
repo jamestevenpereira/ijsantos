@@ -42,6 +42,7 @@ function load(): Prefs | null {
 function save(p: Prefs) {
   try {
     localStorage.setItem(KEY, JSON.stringify(p));
+    window.dispatchEvent(new CustomEvent("cookie-consent-updated"));
   } catch {
     /* noop */
   }

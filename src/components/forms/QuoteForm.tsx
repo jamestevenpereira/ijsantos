@@ -5,6 +5,7 @@ import { ArrowRight, Check, ChevronLeft } from "lucide-react";
 import { services } from "@/data/services";
 import { company } from "@/data/company";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
+import { trackGaEvent } from "@/lib/analytics";
 
 export function QuoteForm({ compact = false, defaultService = "" }: { compact?: boolean; defaultService?: string }) {
   const { t } = useTranslation();
@@ -43,6 +44,7 @@ export function QuoteForm({ compact = false, defaultService = "" }: { compact?: 
       setService(defaultService);
       setName(""); setPhone(""); setEmail(""); setMessage("");
       setStep(defaultService ? 2 : 1);
+      trackGaEvent("generate_lead");
       toast.success(t("form.toast_success"), { description: t("form.toast_success_desc") });
     } catch (err) {
       toast.error(t("form.toast_error"), {
