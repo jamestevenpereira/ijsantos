@@ -10,12 +10,21 @@ type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
 };
 
+type CloudflareRuntimeRequest = Request & {
+  runtime?: {
+    cloudflare?: {
+      env?: unknown;
+      context?: unknown;
+    };
+  };
+};
+
 let serverEntryPromise: Promise<ServerEntry> | undefined;
 
 async function getServerEntry(): Promise<ServerEntry> {
   if (!serverEntryPromise) {
     serverEntryPromise = import("@tanstack/react-start/server-entry").then(
-      (m) => ((m as { default?: ServerEntry }).default ?? (m as unknown as ServerEntry)),
+      (m) => (m as { default?: ServerEntry }).default ?? (m as unknown as ServerEntry),
     );
   }
   return serverEntryPromise;
@@ -69,8 +78,17 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
   return brandedErrorResponse();
 }
 
+function getCloudflareRuntime(request: Request, env: unknown, ctx: unknown) {
+  const runtime = (request as CloudflareRuntimeRequest).runtime?.cloudflare;
+  return {
+    env: env ?? runtime?.env,
+    ctx: ctx ?? runtime?.context,
+  };
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
+    const runtime = getCloudflareRuntime(request, env, ctx);
     const url = new URL(request.url);
 
     if (url.pathname === "/api/contacto") {
@@ -78,31 +96,30 @@ export default {
     }
 
     if (url.pathname === "/api/upload") {
-      return handleUpload(request, env as Parameters<typeof handleUpload>[1]);
+      return handleUpload(request, runtime.env as Parameters<typeof handleUpload>[1]);
     }
 
     if (url.pathname === "/api/debug-env" && request.method === "GET") {
-      const e = env as Record<string, unknown>;
+      const e = runtime.env as Record<string, unknown> | undefined;
       return new Response(
         JSON.stringify({
-          hasBucket: !!e["PORTFOLIO_BUCKET"],
-          hasSupabaseUrl: !!e["SUPABASE_URL"],
-          hasServiceKey: !!e["SUPABASE_SERVICE_ROLE_KEY"],
-          hasR2Url: !!e["VITE_R2_PUBLIC_URL"],
-          supabaseUrl: e["SUPABASE_URL"],
-          r2Url: e["VITE_R2_PUBLIC_URL"],
+          hasRuntimeEnv: !!e,
+          hasBucket: !!e?.["PORTFOLIO_BUCKET"],
+          hasSupabaseUrl: !!e?.["SUPABASE_URL"],
+          hasServiceKey: !!e?.["SUPABASE_SERVICE_ROLE_KEY"],
+          hasR2Url: !!e?.["VITE_R2_PUBLIC_URL"],
         }),
         { headers: { "Content-Type": "application/json" } },
       );
     }
 
     if (url.pathname === "/api/delete-files") {
-      return handleDeleteFiles(request, env as Parameters<typeof handleDeleteFiles>[1]);
+      return handleDeleteFiles(request, runtime.env as Parameters<typeof handleDeleteFiles>[1]);
     }
 
     try {
       const handler = await getServerEntry();
-      const response = await handler.fetch(request, env, ctx);
+      const response = await handler.fetch(request, runtime.env, runtime.ctx);
       return await normalizeCatastrophicSsrResponse(response);
     } catch (error) {
       console.error(error);

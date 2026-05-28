@@ -21,9 +21,19 @@ function json(body: unknown, status = 200): Response {
 export async function handleUpload(request: Request, env: R2UploadEnv): Promise<Response> {
   if (request.method !== "POST") return json({ error: "Method not allowed" }, 405);
 
-  if (!env.PORTFOLIO_BUCKET) {
+  if (!env?.PORTFOLIO_BUCKET) {
     console.error("[upload] PORTFOLIO_BUCKET binding missing");
     return json({ error: "Storage not configured" }, 500);
+  }
+
+  if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) {
+    console.error("[upload] Supabase auth env missing");
+    return json({ error: "Auth service not configured" }, 500);
+  }
+
+  if (!env.VITE_R2_PUBLIC_URL) {
+    console.error("[upload] VITE_R2_PUBLIC_URL missing");
+    return json({ error: "Public storage URL not configured" }, 500);
   }
 
   const token = request.headers.get("Authorization")?.replace("Bearer ", "");
