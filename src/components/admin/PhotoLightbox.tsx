@@ -92,15 +92,24 @@ export function PhotoLightbox({ item, onClose, onDelete }: Props) {
           <>
             <DialogHeader className="sr-only">
               <DialogTitle>{item.title ?? item.category}</DialogTitle>
-              <DialogDescription>Pré-visualização da foto</DialogDescription>
+              <DialogDescription>Pré-visualização do ficheiro</DialogDescription>
             </DialogHeader>
 
             <div className="bg-black grid place-items-center max-h-[60vh] md:max-h-[70vh] overflow-hidden">
-              <img
-                src={item.public_url}
-                alt={item.title ?? item.category}
-                className="max-h-[60vh] md:max-h-[70vh] w-auto object-contain"
-              />
+              {item.media_type === "video" ? (
+                <video
+                  key={item.id}
+                  src={item.public_url}
+                  controls
+                  className="max-h-[60vh] md:max-h-[70vh] w-auto"
+                />
+              ) : (
+                <img
+                  src={item.public_url}
+                  alt={item.title ?? item.category}
+                  className="max-h-[60vh] md:max-h-[70vh] w-auto object-contain"
+                />
+              )}
             </div>
 
             <div className="p-5 border-t border-white/10">
