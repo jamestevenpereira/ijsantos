@@ -8,5 +8,12 @@
     "VITE_SUPABASE_PUBLISHABLE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJsdGZieHVpdnZyZXR6dGF2dXFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4NjAzMjEsImV4cCI6MjA5NTQzNjMyMX0.mYV92N_nEesIux-m3s0If9ziJPhlLo5epxBYJ68c248",
     "SUPABASE_URL": "https://bltfbxuivvretztavuqe.supabase.co",
     "SUPABASE_PUBLISHABLE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJsdGZieHVpdnZyZXR6dGF2dXFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4NjAzMjEsImV4cCI6MjA5NTQzNjMyMX0.mYV92N_nEesIux-m3s0If9ziJPhlLo5epxBYJ68c248"
-  }
+  },
+  "r2_buckets": [
+    {
+      "binding": "PORTFOLIO_BUCKET",
+      "bucket_name": "ijsantos-portfolio",
+      "preview_bucket_name": "ijsantos-portfolio-preview"
+    }
+  ]
 }
