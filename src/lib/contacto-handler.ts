@@ -25,6 +25,14 @@ const COMPANY = {
   hours: "Segunda a sexta, 08h00 - 17h00",
 };
 
+const LOGO_CONTENT_ID = "ijsantos-logo";
+const LOGO_ATTACHMENT = {
+  path: COMPANY.logoUrl,
+  filename: "ijsantos-logo.png",
+  content_id: LOGO_CONTENT_ID,
+  content_type: "image/png",
+};
+
 type ContactEnv = {
   RESEND_API_KEY?: string;
   CONTACT_TO_EMAIL?: string;
@@ -81,7 +89,7 @@ function emailShell(params: { title: string; preview: string; body: string }): s
                 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
                   <tr>
                     <td style="vertical-align:middle;">
-                      <img src="${COMPANY.logoUrl}" width="148" alt="${COMPANY.name}" style="display:block;width:148px;max-width:148px;height:auto;border:0;">
+                      <img src="cid:${LOGO_CONTENT_ID}" width="148" alt="${COMPANY.name}" style="display:block;width:148px;max-width:148px;height:auto;border:0;">
                     </td>
                     <td align="right" style="vertical-align:middle;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#d6d3d1;">
                       ${COMPANY.tagline}<br>
@@ -349,6 +357,7 @@ export async function handleContacto(request: Request, env?: ContactEnv): Promis
       subject: `Novo pedido de orçamento - ${serviceLabel} - ${name}`,
       html: adminEmailHtml(adminData),
       text: adminEmailText(adminData),
+      attachments: [LOGO_ATTACHMENT],
     }),
     resend.emails.send({
       from: CONTACT_FROM_EMAIL,
@@ -357,6 +366,7 @@ export async function handleContacto(request: Request, env?: ContactEnv): Promis
       subject: "Recebemos o seu pedido - IJ Santos",
       html: clientEmailHtml(clientData),
       text: clientEmailText(clientData),
+      attachments: [LOGO_ATTACHMENT],
     }),
   ]);
 
