@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IJ Santos - Passo a Passo Google Business</title>
+  <style>
+    :root {
+      --bg: #0b0b0c;
+      --card: #141416;
+      --muted: #a7a7b0;
+      --text: #f2f2f5;
+      --ok: #22c55e;
+      --brand: #dc2626;
+      --line: #27272a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    .wrap {
+      max-width: 1024px;
+      margin: 0 auto;
+      padding: 28px 18px 48px;
+    }
+    h1, h2, h3 { line-height: 1.2; margin: 0 0 10px; }
+    h1 { font-size: 30px; }
+    h2 { font-size: 22px; margin-top: 26px; }
+    h3 { font-size: 18px; margin-top: 18px; }
+    p { margin: 0 0 10px; color: var(--text); }
+    .muted { color: var(--muted); }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 16px;
+      margin-top: 14px;
+    }
+    .ok {
+      color: var(--ok);
+      font-weight: 600;
+    }
+    .danger {
+      color: #f87171;
+      font-weight: 600;
+    }
+    ul, ol { margin: 8px 0 8px 18px; padding: 0; }
+    li { margin: 6px 0; }
+    .k {
+      display: inline-block;
+      background: #1f1f23;
+      border: 1px solid #323238;
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: 13px;
+      color: #ececf1;
+      vertical-align: middle;
+    }
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
+    @media (min-width: 820px) {
+      .grid.cols-2 { grid-template-columns: 1fr 1fr; }
+    }
+    .checklist li {
+      list-style: none;
+      margin-left: 0;
+      position: relative;
+      padding-left: 30px;
+    }
+    .checklist li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 4px;
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      border: 1px solid #404047;
+      background: #101013;
+    }
+    .copybox {
+      background: #0f0f11;
+      border: 1px solid #2f2f35;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 8px;
+      white-space: pre-wrap;
+    }
+    .copyrow {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+    .btn {
+      border: 1px solid #35353b;
+      background: #19191d;
+      color: #efeff4;
+      border-radius: 8px;
+      padding: 7px 11px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .btn:hover { border-color: #585862; }
+    .tag {
+      font-size: 12px;
+      color: #fca5a5;
+      border: 1px solid #7f1d1d;
+      border-radius: 999px;
+      padding: 3px 8px;
+    }
+    .steps > li {
+      margin-bottom: 14px;
+    }
+    .hr {
+      height: 1px;
+      background: var(--line);
+      margin: 16px 0;
+    }
+    a { color: #93c5fd; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Passo a Passo Pronto - Google Business (IJ Santos)</h1>
+    <p class="muted">
+      Documento operacional para executar sem pensar. Seguir pela ordem.
+    </p>
+
+    <div class="card">
+      <p><strong>Perfil:</strong> Irmaos J. Santos Lda</p>
+      <p><strong>URL do site:</strong> https://ijsantos.com</p>
+      <p><strong>Funcao atual:</strong> Manager <span class="tag">suficiente para esta execucao</span></p>
+      <p class="ok">Objetivo: aumentar visibilidade local, chamadas e pedidos de orcamento.</p>
+    </div>
+
+    <h2>1) Dados que vao ser usados (copiar/colar)</h2>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>Identidade</h3>
+        <ul>
+          <li><strong>Nome comercial:</strong> IJ Santos</li>
+          <li><strong>Nome legal:</strong> Irmaos J. Santos, Lda.</li>
+          <li><strong>NIPC:</strong> 503 534 633</li>
+          <li><strong>Website:</strong> https://ijsantos.com</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Contacto e local</h3>
+        <ul>
+          <li><strong>Morada:</strong> Zona industrial de Nelas Lote 13, 3520-095 Nelas</li>
+          <li><strong>Telefone no perfil:</strong> +351 917 510 722</li>
+          <li><strong>Horario:</strong> Seg-Sex, 08:00-17:00</li>
+          <li><strong>Area:</strong> Nelas e regiao centro</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="copyrow">
+        <h3>Descricao pronta (campo "Descricao da empresa")</h3>
+        <button class="btn" data-copy="desc-empresa">Copiar</button>
+      </div>
+      <div id="desc-empresa" class="copybox">A IJ Santos (Irmaos J. Santos, Lda.) e uma empresa de construcao civil e limpezas exteriores sediada em Nelas, com atividade desde 1995. Executamos obras de construcao, remodelacao e reabilitacao, pinturas interiores e exteriores, limpeza de fachadas, limpeza de telhados e limpeza de pavimentos exteriores. Trabalhamos com foco em qualidade, seguranca e cumprimento de prazos, com acompanhamento proximo em todas as fases da obra. Prestamos servico em Nelas, Viseu, Mangualde, Tondela e restantes zonas da regiao centro.</div>
+      <p class="muted">Regra Google: sem links, sem promocoes, sem excesso comercial.</p>
+    </div>
+
+    <h2>2) Execucao em 10 passos (ordem exata)</h2>
+    <div class="card">
+      <ol class="steps">
+        <li>
+          <strong>Abrir gestao do perfil</strong><br />
+          No Google, pesquisar <span class="k">my business</span> e abrir o perfil correto.
+        </li>
+        <li>
+          <strong>Completar "Editar perfil"</strong><br />
+          Confirmar: nome, categoria principal, website, telefone, morada, horario, descricao.
+        </li>
+        <li>
+          <strong>Categorias</strong><br />
+          Manter principal: <span class="k">Construtor civil</span>.<br />
+          Adicionar secundarias:
+          <span class="k">Servico de remodelacao</span>,
+          <span class="k">Pintor</span>,
+          <span class="k">Servico de limpeza</span>,
+          <span class="k">Empreiteiro</span>.
+        </li>
+        <li>
+          <strong>Servicos</strong><br />
+          Entrar em <span class="k">Editar servicos</span> e criar estes servicos:
+          <ul>
+            <li>Construcao civil</li>
+            <li>Remodelacoes e reabilitacao</li>
+            <li>Pinturas interiores e exteriores</li>
+            <li>Limpeza de fachadas</li>
+            <li>Limpeza de telhados</li>
+            <li>Limpeza de pavimentos exteriores</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Area de servico</strong><br />
+          Em <span class="k">Area de servico</span>, adicionar:
+          Nelas, Viseu, Mangualde, Tondela, Carregal do Sal, Seia, Gouveia, Coimbra.
+        </li>
+        <li>
+          <strong>Fotos (upload inicial)</strong><br />
+          Subir agora 15-25 fotos reais:
+          3 exterior, 3 interior/instalacoes, 6 obras concluidas, 6 antes/depois, 2 equipa.
+        </li>
+        <li>
+          <strong>Publicacoes (4 primeiras)</strong><br />
+          Criar 1 publicacao por semana durante 4 semanas.
+          Usar os templates abaixo.
+        </li>
+        <li>
+          <strong>Avaliacoes (reviews)</strong><br />
+          Gerar link "Pedir criticas" e enviar para 10 clientes satisfeitos.
+          Objetivo inicial: +5 avaliacoes novas.
+        </li>
+        <li>
+          <strong>Responder a todas as avaliacoes</strong><br />
+          Responder em 24-48h (boas e menos boas).
+        </li>
+        <li>
+          <strong>Desempenho mensal</strong><br />
+          No fim de cada mes: registar chamadas, cliques no website e pedidos de direcoes.
+        </li>
+      </ol>
+    </div>
+
+    <h2>3) Templates prontos (copiar e publicar)</h2>
+    <div class="card">
+      <div class="copyrow">
+        <h3>Post 1 - Obra concluida</h3>
+        <button class="btn" data-copy="post1">Copiar</button>
+      </div>
+      <div id="post1" class="copybox">Obra concluida em Nelas.
+Executamos trabalhos de construcao/remodelacao com foco em qualidade e prazos.
+Se precisa de orcamento para a sua obra, contacte-nos.</div>
+    </div>
+
+    <div class="card">
+      <div class="copyrow">
+        <h3>Post 2 - Limpeza exterior</h3>
+        <button class="btn" data-copy="post2">Copiar</button>
+      </div>
+      <div id="post2" class="copybox">Antes e depois de limpeza de fachada.
+Removemos sujidade, bolor e manchas em superficies exteriores.
+Atendimento em Nelas, Viseu e regiao centro.</div>
+    </div>
+
+    <div class="card">
+      <div class="copyrow">
+        <h3>Post 3 - Telhados e pavimentos</h3>
+        <button class="btn" data-copy="post3">Copiar</button>
+      </div>
+      <div id="post3" class="copybox">Servico de limpeza de telhados e pavimentos exteriores.
+Intervencoes seguras e adaptadas a cada tipo de superficie.
+Fale connosco para avaliacao e orcamento.</div>
+    </div>
+
+    <div class="card">
+      <div class="copyrow">
+        <h3>Post 4 - Pedido de orcamento</h3>
+        <button class="btn" data-copy="post4">Copiar</button>
+      </div>
+      <div id="post4" class="copybox">Precisa de construcao, remodelacao, pintura ou limpeza exterior?
+A IJ Santos ajuda em todas as fases da obra.
+Peca o seu orcamento.</div>
+    </div>
+
+    <h2>4) Mensagem pronta para pedir avaliacoes</h2>
+    <div class="card">
+      <div class="copyrow">
+        <h3>Texto WhatsApp/SMS</h3>
+        <button class="btn" data-copy="msg-review">Copiar</button>
+      </div>
+      <div id="msg-review" class="copybox">Ola [Nome], obrigado por confiar na IJ Santos.
+Pode deixar a sua avaliacao no Google? Ajuda muito a nossa empresa local.
+Link: [COLAR_LINK_PEDIR_CRITICAS]
+Obrigado.</div>
+    </div>
+
+    <h2>5) Checklist final de execucao</h2>
+    <div class="card">
+      <ul class="checklist">
+        <li>Descricao da empresa atualizada</li>
+        <li>Categorias principal e secundarias validadas</li>
+        <li>Servicos criados no perfil</li>
+        <li>Area de servico completa</li>
+        <li>15-25 fotos reais adicionadas</li>
+        <li>4 publicacoes agendadas/publicadas</li>
+        <li>Link de criticas enviado a 10 clientes</li>
+        <li>Respostas a todas as avaliacoes pendentes</li>
+        <li>Registo mensal de desempenho iniciado</li>
+      </ul>
+    </div>
+
+    <div class="hr"></div>
+    <p class="muted">
+      Nota: como Manager, consegues executar este plano todo.
+      Apenas gestao de acessos (owners/managers) depende de Owner.
+    </p>
+
+    <h2>Referencias oficiais Google</h2>
+    <div class="card">
+      <ul>
+        <li><a href="https://support.google.com/business/answer/7091?hl=pt" target="_blank" rel="noopener noreferrer">Dicas para melhorar classificacao local</a></li>
+        <li><a href="https://support.google.com/business/answer/15691556?hl=en" target="_blank" rel="noopener noreferrer">Profile Strength</a></li>
+        <li><a href="https://support.google.com/business/answer/9455399?hl=en" target="_blank" rel="noopener noreferrer">Servicos no Perfil</a></li>
+        <li><a href="https://support.google.com/business/answer/7298639?hl=en" target="_blank" rel="noopener noreferrer">Atributos da empresa</a></li>
+        <li><a href="https://support.google.com/business/answer/7342169" target="_blank" rel="noopener noreferrer">Publicacoes</a></li>
+        <li><a href="https://support.google.com/business/answer/6123536?hl=en" target="_blank" rel="noopener noreferrer">Fotos</a></li>
+        <li><a href="https://support.google.com/business/answer/3403100?p=edit_manager" target="_blank" rel="noopener noreferrer">Permissoes Owner vs Manager</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll("[data-copy]").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const id = btn.getAttribute("data-copy");
+        const el = document.getElementById(id);
+        if (!el) return;
+        const text = el.textContent || "";
+        try {
+          await navigator.clipboard.writeText(text.trim());
+          const old = btn.textContent;
+          btn.textContent = "Copiado";
+          setTimeout(() => { btn.textContent = old; }, 1200);
+        } catch {
+          alert("Nao foi possivel copiar automaticamente. Copia manualmente o texto.");
+        }
+      });
+    });
+  </script>
+</body>
+</html>
