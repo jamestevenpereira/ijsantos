@@ -61,13 +61,13 @@ function SobrePage() {
           <div className="grid grid-cols-2 gap-4">
             <img
               src={aboutTeam}
-              alt="Equipa IJ Santos"
+              alt={t("sobre.img_team_alt")}
               className="rounded-xl aspect-[4/5] object-cover"
               loading="lazy"
             />
             <img
               src={media("portfolio/CONSTRUCAO-3.jpg")}
-              alt="Obra IJ Santos"
+              alt={t("sobre.img_work_alt")}
               className="rounded-xl aspect-[4/5] object-cover mt-10"
               loading="lazy"
             />
@@ -155,23 +155,26 @@ function SobrePage() {
             <p className="mt-4 text-muted-foreground text-lg">{t("team.body")}</p>
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {teamMembers.map((m) => (
-              <div key={m.name} className="rounded-2xl border border-border bg-card overflow-hidden">
-                <div className="aspect-[4/3] overflow-hidden">
-                  <img
-                    src={m.photo}
-                    alt={m.name}
-                    loading="lazy"
-                    className="h-full w-full object-cover object-top"
-                  />
+            {teamMembersData.map((m) => {
+              const displayName = m.nameKey ? t(m.nameKey) : m.name!;
+              return (
+                <div key={displayName} className="rounded-2xl border border-border bg-card overflow-hidden">
+                  <div className="aspect-[4/3] overflow-hidden">
+                    <img
+                      src={m.photo}
+                      alt={displayName}
+                      loading="lazy"
+                      className="h-full w-full object-cover object-top"
+                    />
+                  </div>
+                  <div className="p-6 text-center">
+                    <p className="font-display font-bold text-lg text-foreground">{displayName}</p>
+                    <p className="mt-1 text-sm text-brand font-semibold">{t(m.roleKey)}</p>
+                    <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{t(m.bioKey)}</p>
+                  </div>
                 </div>
-                <div className="p-6 text-center">
-                  <p className="font-display font-bold text-lg text-foreground">{m.name}</p>
-                  <p className="mt-1 text-sm text-brand font-semibold">{m.role}</p>
-                  <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{m.bio}</p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -181,23 +184,26 @@ function SobrePage() {
   );
 }
 
-const teamMembers = [
+const teamMembersData = [
   {
+    nameKey: null,
     name: "José Santos",
-    role: "Co-fundador & Diretor de Obra",
-    bio: "Responsável pela coordenação técnica e qualidade de execução em todas as obras. 30+ anos de experiência em construção civil.",
+    roleKey: "team.jose_role",
+    bioKey: "team.jose_bio",
     photo: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80&auto=format&fit=crop",
   },
   {
+    nameKey: null,
     name: "João Santos",
-    role: "Co-fundador & Diretor Comercial",
-    bio: "Responsável pelo contacto com clientes, orçamentação e acompanhamento de projetos. Garante que cada cliente recebe atenção personalizada.",
+    roleKey: "team.joao_role",
+    bioKey: "team.joao_bio",
     photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&q=80&auto=format&fit=crop",
   },
   {
-    name: "Equipa Técnica",
-    role: "Especialistas de Obra",
-    bio: "Uma equipa de profissionais especializados em construção civil, remodelações e limpezas exteriores. Formação contínua e rigor em cada projeto.",
+    nameKey: "team.equipa_name",
+    name: null,
+    roleKey: "team.equipa_role",
+    bioKey: "team.equipa_bio",
     photo: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80&auto=format&fit=crop",
   },
 ];

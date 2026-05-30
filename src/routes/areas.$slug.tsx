@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { CTABand } from "@/components/sections/CTABand";
 import { TrustBand } from "@/components/sections/TrustBand";
 import { ServiceCard } from "@/components/service/ServiceCard";
@@ -89,24 +90,31 @@ export const Route = createFileRoute("/areas/$slug")({
     };
   },
   component: AreaPage,
-  notFoundComponent: () => (
-    <div className="mx-auto max-w-3xl container-px py-32 text-center">
-      <h1 className="font-display text-3xl font-bold">Área não encontrada</h1>
-      <p className="mt-4 text-muted-foreground">A localidade que procura não está listada.</p>
-      <Link to="/" className="mt-8 inline-flex items-center gap-2 text-brand font-semibold">
-        Voltar à página inicial <ArrowRight className="h-4 w-4" />
-      </Link>
-    </div>
-  ),
-  errorComponent: ({ error }) => (
-    <div className="mx-auto max-w-3xl container-px py-32 text-center">
-      <h1 className="font-display text-2xl font-bold">Erro ao carregar a página</h1>
-      <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
-    </div>
-  ),
+  notFoundComponent: () => {
+    const { t } = useTranslation();
+    return (
+      <div className="mx-auto max-w-3xl container-px py-32 text-center">
+        <h1 className="font-display text-3xl font-bold">{t("areas.not_found_title")}</h1>
+        <p className="mt-4 text-muted-foreground">{t("areas.not_found_body")}</p>
+        <Link to="/" className="mt-8 inline-flex items-center gap-2 text-brand font-semibold">
+          {t("areas.not_found_back")} <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
+    );
+  },
+  errorComponent: ({ error }) => {
+    const { t } = useTranslation();
+    return (
+      <div className="mx-auto max-w-3xl container-px py-32 text-center">
+        <h1 className="font-display text-2xl font-bold">{t("areas.error_title")}</h1>
+        <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
+      </div>
+    );
+  },
 });
 
 function AreaPage() {
+  const { t } = useTranslation();
   const { area } = Route.useLoaderData();
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
@@ -124,7 +132,7 @@ function AreaPage() {
             {area.district}
           </span>
           <h1 className="mt-6 font-display text-4xl md:text-6xl font-bold tracking-tight max-w-3xl text-balance">
-            Construção e limpezas exteriores em <span className="text-brand">{area.name}</span>.
+            {t("areas.hero_title", { name: area.name })}
           </h1>
           <p className="mt-6 text-lg md:text-xl text-primary-foreground/85 max-w-2xl">
             {area.intro}
@@ -134,7 +142,7 @@ function AreaPage() {
               to="/contacto"
               className="inline-flex items-center gap-2 rounded-md bg-brand text-brand-foreground px-6 py-3.5 text-sm font-semibold shadow-lg hover:brightness-95 transition"
             >
-              Pedir orçamento em {area.name} <ArrowRight className="h-4 w-4" />
+              {t("areas.cta_quote", { name: area.name })} <ArrowRight className="h-4 w-4" />
             </Link>
             <a
               href={company.phoneHref}
@@ -151,10 +159,10 @@ function AreaPage() {
         <div className="mx-auto max-w-7xl container-px grid gap-12 lg:grid-cols-3">
           <div className="lg:col-span-2 space-y-6">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
-              IJ Santos em {area.name}
+              {t("areas.brand_label", { name: area.name })}
             </span>
             <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-balance">
-              Uma empresa local, ao seu lado.
+              {t("areas.body_title")}
             </h2>
             {area.body.map((p) => (
               <p key={p} className="text-muted-foreground text-lg leading-relaxed">
@@ -164,7 +172,7 @@ function AreaPage() {
             <p className="text-sm text-muted-foreground italic">{area.distanceNote}</p>
           </div>
           <aside className="rounded-2xl border border-border bg-card p-7 h-fit">
-            <h3 className="font-display text-xl font-bold">Porquê a IJ Santos em {area.name}?</h3>
+            <h3 className="font-display text-xl font-bold">{t("areas.why_title", { name: area.name })}</h3>
             <ul className="mt-6 space-y-5">
               {area.highlights.map((h) => (
                 <li key={h.title}>
@@ -183,12 +191,12 @@ function AreaPage() {
       <section className="py-20 md:py-28 bg-surface">
         <div className="mx-auto max-w-7xl container-px">
           <div className="max-w-2xl">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Serviços</span>
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">{t("areas.services_label")}</span>
             <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
-              O que fazemos em {area.name}.
+              {t("areas.services_title", { name: area.name })}
             </h2>
             <p className="mt-4 text-muted-foreground text-lg">
-              Da obra nova à manutenção exterior — tudo executado por equipa local.
+              {t("areas.services_body")}
             </p>
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -204,10 +212,10 @@ function AreaPage() {
         <div className="mx-auto max-w-3xl container-px">
           <div className="text-center">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
-              Perguntas frequentes em {area.name}
+              {t("areas.faq_label", { name: area.name })}
             </span>
             <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
-              Dúvidas mais comuns.
+              {t("areas.faq_title")}
             </h2>
           </div>
           <div className="mt-10 divide-y divide-border border-y border-border">
@@ -234,7 +242,7 @@ function AreaPage() {
       <section className="py-16 border-t border-border">
         <div className="mx-auto max-w-7xl container-px text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
-            Trabalhamos também em
+            {t("areas.also_work")}
           </p>
           <div className="mt-4 flex flex-wrap justify-center gap-3">
             {localAreas

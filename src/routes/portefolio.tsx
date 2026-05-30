@@ -220,7 +220,7 @@ function PortfolioPage() {
             <button
               onClick={() => setOpenAlbum(null)}
               className="h-10 w-10 rounded-full bg-white/10 text-white grid place-items-center hover:bg-white/20 shrink-0"
-              aria-label="Fechar"
+              aria-label={t("portfolio.close_aria")}
             >
               <X className="h-5 w-5" />
             </button>
@@ -233,7 +233,7 @@ function PortfolioPage() {
                   key={photo.id}
                   onClick={() => setLightboxIndex(i)}
                   className="group relative overflow-hidden rounded-lg border border-white/10 aspect-square"
-                  aria-label={`Ver ${photo.media_type === "video" ? "vídeo" : "foto"} ${i + 1}`}
+                  aria-label={photo.media_type === "video" ? t("portfolio.view_video_aria", { index: i + 1 }) : t("portfolio.view_photo_aria", { index: i + 1 })}
                 >
                   {photo.media_type === "video" ? (
                     <div className="h-full w-full bg-[#111] grid place-items-center">
@@ -267,7 +267,7 @@ function PortfolioPage() {
               e.stopPropagation();
               setLightboxIndex(null);
             }}
-            aria-label="Fechar"
+            aria-label={t("portfolio.close_aria")}
           >
             <X className="h-5 w-5" />
           </button>
@@ -279,7 +279,7 @@ function PortfolioPage() {
                 i === null ? 0 : (i - 1 + openAlbum.photos.length) % openAlbum.photos.length,
               );
             }}
-            aria-label="Foto anterior"
+            aria-label={t("portfolio.prev_photo")}
           >
             <ChevronLeft className="h-6 w-6" />
           </button>
@@ -291,7 +291,7 @@ function PortfolioPage() {
                 i === null ? 0 : (i + 1) % openAlbum.photos.length,
               );
             }}
-            aria-label="Próxima foto"
+            aria-label={t("portfolio.next_photo")}
           >
             <ChevronRight className="h-6 w-6" />
           </button>
@@ -331,11 +331,12 @@ function AlbumCard({
   album: PortfolioAlbum;
   onClick: () => void;
 }) {
+  const { t } = useTranslation();
   return (
     <button
       onClick={onClick}
       className="group relative overflow-hidden rounded-xl border border-border bg-muted aspect-[4/3] text-left w-full"
-      aria-label={`Ver álbum: ${album.obra.nome}`}
+      aria-label={t("portfolio.view_album_aria", { name: album.obra.nome })}
     >
       {album.cover_media_type === "video" ? (
         <div className="h-full w-full bg-[#111] grid place-items-center">

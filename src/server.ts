@@ -92,7 +92,7 @@ export default {
     const url = new URL(request.url);
 
     if (url.pathname === "/api/contacto") {
-      return handleContacto(request);
+      return handleContacto(request, runtime.env as Parameters<typeof handleContacto>[1]);
     }
 
     if (url.pathname === "/api/upload") {

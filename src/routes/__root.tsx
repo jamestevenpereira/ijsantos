@@ -308,6 +308,7 @@ function CanonicalLink() {
 }
 
 function RootShell({ children }: { children: React.ReactNode }) {
+  const { t } = useTranslation();
   const themeScript = `(function(){try{var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}var d=document.documentElement;if(t==='dark'){d.classList.add('dark');}d.style.colorScheme=t;}catch(e){}})();`;
   return (
     <html lang="pt-PT">
@@ -322,7 +323,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:rounded-md focus:bg-brand focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-brand-foreground"
         >
-          Saltar para o conteúdo
+          {t("a11y.skip_content")}
         </a>
         <GoogleAnalytics />
         {children}

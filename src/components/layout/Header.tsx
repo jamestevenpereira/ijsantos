@@ -73,7 +73,7 @@ export function Header() {
     >
       <div className="mx-auto max-w-7xl container-px">
         <div className="flex h-20 md:h-24 items-center justify-between">
-          <Link to="/" className="flex items-center gap-3 group" aria-label="IJ Santos — Início">
+          <Link to="/" className="flex items-center gap-3 group" aria-label={t("header.logo_aria")}>
             <img
               src="/logo.png"
               alt="IJ Santos"

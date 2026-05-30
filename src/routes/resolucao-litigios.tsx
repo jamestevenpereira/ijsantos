@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { ExternalLink } from "lucide-react";
 import { company } from "@/data/company";
 
@@ -25,17 +26,17 @@ const entidades = [
 ];
 
 function Page() {
+  const { t } = useTranslation();
   return (
     <>
       <section className="bg-primary text-primary-foreground">
         <div className="mx-auto max-w-4xl container-px py-20 md:py-24">
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Informação ao consumidor</span>
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">{t("litigios.label")}</span>
           <h1 className="mt-3 font-display text-4xl md:text-5xl font-bold tracking-tight text-balance">
-            Resolução de Litígios
+            {t("litigios.title")}
           </h1>
           <p className="mt-5 text-primary-foreground/75 max-w-2xl">
-            Conforme Lei n.º 144/2015, disponibilizamos a informação necessária para que possa
-            exercer o seu direito de reclamação junto de uma entidade oficial e imparcial.
+            {t("litigios.intro")}
           </p>
         </div>
       </section>
@@ -106,8 +107,8 @@ function Page() {
           </div>
 
           <div className="rounded-2xl bg-surface border border-border p-6 md:p-8 mt-10">
-            <h3 className="font-display text-lg font-bold">Contacto direto — CNIACC</h3>
-            <p className="mt-2 text-muted-foreground text-sm">Conforme Lei n.º 144/2015 para resolução de litígios:</p>
+            <h3 className="font-display text-lg font-bold">{t("litigios.contact_title")}</h3>
+            <p className="mt-2 text-muted-foreground text-sm">{t("litigios.contact_subtitle")}</p>
             <ul className="mt-4 space-y-1.5 text-sm">
               <li><span className="text-muted-foreground">Telefone:</span> <a className="font-medium hover:text-brand" href="tel:+351213847484">21 384 7484</a></li>
               <li><span className="text-muted-foreground">Email:</span> <a className="font-medium hover:text-brand" href="mailto:cniacc@fd.unl.pt">cniacc@fd.unl.pt</a></li>
@@ -116,15 +117,15 @@ function Page() {
           </div>
 
           <div className="rounded-2xl bg-primary text-primary-foreground p-6 md:p-8 mt-6">
-            <h3 className="font-display text-lg font-bold">Livro de Reclamações</h3>
-            <p className="mt-2 text-primary-foreground/75 text-sm">Pode também apresentar uma reclamação no Livro de Reclamações eletrónico:</p>
+            <h3 className="font-display text-lg font-bold">{t("litigios.lr_title")}</h3>
+            <p className="mt-2 text-primary-foreground/75 text-sm">{t("litigios.lr_subtitle")}</p>
             <a
               href={company.livroReclamacoes}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-4 inline-flex items-center gap-2 rounded-md bg-brand text-brand-foreground px-4 py-2.5 text-sm font-semibold"
             >
-              Aceder ao Livro de Reclamações <ExternalLink className="h-4 w-4" />
+              {t("litigios.lr_btn")} <ExternalLink className="h-4 w-4" />
             </a>
           </div>
         </div>

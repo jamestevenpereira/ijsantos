@@ -17,14 +17,26 @@ function json(body: unknown, status = 200): Response {
   });
 }
 
-export async function handleContacto(request: Request): Promise<Response> {
+type ContactEnv = {
+  RESEND_API_KEY?: string;
+  CONTACT_TO_EMAIL?: string;
+  CONTACT_FROM_EMAIL?: string;
+};
+
+export async function handleContacto(request: Request, env?: ContactEnv): Promise<Response> {
   if (request.method !== "POST") {
     return json({ error: "Method not allowed." }, 405);
   }
 
-  const RESEND_API_KEY = process.env.RESEND_API_KEY;
+  const RESEND_API_KEY = env?.RESEND_API_KEY ?? process.env.RESEND_API_KEY;
+  const CONTACT_TO_EMAIL = env?.CONTACT_TO_EMAIL ?? process.env.CONTACT_TO_EMAIL;
+  const CONTACT_FROM_EMAIL = env?.CONTACT_FROM_EMAIL ?? process.env.CONTACT_FROM_EMAIL;
+
   if (!RESEND_API_KEY) {
     return json({ error: "Email service not configured." }, 503);
+  }
+  if (!CONTACT_TO_EMAIL || !CONTACT_FROM_EMAIL) {
+    return json({ error: "Contact email settings are missing." }, 503);
   }
 
   let body: Record<string, string>;
@@ -43,8 +55,8 @@ export async function handleContacto(request: Request): Promise<Response> {
 
   const resend = new Resend(RESEND_API_KEY);
   const { error } = await resend.emails.send({
-    from: "onboarding@resend.dev",
-    to: "jamestevenpereira@gmail.com",
+    from: CONTACT_FROM_EMAIL,
+    to: CONTACT_TO_EMAIL,
     replyTo: email.trim(),
     subject: `Pedido de orçamento · ${serviceLabel}`,
     html: `

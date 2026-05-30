@@ -107,11 +107,10 @@ function ObrasPage() {
             {t("header.obras")}
           </span>
           <h1 className="mt-3 font-display text-4xl md:text-6xl font-bold tracking-tight text-balance max-w-3xl mx-auto md:mx-0">
-            Todos os projetos
+            {t("obras.title")}
           </h1>
           <p className="mt-6 text-lg text-primary-foreground/75 max-w-2xl mx-auto md:mx-0">
-            Obras realizadas em construção civil, remodelação, pavilhões industriais e obras
-            públicas na região de Nelas, Viseu e Centro.
+            {t("obras.body")}
           </p>
         </div>
       </section>
@@ -167,14 +166,14 @@ function ObrasPage() {
               {totalPages > 1 && (
                 <nav
                   className="mt-10 flex items-center justify-center gap-2"
-                  aria-label="Paginação"
+                  aria-label={t("obras.pagination_aria")}
                 >
                   <button
                     onClick={() => setPage((p) => Math.max(1, p - 1))}
                     disabled={currentPage === 1}
                     className="h-10 px-4 rounded-md border border-border bg-card text-sm font-medium hover:border-brand/40 disabled:opacity-40 disabled:pointer-events-none inline-flex items-center gap-1"
                   >
-                    <ChevronLeft className="h-4 w-4" /> Anterior
+                    <ChevronLeft className="h-4 w-4" /> {t("obras.prev")}
                   </button>
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => {
                     const active = n === currentPage;
@@ -198,7 +197,7 @@ function ObrasPage() {
                     disabled={currentPage === totalPages}
                     className="h-10 px-4 rounded-md border border-border bg-card text-sm font-medium hover:border-brand/40 disabled:opacity-40 disabled:pointer-events-none inline-flex items-center gap-1"
                   >
-                    Seguinte <ChevronRight className="h-4 w-4" />
+                    {t("obras.next")} <ChevronRight className="h-4 w-4" />
                   </button>
                 </nav>
               )}
@@ -219,6 +218,7 @@ function ObraRow({
   obra: ObraDbItem;
   album: PortfolioAlbum | null;
 }) {
+  const { t } = useTranslation();
   const hasPhotos = album !== null;
 
   const content = (
@@ -282,7 +282,7 @@ function ObraRow({
             {album.photos.length} foto{album.photos.length !== 1 ? "s" : ""}
           </span>
         ) : (
-          <span className="text-xs text-muted-foreground/60">Sem fotografias</span>
+          <span className="text-xs text-muted-foreground/60">{t("obras.no_photos")}</span>
         )}
       </div>
     </div>
@@ -294,7 +294,7 @@ function ObraRow({
     <Link
       to="/portefolio"
       search={{ album: obra.id }}
-      aria-label={`Ver fotos de ${obra.nome}`}
+      aria-label={t("obras.view_photos_aria", { name: obra.nome })}
     >
       {content}
     </Link>

@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { getBlogPost, type BlogPost, type BlogSection } from "@/data/blog";
 import { company } from "@/data/company";
 import { BlogCTA } from "@/components/blog/BlogCTA";
@@ -48,14 +49,17 @@ export const Route = createFileRoute("/blog/$slug")({
       ],
     };
   },
-  notFoundComponent: () => (
-    <div className="mx-auto max-w-3xl container-px py-32 text-center">
-      <h1 className="font-display text-3xl font-bold">Artigo não encontrado</h1>
-      <Link to="/" className="mt-8 inline-flex items-center gap-2 text-brand font-semibold">
-        <ArrowLeft className="h-4 w-4" /> Voltar ao início
-      </Link>
-    </div>
-  ),
+  notFoundComponent: () => {
+    const { t } = useTranslation();
+    return (
+      <div className="mx-auto max-w-3xl container-px py-32 text-center">
+        <h1 className="font-display text-3xl font-bold">{t("blog.not_found_title")}</h1>
+        <Link to="/" className="mt-8 inline-flex items-center gap-2 text-brand font-semibold">
+          <ArrowLeft className="h-4 w-4" /> {t("blog.not_found_back")}
+        </Link>
+      </div>
+    );
+  },
   component: BlogPost,
 });
 
@@ -91,6 +95,7 @@ function renderSection(section: BlogSection, index: number) {
 }
 
 function BlogPost() {
+  const { t } = useTranslation();
   const { post } = Route.useLoaderData() as { post: BlogPost };
 
   const date = new Date(post.date).toLocaleDateString("pt-PT", {
@@ -127,7 +132,7 @@ function BlogPost() {
           to="/"
           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-brand transition mb-8"
         >
-          <ArrowLeft className="h-4 w-4" /> Voltar
+          <ArrowLeft className="h-4 w-4" /> {t("blog.back")}
         </Link>
 
         {/* Header */}
@@ -136,7 +141,7 @@ function BlogPost() {
             <time dateTime={post.date}>{date}</time>
             <span>·</span>
             <span className="inline-flex items-center gap-1">
-              <Clock className="h-3.5 w-3.5" /> {post.readTime} min de leitura
+              <Clock className="h-3.5 w-3.5" /> {post.readTime} {t("blog.min_read")}
             </span>
           </div>
           <h1 className="mt-4 font-display text-3xl md:text-4xl font-bold tracking-tight text-foreground text-balance">

@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { company } from "@/data/company";
 
 export const Route = createFileRoute("/privacidade")({
@@ -14,18 +15,17 @@ export const Route = createFileRoute("/privacidade")({
 });
 
 function Page() {
+  const { t } = useTranslation();
   return (
     <>
       <section className="bg-primary text-primary-foreground">
         <div className="mx-auto max-w-4xl container-px py-20 md:py-24">
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Legal</span>
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">{t("privacidade.label")}</span>
           <h1 className="mt-3 font-display text-4xl md:text-5xl font-bold tracking-tight text-balance">
-            Política de Privacidade e Cookies
+            {t("privacidade.title")}
           </h1>
           <p className="mt-5 text-primary-foreground/75 max-w-2xl">
-            A {company.legalName} cumpre com as obrigações decorrentes da Lei de Proteção de
-            Dados e da Lei do tratamento de dados pessoais e proteção da privacidade no setor
-            das comunicações eletrónicas.
+            {t("privacidade.intro", { legalName: company.legalName })}
           </p>
         </div>
       </section>
@@ -160,7 +160,7 @@ function Page() {
               onClick={() => window.dispatchEvent(new Event("open-cookie-preferences"))}
               className="inline-flex items-center justify-center rounded-md bg-brand text-brand-foreground px-4 py-2.5 text-sm font-semibold"
             >
-              Gerir preferências de cookies
+              {t("privacidade.manage_cookies_btn")}
             </button>
           </Block>
         </div>
