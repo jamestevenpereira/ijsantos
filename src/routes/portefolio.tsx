@@ -8,6 +8,7 @@ import { categoryOrder, type PortfolioCategory } from "@/data/portfolio";
 import { slugToCategoryName, type PortfolioCategoryName } from "@/data/portfolio-categories";
 import { listPortfolioAlbums, type PortfolioAlbum } from "@/lib/portfolio-db";
 import { CTABand } from "@/components/sections/CTABand";
+import { company } from "@/data/company";
 
 const searchSchema = z.object({
   album: z.string().optional(),
@@ -26,10 +27,9 @@ export const Route = createFileRoute("/portefolio")({
       { property: "og:title", content: "Portefólio de obras · IJ Santos" },
       {
         property: "og:description",
-        content:
-          "Galeria de obras executadas pela IJ Santos em construção civil e obras públicas.",
+        content: "Galeria de obras executadas pela IJ Santos em construção civil e obras públicas.",
       },
-      { property: "og:url", content: "https://ijsantos.pt/portefolio" },
+      { property: "og:url", content: `${company.siteUrl}/portefolio` },
     ],
   }),
   component: PortfolioPage,
@@ -45,7 +45,12 @@ function PortfolioPage() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const albumParamHandled = useRef(false);
 
-  const { data: albums = [] } = useQuery({
+  const {
+    data: albums = [],
+    isLoading: albumsLoading,
+    isError: albumsError,
+    refetch: refetchAlbums,
+  } = useQuery({
     queryKey: ["portfolio_albums"],
     queryFn: listPortfolioAlbums,
     staleTime: 60_000,
@@ -54,10 +59,7 @@ function PortfolioPage() {
   const nameToSlug = useMemo(
     () =>
       Object.fromEntries(
-        Object.entries(slugToCategoryName).map(([slug, name]) => [
-          name,
-          slug as PortfolioCategory,
-        ]),
+        Object.entries(slugToCategoryName).map(([slug, name]) => [name, slug as PortfolioCategory]),
       ) as Record<PortfolioCategoryName, PortfolioCategory>,
     [],
   );
@@ -66,7 +68,7 @@ function PortfolioPage() {
     if (filter === "todos") return albums;
     const filterName = slugToCategoryName[filter];
     return albums.filter((a) => a.obra.categoria === filterName);
-  }, [albums, filter, nameToSlug]);
+  }, [albums, filter]);
 
   const albumsPerCategory = useMemo(() => {
     const counts: Partial<Record<PortfolioCategory, number>> = {};
@@ -87,7 +89,7 @@ function PortfolioPage() {
       const slug = nameToSlug[target.obra.categoria as PortfolioCategoryName];
       if (slug) setFilter(slug);
     }
-  }, [albumParam, albums]);
+  }, [albumParam, albums, nameToSlug]);
 
   // Close lightbox when album changes.
   useEffect(() => {
@@ -103,9 +105,7 @@ function PortfolioPage() {
       if (e.key === "ArrowRight")
         setLightboxIndex((i) => (i === null ? 0 : (i + 1) % photos.length));
       if (e.key === "ArrowLeft")
-        setLightboxIndex((i) =>
-          i === null ? 0 : (i - 1 + photos.length) % photos.length,
-        );
+        setLightboxIndex((i) => (i === null ? 0 : (i - 1 + photos.length) % photos.length));
     };
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
@@ -178,18 +178,20 @@ function PortfolioPage() {
           </div>
 
           {/* Albums grid */}
-          {filteredAlbums.length === 0 ? (
-            <p className="text-center text-muted-foreground py-20">
-              {t("portfolio.empty")}
-            </p>
+          {albumsLoading ? (
+            <PortfolioState message={t("portfolio.loading")} />
+          ) : albumsError ? (
+            <PortfolioState
+              message={t("portfolio.error")}
+              actionLabel={t("portfolio.retry")}
+              onAction={() => void refetchAlbums()}
+            />
+          ) : filteredAlbums.length === 0 ? (
+            <p className="text-center text-muted-foreground py-20">{t("portfolio.empty")}</p>
           ) : (
             <div className="mt-10 grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {filteredAlbums.map((album) => (
-                <AlbumCard
-                  key={album.obra.id}
-                  album={album}
-                  onClick={() => setOpenAlbum(album)}
-                />
+                <AlbumCard key={album.obra.id} album={album} onClick={() => setOpenAlbum(album)} />
               ))}
             </div>
           )}
@@ -233,7 +235,11 @@ function PortfolioPage() {
                   key={photo.id}
                   onClick={() => setLightboxIndex(i)}
                   className="group relative overflow-hidden rounded-lg border border-white/10 aspect-square"
-                  aria-label={photo.media_type === "video" ? t("portfolio.view_video_aria", { index: i + 1 }) : t("portfolio.view_photo_aria", { index: i + 1 })}
+                  aria-label={
+                    photo.media_type === "video"
+                      ? t("portfolio.view_video_aria", { index: i + 1 })
+                      : t("portfolio.view_photo_aria", { index: i + 1 })
+                  }
                 >
                   {photo.media_type === "video" ? (
                     <div className="h-full w-full bg-[#111] grid place-items-center">
@@ -287,18 +293,13 @@ function PortfolioPage() {
             className="absolute right-4 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-white/10 text-white grid place-items-center hover:bg-white/20"
             onClick={(e) => {
               e.stopPropagation();
-              setLightboxIndex((i) =>
-                i === null ? 0 : (i + 1) % openAlbum.photos.length,
-              );
+              setLightboxIndex((i) => (i === null ? 0 : (i + 1) % openAlbum.photos.length));
             }}
             aria-label={t("portfolio.next_photo")}
           >
             <ChevronRight className="h-6 w-6" />
           </button>
-          <figure
-            className="max-h-[88vh] max-w-[96vw]"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <figure className="max-h-[88vh] max-w-[96vw]" onClick={(e) => e.stopPropagation()}>
             {openAlbum.photos[lightboxIndex].media_type === "video" ? (
               <video
                 key={openAlbum.photos[lightboxIndex].id}
@@ -324,13 +325,32 @@ function PortfolioPage() {
   );
 }
 
-function AlbumCard({
-  album,
-  onClick,
+function PortfolioState({
+  message,
+  actionLabel,
+  onAction,
 }: {
-  album: PortfolioAlbum;
-  onClick: () => void;
+  message: string;
+  actionLabel?: string;
+  onAction?: () => void;
 }) {
+  return (
+    <div className="mt-10 rounded-2xl border border-border bg-card px-6 py-14 text-center">
+      <p className="text-sm font-medium text-muted-foreground">{message}</p>
+      {actionLabel && onAction && (
+        <button
+          type="button"
+          onClick={onAction}
+          className="mt-4 rounded-md bg-brand px-4 py-2 text-sm font-semibold text-brand-foreground hover:brightness-95"
+        >
+          {actionLabel}
+        </button>
+      )}
+    </div>
+  );
+}
+
+function AlbumCard({ album, onClick }: { album: PortfolioAlbum; onClick: () => void }) {
   const { t } = useTranslation();
   return (
     <button

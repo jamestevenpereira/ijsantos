@@ -8,6 +8,7 @@ import { slugToCategoryName, type PortfolioCategoryName } from "@/data/portfolio
 import { listObras, type ObraDbItem } from "@/lib/obras-db";
 import { listPortfolioAlbums, type PortfolioAlbum } from "@/lib/portfolio-db";
 import { CTABand } from "@/components/sections/CTABand";
+import { company } from "@/data/company";
 
 export const Route = createFileRoute("/obras")({
   head: () => ({
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/obras")({
           "Lista completa de obras e projetos executados pela IJ Santos em construção civil, remodelação e obras públicas na região de Nelas, Viseu e Centro.",
       },
       { property: "og:title", content: "Obras e Projetos · IJ Santos" },
-      { property: "og:url", content: "https://ijsantos.pt/obras" },
+      { property: "og:url", content: `${company.siteUrl}/obras` },
     ],
   }),
   component: ObrasPage,
@@ -34,17 +35,25 @@ function ObrasPage() {
   const [filter, setFilter] = useState<Filter>("todos");
   const [page, setPage] = useState(1);
 
-  const { data: obras = [], isLoading: obrasLoading } = useQuery({
+  const obrasQuery = useQuery({
     queryKey: ["obras"],
     queryFn: listObras,
     staleTime: 60_000,
   });
-
-  const { data: albums = [] } = useQuery({
+  const albumsQuery = useQuery({
     queryKey: ["portfolio_albums"],
     queryFn: listPortfolioAlbums,
     staleTime: 60_000,
   });
+
+  const obras = useMemo(() => obrasQuery.data ?? [], [obrasQuery.data]);
+  const albums = useMemo(() => albumsQuery.data ?? [], [albumsQuery.data]);
+  const obrasLoading = obrasQuery.isLoading || albumsQuery.isLoading;
+  const obrasError = obrasQuery.isError || albumsQuery.isError;
+  const retryObras = () => {
+    void obrasQuery.refetch();
+    void albumsQuery.refetch();
+  };
 
   // Map obra_id → album for fast lookup
   const albumByObraId = useMemo(() => {
@@ -59,10 +68,7 @@ function ObrasPage() {
   const nameToSlug = useMemo(
     () =>
       Object.fromEntries(
-        Object.entries(slugToCategoryName).map(([slug, name]) => [
-          name,
-          slug as PortfolioCategory,
-        ]),
+        Object.entries(slugToCategoryName).map(([slug, name]) => [name, slug as PortfolioCategory]),
       ) as Record<PortfolioCategoryName, PortfolioCategory>,
     [],
   );
@@ -144,22 +150,20 @@ function ObrasPage() {
 
           {/* Obras list */}
           {obrasLoading ? (
-            <div className="flex justify-center py-20">
-              <span className="h-6 w-6 rounded-full border-2 border-brand border-t-transparent animate-spin" />
-            </div>
+            <ObrasState message={t("obras.loading")} />
+          ) : obrasError ? (
+            <ObrasState
+              message={t("obras.error")}
+              actionLabel={t("obras.retry")}
+              onAction={retryObras}
+            />
           ) : filteredObras.length === 0 ? (
-            <p className="text-center text-muted-foreground py-20">
-              {t("portfolio.empty")}
-            </p>
+            <p className="text-center text-muted-foreground py-20">{t("portfolio.empty")}</p>
           ) : (
             <>
               <div className="flex flex-col gap-3">
                 {pageObras.map((obra) => (
-                  <ObraRow
-                    key={obra.id}
-                    obra={obra}
-                    album={albumByObraId.get(obra.id) ?? null}
-                  />
+                  <ObraRow key={obra.id} obra={obra} album={albumByObraId.get(obra.id) ?? null} />
                 ))}
               </div>
 
@@ -211,13 +215,32 @@ function ObrasPage() {
   );
 }
 
-function ObraRow({
-  obra,
-  album,
+function ObrasState({
+  message,
+  actionLabel,
+  onAction,
 }: {
-  obra: ObraDbItem;
-  album: PortfolioAlbum | null;
+  message: string;
+  actionLabel?: string;
+  onAction?: () => void;
 }) {
+  return (
+    <div className="rounded-2xl border border-border bg-card px-6 py-14 text-center">
+      <p className="text-sm font-medium text-muted-foreground">{message}</p>
+      {actionLabel && onAction && (
+        <button
+          type="button"
+          onClick={onAction}
+          className="mt-4 rounded-md bg-brand px-4 py-2 text-sm font-semibold text-brand-foreground hover:brightness-95"
+        >
+          {actionLabel}
+        </button>
+      )}
+    </div>
+  );
+}
+
+function ObraRow({ obra, album }: { obra: ObraDbItem; album: PortfolioAlbum | null }) {
   const { t } = useTranslation();
   const hasPhotos = album !== null;
 
@@ -250,7 +273,9 @@ function ObraRow({
         <div className="flex flex-wrap items-center gap-2 mb-1">
           <h2
             className={`font-semibold text-base leading-snug truncate ${
-              hasPhotos ? "text-foreground group-hover:text-brand transition-colors" : "text-foreground/60"
+              hasPhotos
+                ? "text-foreground group-hover:text-brand transition-colors"
+                : "text-foreground/60"
             }`}
           >
             {obra.nome}

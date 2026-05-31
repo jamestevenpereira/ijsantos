@@ -1,4 +1,5 @@
 import { useRef, useState, useCallback, useEffect } from "react";
+import { MoveHorizontal } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import aboutTeam from "@/assets/about-team.jpg";
 import heroImage from "@/assets/hero-construction.jpg";
@@ -11,6 +12,7 @@ export function BeforeAfter() {
   const dragging = useRef(false);
   const { ref: headingRef, inView: headingInView } = useInView();
   const { ref: sliderRef, inView: sliderInView } = useInView();
+  const beforeImageWidth = pos > 0 ? `${(100 / pos) * 100}%` : "100%";
 
   const updateFromClientX = useCallback((clientX: number) => {
     const el = ref.current;
@@ -42,14 +44,17 @@ export function BeforeAfter() {
   return (
     <section className="py-20 md:py-28 bg-surface">
       <div className="mx-auto max-w-7xl container-px">
-        <div ref={headingRef} className={`max-w-2xl mx-auto md:mx-0 text-center md:text-left ${fadeUp(headingInView)}`}>
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">{t("beforeafter.label")}</span>
+        <div
+          ref={headingRef}
+          className={`max-w-2xl mx-auto md:mx-0 text-center md:text-left ${fadeUp(headingInView)}`}
+        >
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">
+            {t("beforeafter.label")}
+          </span>
           <h2 className="mt-3 font-display text-3xl md:text-5xl font-bold tracking-tight text-balance">
             {t("beforeafter.title")}
           </h2>
-          <p className="mt-4 text-muted-foreground text-lg">
-            {t("beforeafter.body")}
-          </p>
+          <p className="mt-4 text-muted-foreground text-lg">{t("beforeafter.body")}</p>
         </div>
 
         <div
@@ -85,15 +90,12 @@ export function BeforeAfter() {
               className="absolute inset-0 h-full w-full object-cover"
               draggable={false}
             />
-            <div
-              className="absolute inset-y-0 left-0 overflow-hidden"
-              style={{ width: `${pos}%` }}
-            >
+            <div className="absolute inset-y-0 left-0 overflow-hidden" style={{ width: `${pos}%` }}>
               <img
                 src={aboutTeam}
                 alt={t("beforeafter.before")}
                 className="absolute inset-0 h-full w-full object-cover grayscale-[0.3] brightness-90"
-                style={{ width: `${(100 / pos) * 100}%`, maxWidth: "none" }}
+                style={{ width: beforeImageWidth, maxWidth: "none" }}
                 draggable={false}
               />
             </div>
@@ -110,7 +112,7 @@ export function BeforeAfter() {
               style={{ left: `${pos}%` }}
             >
               <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-10 w-10 rounded-full bg-brand text-brand-foreground grid place-items-center shadow-lg font-bold">
-                ⇆
+                <MoveHorizontal className="h-5 w-5" aria-hidden="true" />
               </div>
             </div>
           </div>

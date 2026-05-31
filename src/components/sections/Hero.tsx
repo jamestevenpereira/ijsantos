@@ -3,12 +3,15 @@ import { ArrowRight, Phone } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { company } from "@/data/company";
+import { trackGaEvent } from "@/lib/analytics";
 import heroImage from "@/assets/hero-construction.jpg";
 
 export function Hero() {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const anim = `motion-safe:transition-all motion-safe:duration-700 motion-safe:ease-out ${
     mounted ? "opacity-100 translate-y-0" : "motion-safe:opacity-0 motion-safe:translate-y-4"
@@ -41,7 +44,8 @@ export function Hero() {
             className={`mt-6 text-4xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.1] md:leading-[1.05] text-balance ${anim}`}
             style={{ transitionDelay: "100ms" }}
           >
-            {t("hero.title")}<span className="text-brand">{t("hero.title_highlight")}</span>
+            {t("hero.title")}
+            <span className="text-brand">{t("hero.title_highlight")}</span>
           </h1>
           <p
             className={`mt-6 text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto md:mx-0 leading-relaxed ${anim}`}
@@ -56,18 +60,19 @@ export function Hero() {
           >
             <Link
               to="/contacto"
+              onClick={() => trackGaEvent("cta_click", { location: "hero", target: "contact" })}
               className="inline-flex items-center gap-2 rounded-md bg-brand text-brand-foreground px-6 py-3.5 text-sm font-semibold shadow-lg hover:brightness-95 transition min-h-[44px]"
             >
               {t("hero.cta_quote")} <ArrowRight className="h-4 w-4" />
             </Link>
             <a
               href={company.phoneHref}
+              onClick={() => trackGaEvent("lead_intent", { method: "phone", location: "hero" })}
               className="inline-flex items-center gap-2 rounded-md border border-primary-foreground/30 bg-primary-foreground/5 px-6 py-3.5 text-sm font-semibold text-primary-foreground hover:bg-primary-foreground/10 transition backdrop-blur min-h-[44px]"
             >
               <Phone className="h-4 w-4" /> {company.phone}
             </a>
           </div>
-
         </div>
       </div>
     </section>

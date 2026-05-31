@@ -14,8 +14,8 @@ const COMPANY = {
   name: "IJ Santos",
   legalName: "Irmãos J. Santos, Lda.",
   tagline: "Construção e Limpezas Exteriores",
-  siteUrl: "https://ijsantos-site.pages.dev",
-  logoUrl: "https://ijsantos-site.pages.dev/logo-light.png",
+  siteUrl: "https://ijsantos.com",
+  logoUrl: "https://ijsantos.com/logo-light.png",
   phone: "+351 926 051 178",
   phoneHref: "tel:+351926051178",
   email: "jpsantos@ijsantos.com",
@@ -317,11 +317,21 @@ export async function handleContacto(request: Request, env?: ContactEnv): Promis
     return json({ error: "Invalid request body." }, 400);
   }
 
-  const name = String(body.name ?? "").trim().slice(0, 100);
-  const phone = String(body.phone ?? "").trim().slice(0, 40);
-  const email = String(body.email ?? "").trim().slice(0, 200);
-  const service = String(body.service ?? "").trim().slice(0, 80);
-  const message = String(body.message ?? "").trim().slice(0, 2000);
+  const name = String(body.name ?? "")
+    .trim()
+    .slice(0, 100);
+  const phone = String(body.phone ?? "")
+    .trim()
+    .slice(0, 40);
+  const email = String(body.email ?? "")
+    .trim()
+    .slice(0, 200);
+  const service = String(body.service ?? "")
+    .trim()
+    .slice(0, 80);
+  const message = String(body.message ?? "")
+    .trim()
+    .slice(0, 2000);
 
   if (!name || !phone || !email) {
     return json({ error: "Nome, telefone e email são obrigatórios." }, 422);

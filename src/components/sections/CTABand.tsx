@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight, Phone } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { company } from "@/data/company";
+import { trackGaEvent } from "@/lib/analytics";
 import { useInView, fadeUp } from "@/hooks/useInView";
 
 export function CTABand({
@@ -57,12 +58,20 @@ export function CTABand({
             <Link
               to="/contacto"
               {...(serviceSlug ? { search: { servico: serviceSlug } } : {})}
+              onClick={() =>
+                trackGaEvent("cta_click", {
+                  location: "cta_band",
+                  target: "contact",
+                  service: serviceSlug ?? "general",
+                })
+              }
               className="inline-flex items-center gap-2 rounded-md bg-brand text-brand-foreground px-6 py-3.5 text-sm font-semibold hover:brightness-95 transition min-h-[44px]"
             >
               {t("cta.btn_quote")} <ArrowRight className="h-4 w-4" />
             </Link>
             <a
               href={company.phoneHref}
+              onClick={() => trackGaEvent("lead_intent", { method: "phone", location: "cta_band" })}
               className="inline-flex items-center gap-2 rounded-md border border-primary-foreground/30 px-6 py-3.5 text-sm font-semibold text-primary-foreground hover:bg-primary-foreground/10 transition min-h-[44px]"
             >
               <Phone className="h-4 w-4" /> {company.phone}

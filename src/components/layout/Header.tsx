@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Menu, Phone, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { company } from "@/data/company";
+import { trackGaEvent } from "@/lib/analytics";
 import { ThemeToggle } from "./ThemeToggle";
 import i18n from "@/i18n";
 import { ArrowRight } from "lucide-react";
@@ -13,7 +14,11 @@ function LanguageSwitcher({ className = "" }: { className?: string }) {
 
   const switchTo = (lang: string) => {
     i18n.changeLanguage(lang);
-    try { localStorage.setItem("ijs.lang", lang); } catch { /* noop */ }
+    try {
+      localStorage.setItem("ijs.lang", lang);
+    } catch {
+      /* noop */
+    }
   };
 
   return (
@@ -74,11 +79,7 @@ export function Header() {
       <div className="mx-auto max-w-7xl container-px">
         <div className="flex h-20 md:h-24 items-center justify-between">
           <Link to="/" className="flex items-center gap-3 group" aria-label={t("header.logo_aria")}>
-            <img
-              src="/logo.png"
-              alt="IJ Santos"
-              className="h-12 md:h-14 w-auto dark:hidden"
-            />
+            <img src="/logo.png" alt="IJ Santos" className="h-12 md:h-14 w-auto dark:hidden" />
             <img
               src="/logo-light.png"
               alt="IJ Santos"
@@ -104,6 +105,7 @@ export function Header() {
           <div className="hidden md:flex items-center gap-3">
             <a
               href={company.phoneHref}
+              onClick={() => trackGaEvent("lead_intent", { method: "phone", location: "header" })}
               className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-brand transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:rounded-sm"
             >
               <Phone className="h-4 w-4" />
@@ -117,10 +119,13 @@ export function Header() {
               }`}
             >
               <span className="h-1.5 w-1.5 rounded-full bg-brand shrink-0" />
-              <span className="text-xs font-medium text-muted-foreground whitespace-nowrap">{t("header.urgency")}</span>
+              <span className="text-xs font-medium text-muted-foreground whitespace-nowrap">
+                {t("header.urgency")}
+              </span>
             </span>
             <Link
               to="/contacto"
+              onClick={() => trackGaEvent("cta_click", { location: "header", target: "contact" })}
               className="inline-flex items-center justify-center rounded-md bg-brand text-brand-foreground px-4 py-2.5 text-sm font-semibold hover:brightness-95 transition shadow-sm"
             >
               {t("header.cta")}
@@ -136,6 +141,9 @@ export function Header() {
             >
               <Link
                 to="/contacto"
+                onClick={() =>
+                  trackGaEvent("cta_click", { location: "mobile_header", target: "contact" })
+                }
                 className="inline-flex items-center gap-1 rounded-md bg-brand text-brand-foreground px-3 py-1.5 text-xs font-semibold whitespace-nowrap"
               >
                 {t("header.cta_short")} <ArrowRight className="h-3 w-3" />
@@ -169,13 +177,19 @@ export function Header() {
             ))}
             <a
               href={company.phoneHref}
+              onClick={() =>
+                trackGaEvent("lead_intent", { method: "phone", location: "mobile_menu" })
+              }
               className="w-full justify-center px-3 py-3 rounded-md text-base font-medium text-foreground hover:bg-muted flex items-center gap-2"
             >
               <Phone className="h-4 w-4" /> {company.phone}
             </a>
             <Link
               to="/contacto"
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                trackGaEvent("cta_click", { location: "mobile_menu", target: "contact" });
+                setOpen(false);
+              }}
               className="mt-2 w-full inline-flex items-center justify-center rounded-md bg-brand text-brand-foreground px-4 py-3 text-sm font-semibold"
             >
               {t("header.cta")}
